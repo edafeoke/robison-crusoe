@@ -13,16 +13,22 @@ export class CollisionSystem {
   constructor(
     public map: IslandMap,
     public removed: Set<number> = new Set(),
+    public objects?: readonly number[],
   ) {}
+  rockPassable(value: number): boolean {
+    return PASSABLE_ROCKS.has(value) || value >= 50;
+  }
   walkable(tx: number, ty: number): boolean {
     if (tx < 0 || ty < 0 || tx >= MAP_SIZE || ty >= MAP_SIZE) return false;
     const i = tileIndex(tx, ty),
       l = this.map.layers;
     return (
       !BLOCKED_TERRAIN.has(l.FULL[i]) &&
-      (PASSABLE_ROCKS.has(l.Rocks[i]) || l.Rocks[i] >= 50) &&
+      this.rockPassable(l.Rocks[i]) &&
       l.Decor[i] === 0 &&
-      (l.Objects[i] === 0 || this.removed.has(i))
+      (this.objects
+        ? this.objects[i] === 0
+        : l.Objects[i] === 0 || this.removed.has(i))
     );
   }
   canStand(x: number, y: number): boolean {

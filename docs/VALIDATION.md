@@ -1,6 +1,38 @@
 # Validation record
 
-## Current milestone: recovered item rules and offline reload
+## Current milestone: recovered wildlife
+
+Date: 2026-10-30. **21 tests passed**, including eight new wildlife checks. TypeScript/production build passed. The new wildlife export was regenerated and compared byte-for-byte. Original map and copied sprite integrity checks still pass. `git diff --check` passed.
+
+Automated wildlife coverage:
+
+1. All 16 profiles resolve to original constructors/frame values and valid D0 regions; source start map contains 326 managed animals; loop target is 11 FPS / integer 90 ms.
+2. Prey flees, predators pursue, and passive animals keep resting when Robinson approaches.
+3. Bird takeoff releases ground occupancy; flight uses original frames; blocked cells and Robinson prevent landing.
+4. Moving occupancy vacates old cells, blocks current cells (including formerly collected resource cells), preserves static resources and updates inspection.
+5. Sharks cannot leave terrain 5/6; other families retain their distinct source terrain restrictions, including alligator and predator differences.
+6. Fixed ticks/view gating and zero-delta pause; 1500 whole-population updates stay within world bounds without double-booked ground cells or source-map mutation.
+7. Snapshots restore positions, animation, behavior, timers and seeds, then produce identical continuation for another 100 ticks.
+8. Earlier saves remain structurally valid; malformed values, duplicate stable IDs and incompatible species/state combinations are rejected or safely reset before scene restoration.
+
+### Production browser observations
+
+Used a separate origin, `http://127.0.0.1:4183/`, leaving existing expeditions at ports 4180/4181 untouched. No public deployment or remote-site modification occurred.
+
+- Loaded original world and original Robinson/animal frames. Seagull ground motion, ground shadow, flight wing poses, movement over water and flight above vegetation were visible.
+- Arrow Right moved Robinson from tile (8,148) to (15,148). D advanced to (19,148), then (22,148), triggering nearby seagull flight. These observations cover one bird species in-browser; other family responses are covered by the pure simulation tests, not claimed manually played across the whole island.
+- E opened the original Stone description; Gather added Stone×1 to inventory and removed its runtime obstacle. Mouse input subsequently moved along a generated path to (19,146).
+- Browser testing found React menu/zoom clicks issuing Phaser movement commands through window mouse events. The world handler now accepts canvas-target events only. Repeating Begin and Zoom out left Robinson at the original (8,148) position; deliberate canvas clicks and keyboard movement still worked.
+- Panels paused wildlife simulation. Saved at (19,146), with one stone, explored cells, examination progress and elapsed time 09:18 on the presentation clock. Save confirmed successfully.
+- Final production entry is **index-C0QT_FH9.js**, approximately 1.52 MB / 430 KB gzip. Exactly one canvas was observed. No captured console errors/warnings during final QA.
+- After the final build's “Island assets cached” indicator, stopped the preview process, reloaded the page, and chose Continue a saved story. The game restored **(19,146), Stone×1, examination/exploration progress and clock 09:18**, with original wildlife rendering and moving while the server remained stopped. Exact per-animal continuation is separately established by the automated snapshot test; UI observation alone is not a byte-level snapshot comparison.
+- Screenshots: `evidence/wildlife-milestone.jpg`, `evidence/wildlife-flight.jpg`, `evidence/wildlife-offline-restored.jpg`. The updated cached preview tab remains available; temporary desktop viewport override was reset. Preview process is stopped. Run `npm run preview -- --port 4183` after building to serve that origin again, or `npm run dev` for development.
+
+### Remaining limitations
+
+Animal damage, hunting/fishing, food drops, reserve depletion, outfits, construction, tide scheduling and original story/escape progression remain deferred. No Java ME emulator or comprehensive cross-browser comparison was performed. Offscreen activation, PRNG, fixed-step scheduling and continuous-coordinate adaptations are detailed in WILDLIFE.md. This milestone continues to use the original pixel art; it is not a completed hand-painted remaster.
+
+## Second milestone: recovered item rules and offline reload (historical)
 
 Automated checks: **13 passed**. TypeScript and production build pass. The six new checks cover typed CSV requirements, tool-gated collection, specialized animal/structure actions, reusable crafting tools, unique equipment and recipe scope, and forged/remote/duplicate pickup rejection.
 
@@ -51,7 +83,7 @@ The footer therefore says **Island assets cached**, not that offline reload is g
 
 ## Other limitations
 
-This milestone does not implement the full original survival timing, animal AI, clothing composition, fishing/hunting/throwing minigames, changing tide timing, construction placement, story triggers or boat escape. Needs remain paused. Hand-painted replacement artwork is deferred in favor of exact original pixel art. No original MIDlet emulator comparison has been performed. See REVERSE_ENGINEERING.md and GAME_DESIGN.md for verified facts, adaptations and the implementation sequence.
+The first two milestones did not implement the full original survival timing, animal AI, clothing composition, fishing/hunting/throwing minigames, changing tide timing, construction placement, story triggers or boat escape. Needs remain paused. Hand-painted replacement artwork is deferred in favor of exact original pixel art. No original MIDlet emulator comparison has been performed. See REVERSE_ENGINEERING.md and GAME_DESIGN.md for verified facts, adaptations and the implementation sequence.
 
 First-milestone visual evidence: `evidence/playable-milestone.jpg` (1440 px desktop, full page). Temporary preview servers were stopped after QA; restart with `npm run dev` to open/reload the game.
 

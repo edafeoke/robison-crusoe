@@ -50,4 +50,4 @@ The UI now lists 20 recovered recipes whose result belongs to the original suppl
 
 Existing version-1 IndexedDB saves still load; previously acquired items are retained. New restrictions apply to subsequent actions. This avoids silently deleting progress from the simplified first milestone.
 
-The browser's interaction radius/pathfinding, labels and recipe filters are adaptations. Exact original facing-only interaction, timed action presentation, food/poisoning, animal AI, minigames and story gating remain to port. No emulator comparison has been completed.
+The browser's interaction radius/pathfinding, labels and recipe filters are adaptations. Exact original facing-only interaction, timed action presentation, food/poisoning, animal damage, minigames and story gating remain to port. The subsequent wildlife milestone ports the recovered animal behavior families; see WILDLIFE.md. No emulator comparison has been completed.

@@ -452,8 +452,9 @@ export function PauseMenu() {
           <b>A personal preservation project</b>
           <br />
           Original game and art © Exkee. This exploration build preserves the
-          original island and sprites. Survival, animal behavior, minigames and
-          story progression are still in development. Needs are paused.
+          original island and sprites. Wildlife roams, flees and takes flight.
+          Survival, hunting, minigames and story progression are still in
+          development. Needs and animal damage are paused.
         </p>
       </div>
     </>
@@ -479,6 +480,11 @@ export function Dialogue() {
       <h3>{item.name}</h3>
       <blockquote>“{item.description}”</blockquote>
       <p className="observation-credit">— Robinson’s original observation</p>
+      {focus?.itemId === item.id && focus.behavior && (
+        <p className="muted">
+          {focus.behavior} · Observe from a little distance.
+        </p>
+      )}
       {rule.kind === "collect" && rule.tool !== null && (
         <div className={`pickup-requirement ${canCollect ? "satisfied" : ""}`}>
           <SpriteIcon sprite={s.items[rule.tool].sprite} size={28} />

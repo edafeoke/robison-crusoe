@@ -5,6 +5,7 @@ import type {
 } from "../game/assets/assetManifest";
 import { canPickup, craftInventory } from "../game/systems/ItemRules";
 import { SaveSystem, type SaveData } from "../game/systems/SaveSystem";
+import type { WildlifeSnapshot } from "../game/entities/WildlifeState";
 export type Panel =
   | "inventory"
   | "crafting"
@@ -19,6 +20,7 @@ export interface FocusObject {
   x: number;
   y: number;
   distance: number;
+  behavior?: string;
 }
 interface GameState {
   offlineReady: boolean;
@@ -33,6 +35,8 @@ interface GameState {
   elapsed: number;
   inventory: Record<number, number>;
   worldObjects: readonly number[] | null;
+  wildlife?: WildlifeSnapshot[];
+  captureWildlife?: () => WildlifeSnapshot[];
   collected: number[];
   inspected: number[];
   discovered: number[];
@@ -158,6 +162,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         inspected: s.inspected,
         discovered: s.discovered,
         enhancements: s.enhancements,
+        wildlife: s.captureWildlife?.() ?? s.wildlife,
       };
       await SaveSystem.save(data);
       set({ saveMessage: "Expedition saved on this device" });
@@ -177,6 +182,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       if (saved) {
         set({
           ...saved,
+          wildlife: saved.wildlife,
           panel: null,
           focus: null,
           started: true,

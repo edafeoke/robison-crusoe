@@ -33,6 +33,7 @@ export const assetManifest = {
   map: "/assets/maps/island.json",
   objects: "/assets/objects/objects.json",
   story: "/assets/ui/story.json",
+  wildlife: "/assets/animals/wildlife.json",
   overview: "/assets/maps/island-overview.png",
   player: {
     bank: 3,

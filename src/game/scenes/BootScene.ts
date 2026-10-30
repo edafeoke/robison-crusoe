@@ -10,6 +10,7 @@ export class BootScene extends Phaser.Scene {
     this.load.json("island", assetManifest.map);
     this.load.json("objects", assetManifest.objects);
     this.load.json("story", assetManifest.story);
+    this.load.json("wildlife", assetManifest.wildlife);
     this.load.on("loaderror", () =>
       useGameStore.setState({
         error: "The island files could not be loaded. Reload to try again.",

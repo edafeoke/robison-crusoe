@@ -6,6 +6,9 @@ import { findPath } from "../systems/MovementSystem";
 import { nearestObject } from "../systems/InteractionSystem";
 import { AnimationSystem } from "../systems/AnimationSystem";
 import { Player } from "../entities/Player";
+import { Animal } from "../entities/Animal";
+import type { WildlifeManifest } from "../entities/WildlifeState";
+import { WildlifeSystem } from "../systems/WildlifeSystem";
 import { useGameStore } from "../../store/gameStore";
 export class IslandScene extends Phaser.Scene {
   player!: Player;
@@ -19,6 +22,8 @@ export class IslandScene extends Phaser.Scene {
   private removed = new Set<number>();
   private unsubscribe?: () => void;
   private discovered = new Set<number>();
+  private wildlife!: WildlifeSystem;
+  private animals: Animal[] = [];
   constructor() {
     super("Island");
   }
@@ -32,9 +37,38 @@ export class IslandScene extends Phaser.Scene {
     const state = useGameStore.getState();
     this.removed = new Set(state.collected);
     this.discovered = new Set(state.discovered);
-    this.collision = new CollisionSystem(this.map, this.removed);
+    const manifest = this.cache.json.get("wildlife") as
+      | WildlifeManifest
+      | undefined;
+    if (
+      !manifest ||
+      manifest.version !== 1 ||
+      manifest.tickMs !== 90 ||
+      !Array.isArray(manifest.species)
+    ) {
+      useGameStore.setState({
+        error:
+          "The recovered wildlife manifest is unavailable. Reload to try again.",
+      });
+      return;
+    }
+    this.syncTime = 0;
+    this.wildlife = new WildlifeSystem(
+      this.map,
+      manifest,
+      this.removed,
+      state.wildlife,
+    );
+    this.collision = new CollisionSystem(
+      this.map,
+      this.removed,
+      this.wildlife.objects,
+    );
     this.world = new MapRenderer(this, this.map, state.atlas!, state.items);
-    this.world.render(this.removed);
+    this.world.render(this.removed, this.wildlife.managed);
+    this.animals = this.wildlife.actors.map(
+      (a) => new Animal(this, state.atlas!, a, this.wildlife),
+    );
     new AnimationSystem(this, this.map, state.atlas!);
     const spawn = this.collision.canStand(state.x, state.y)
       ? { x: state.x, y: state.y }
@@ -77,7 +111,9 @@ export class IslandScene extends Phaser.Scene {
       .setVisible(false);
     this.input.on("pointerdown", (p: Phaser.Input.Pointer) => {
       const s = useGameStore.getState();
-      if (s.panel || !s.started) return;
+      // Phaser also receives window mouse events from React's overlaid controls.
+      // Menu/save/zoom clicks must not issue a world movement command.
+      if (s.panel || !s.started || p.event.target !== this.game.canvas) return;
       const world = p.positionToCamera(
         this.cameras.main,
       ) as Phaser.Math.Vector2;
@@ -87,6 +123,7 @@ export class IslandScene extends Phaser.Scene {
         world.y,
         this.removed,
         13,
+        this.wildlife.objects,
       );
       if (
         object &&
@@ -129,6 +166,7 @@ export class IslandScene extends Phaser.Scene {
         for (const i of s.collected) {
           this.removed.add(i);
           this.world.remove(i);
+          this.wildlife.removeStatic(i);
         }
       }
       if (s.restoreRevision !== prev.restoreRevision) {
@@ -143,12 +181,14 @@ export class IslandScene extends Phaser.Scene {
     this.events.once("shutdown", () => {
       this.unsubscribe?.();
       this.input.keyboard?.removeAllListeners();
+      useGameStore.setState({ captureWildlife: undefined });
     });
     useGameStore.setState({
       ready: true,
       x: spawn.x,
       y: spawn.y,
-      worldObjects: this.map.layers.Objects,
+      worldObjects: this.wildlife.objects,
+      captureWildlife: () => this.wildlife.snapshot(),
     });
   }
   update(_time: number, delta: number) {
@@ -168,6 +208,8 @@ export class IslandScene extends Phaser.Scene {
       this.player.path = [];
       this.player.move(dx, dy, delta / 1000);
     } else this.player.updatePath(delta / 1000);
+    if (this.wildlife.update(delta, this.player, this.cameras.main.worldView))
+      for (const animal of this.animals) animal.render();
     this.syncTime += delta;
     if (this.syncTime > 100) {
       const elapsed = s.elapsed + this.syncTime / 1000;
@@ -186,7 +228,21 @@ export class IslandScene extends Phaser.Scene {
         this.player.x,
         this.player.y,
         this.removed,
+        42,
+        this.wildlife.objects,
       );
+      if (focus) {
+        const animal = this.wildlife.actorAt(focus.index);
+        if (animal)
+          focus.behavior =
+            animal.reaction === "flee"
+              ? "Moving away"
+              : animal.reaction === "chase"
+                ? "Following Robinson"
+                : animal.phase === "rest"
+                  ? "Resting"
+                  : "Wandering";
+      }
       this.ring.setVisible(!!focus);
       if (focus) this.ring.setPosition(focus.x, focus.y + 2);
       useGameStore.setState({

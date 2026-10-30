@@ -75,7 +75,7 @@ export class MapRenderer {
     private atlas: AtlasManifest,
     private items: RecoveredItem[],
   ) {}
-  render(removed: Set<number>) {
+  render(removed: Set<number>, managed = new Set<number>()) {
     const { scene, map, atlas } = this;
     for (let cy = 0; cy < 6; cy++)
       for (let cx = 0; cx < 6; cx++) {
@@ -157,7 +157,7 @@ export class MapRenderer {
         }
       }
       const obj = map.layers.Objects[i];
-      if (obj && !removed.has(i)) {
+      if (obj && !removed.has(i) && !managed.has(i)) {
         const sprite = makeRegion(
           scene,
           atlas,

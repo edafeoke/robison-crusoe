@@ -1,3 +1,7 @@
+import {
+  validWildlife,
+  type WildlifeSnapshot,
+} from "../entities/WildlifeState";
 export interface SaveData {
   version: 1;
   x: number;
@@ -8,8 +12,9 @@ export interface SaveData {
   elapsed: number;
   discovered: number[];
   enhancements: boolean;
+  wildlife?: WildlifeSnapshot[];
 }
-function validSave(value: unknown): value is SaveData {
+export function validSave(value: unknown): value is SaveData {
   const d = value as SaveData;
   return (
     !!d &&
@@ -23,6 +28,7 @@ function validSave(value: unknown): value is SaveData {
     Number.isFinite(d.elapsed) &&
     d.elapsed >= 0 &&
     typeof d.enhancements === "boolean" &&
+    (d.wildlife === undefined || validWildlife(d.wildlife)) &&
     !!d.inventory &&
     typeof d.inventory === "object" &&
     Object.entries(d.inventory).every(

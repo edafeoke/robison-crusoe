@@ -23,7 +23,7 @@ The world is 2880×2880 pixels. Terrain and rock anchors are top-left. Borders/d
 - Any nonzero Decor or Objects cell blocks in `g.c` / `g.d`.
 - Rocks passable: 0,10,11,12,18,20,22,23,24,30,31,32,38,41,42,43,44,45,46,47, or ≥50, from `g.e`.
 - Sailing uses a different terrain predicate; not implemented.
-- Port uses a small foot box and axis-separated movement; pathfinder shares the same grid. Removed pickups clear the runtime object blocker without changing raw layers.
+- Port uses a small foot box and axis-separated movement; pathfinder shares the same grid. Removed pickups clear the runtime object blocker without changing raw layers. The wildlife milestone maintains a separate object/ownership grid for moving animals. Ground animals occupy their current cell; flight releases occupancy and landing reserves a free cell. Player collision, pathfinding and inspection use this runtime layer, including animals that move onto a previously collected resource cell. Original Objects IDs and all source layer bytes remain intact. See WILDLIFE.md.
 
 ## JSON export
 

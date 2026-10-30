@@ -43,7 +43,7 @@ Names below are roles inferred from actual call sites and referenced APIs, not t
 | `ac` | Localized text decoder and text layout. Four banks, five locales, little-endian pointers and variable-length code points. |
 | `aa` | Time/date, statistics, weather/tide UI and debug overlays. |
 | `r` | HUD/menu/inventory graphics and text rendering. |
-| `d`, `l`, `q`, `u`, `i` | Entity families instantiated by g for specific object map IDs; movement/animation state. Their complete animal-to-behavior mapping remains to audit. |
+| `d`, `l`, `q`, `u`, `i` | Predators, passive wildlife, prey, birds, sharks respectively. All 16 constructed species, 326 placements, frame arrays and state families are now traced; see WILDLIFE.md. |
 | `s`, `n`, `x`, `t` | Action/minigame state/rendering code. Exact one-to-one attribution of every minigame needs a deeper call-graph pass. |
 | `e`, `z` | RecordStore wrapper and storage exception. Wrapper increments caller record index before access. |
 | `m` | Resource loader / palette support. |
@@ -60,6 +60,10 @@ See MAP_FORMAT.md and ASSET_MANIFEST.md for exact formats. Grid is 180×180 at 1
 BS3 has 20 logical frames, divided into four groups of five. The renderer uses down `196608+af`, up `196613+ag`, left `196618+ah`, right `196623+ai`. Frame zero is a standing pose; counters cycle 1…4 for walking. Mirrored logical frames reuse packed pixels. Original movement waits for a 25 ms gate and advances in `aj` increments; exact speed depends on initialization and state. The port uses normalized continuous movement at 64 pixels/s and a 125 ms walk frame interval: these timing choices are **browser adaptations**, not exact recovered constants. Four directions and exact frames are verified.
 
 The original art is pixel art. This milestone preserves it with nearest-neighbor rendering. Replacing it with invented hand-painted artwork would weaken visual fidelity; the surrounding parchment/ink interface is new. Additional painted art is deferred.
+
+## Verified wildlife
+
+The third milestone recovers all animal constructors in `g.e`, their BS2 frame arrays, source 11 FPS / 90 ms tick, speed tiers, wandering/rest, flee/pursuit, bird flight/landing and shark water restrictions. A pure simulation and original-sprite Phaser renderer now manage 326 placements across 16 species. Runtime occupancy is separate from immutable map data. IndexedDB snapshots retain wildlife state; old saves still load. See WILDLIFE.md for full per-species mapping, hazard arithmetic (paused), save format and explicit browser adaptations. No byte-exact AI/emulator equivalence is claimed.
 
 ## Verified objects, inventory and recipes
 
@@ -92,8 +96,8 @@ No audio files or Java ME media player references were found in this supplied va
 ## Fidelity limitations / next work
 
 - Original MIDlet not yet emulator-tested; static bytecode inspection cannot establish every runtime interaction.
-- Complete entity AI, hunting, fishing and throwing minigames, clothing composition, construction placement, story triggers, weather, tide timing and original survival/save formats remain unported.
-- Object icon references are exact; some original world entities use special multipart/animated rendering. Their static representations in this milestone do not claim exact AI or animation behavior.
+- Exact entity scheduling/emulator comparison, animal hazards, hunting, fishing and throwing minigames, clothing composition, construction placement, story triggers, weather, tide timing and original survival/save formats remain unported.
+- Object icon references are exact; some original world entities use special multipart/animated rendering. The 16 traced animal profiles are animated; other special entities remain static until their specific rendering paths are ported.
 - Original map loader filters progress-dependent objects in runtime state. The source export always retains every byte; milestone shows recoverable static placements and does not implement all original filters.
 - Decoration variants were randomized at runtime by the original. The port selects a stable variant using cell ID; piece coordinates and variant choices are recovered, random seed is new.
 - No public distribution permission is supplied. Keep JAR, decompiled sources and extracted art private. No hosting/publication is part of this iteration.

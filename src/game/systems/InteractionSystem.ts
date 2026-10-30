@@ -6,6 +6,7 @@ export function nearestObject(
   y: number,
   removed: Set<number>,
   radius = 42,
+  objects?: readonly number[],
 ): FocusObject | null {
   let best: FocusObject | null = null;
   const tx = Math.floor(x / 16),
@@ -16,8 +17,8 @@ export function nearestObject(
         ay = ty + dy;
       if (ax < 0 || ay < 0 || ax >= 180 || ay >= 180) continue;
       const index = ax + ay * 180,
-        id = map.layers.Objects[index];
-      if (!id || removed.has(index)) continue;
+        id = (objects ?? map.layers.Objects)[index];
+      if (!id || (!objects && removed.has(index))) continue;
       const ox = ax * 16 + 8,
         oy = ay * 16 + 8,
         distance = Math.hypot(ox - x, oy - y);

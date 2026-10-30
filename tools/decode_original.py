@@ -84,5 +84,7 @@ def main():
         (ROOT/'public/assets/maps'/original).write_bytes(raw);layers[name]=list(raw);checksums[name]=hashlib.sha256(raw).hexdigest()
     write(Path('public/assets/maps/island.json'),{'version':1,'width':180,'height':180,'tileWidth':16,'tileHeight':16,'encoding':'unsigned bytes; row-major x + y * 180','layers':layers,'sha256':checksums})
     write(Path('evidence/objects-raw.json'),rows)
+    from recover_wildlife import recover
+    recover()
     print(f'Exported {len(inventory)} archive entries, {sum(counts)} exact sprite regions, 5 lossless layers, {len(composites)} composites, 120 objects, 5 languages.')
 if __name__=='__main__':main()
