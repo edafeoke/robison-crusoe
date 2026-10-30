@@ -1,0 +1,138 @@
+public final class data.m {
+  private static data.m a;
+
+  private data.m();
+    Code:
+       0: aload_0
+       1: invokespecial #11                 // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static final data.m a();
+    Code:
+       0: invokestatic  #16                 // Method data/k.a:()Z
+       3: ifeq          26
+       6: getstatic     #10                 // Field a:Ldata/m;
+       9: ifnonnull     22
+      12: new           #3                  // class data/m
+      15: dup
+      16: invokespecial #12                 // Method "<init>":()V
+      19: putstatic     #10                 // Field a:Ldata/m;
+      22: getstatic     #10                 // Field a:Ldata/m;
+      25: areturn
+      26: new           #1                  // class data/b
+      29: dup
+      30: ldc           #27                 // String Unauthorised operation
+      32: invokespecial #13                 // Method data/b."<init>":(Ljava/lang/String;)V
+      35: athrow
+
+  public final byte[] a(java.lang.String);
+    Code:
+       0: iconst_0
+       1: istore_2
+       2: sipush        1024
+       5: newarray       byte
+       7: astore_3
+       8: aconst_null
+       9: astore        4
+      11: aconst_null
+      12: astore        5
+      14: aconst_null
+      15: astore        6
+      17: aload_0
+      18: invokevirtual #20                 // Method java/lang/Object.getClass:()Ljava/lang/Class;
+      21: new           #9                  // class java/lang/StringBuffer
+      24: dup
+      25: invokespecial #14                 // Method java/lang/StringBuffer."<init>":()V
+      28: ldc           #26                 // String /
+      30: invokevirtual #17                 // Method java/lang/StringBuffer.append:(Ljava/lang/String;)Ljava/lang/StringBuffer;
+      33: aload_1
+      34: invokevirtual #17                 // Method java/lang/StringBuffer.append:(Ljava/lang/String;)Ljava/lang/StringBuffer;
+      37: invokevirtual #24                 // Method java/lang/StringBuffer.toString:()Ljava/lang/String;
+      40: invokevirtual #21                 // Method java/lang/Class.getResourceAsStream:(Ljava/lang/String;)Ljava/io/InputStream;
+      43: astore        5
+      45: new           #4                  // class java/io/ByteArrayOutputStream
+      48: dup
+      49: invokespecial #15                 // Method java/io/ByteArrayOutputStream."<init>":()V
+      52: astore        6
+      54: iconst_0
+      55: istore        7
+      57: goto          85
+      60: aload         5
+      62: aload_3
+      63: iconst_0
+      64: sipush        1024
+      67: invokevirtual #22                 // Method java/io/InputStream.read:([BII)I
+      70: dup
+      71: istore        7
+      73: ifle          85
+      76: aload         6
+      78: aload_3
+      79: iconst_0
+      80: iload         7
+      82: invokevirtual #25                 // Method java/io/ByteArrayOutputStream.write:([BII)V
+      85: iload         7
+      87: ifge          60
+      90: aload         6
+      92: invokevirtual #23                 // Method java/io/ByteArrayOutputStream.toByteArray:()[B
+      95: astore        4
+      97: aload         6
+      99: invokevirtual #18                 // Method java/io/ByteArrayOutputStream.close:()V
+     102: goto          106
+     105: pop
+     106: aload         5
+     108: ifnull        116
+     111: aload         5
+     113: invokevirtual #19                 // Method java/io/InputStream.close:()V
+     116: goto          120
+     119: pop
+     120: goto          188
+     123: pop
+     124: aload         6
+     126: ifnull        134
+     129: aload         6
+     131: invokevirtual #18                 // Method java/io/ByteArrayOutputStream.close:()V
+     134: goto          138
+     137: pop
+     138: aload         5
+     140: ifnull        148
+     143: aload         5
+     145: invokevirtual #19                 // Method java/io/InputStream.close:()V
+     148: goto          152
+     151: pop
+     152: goto          188
+     155: astore        8
+     157: aload         6
+     159: ifnull        167
+     162: aload         6
+     164: invokevirtual #18                 // Method java/io/ByteArrayOutputStream.close:()V
+     167: goto          171
+     170: pop
+     171: aload         5
+     173: ifnull        181
+     176: aload         5
+     178: invokevirtual #19                 // Method java/io/InputStream.close:()V
+     181: goto          185
+     184: pop
+     185: aload         8
+     187: athrow
+     188: aload         4
+     190: areturn
+    Exception table:
+       from    to  target type
+          17    97   123   Class java/lang/Exception
+          17    97   155   any
+         120   124   155   any
+         152   155   155   any
+         157   167   170   Class java/lang/Exception
+         124   134   137   Class java/lang/Exception
+          97   102   105   Class java/lang/Exception
+         171   181   184   Class java/lang/Exception
+         138   148   151   Class java/lang/Exception
+         106   116   119   Class java/lang/Exception
+
+  public static {};
+    Code:
+       0: aconst_null
+       1: putstatic     #10                 // Field a:Ldata/m;
+       4: return
+}

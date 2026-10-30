@@ -1,0 +1,39 @@
+# Asset recovery
+
+Original PNGs are copied byte-for-byte, without resizing/repacking. Every entry and hash is in `evidence/archive-inventory.json`. `evidence/sprite-contact-sheet.png` shows all BS banks; `evidence/island-reference.png` reconstructs the static island; `evidence/spawn-reference.png` shows the start area.
+
+| Bank | Dimensions | Regions | Location / observed content |
+| --- | --- | --- | --- |
+| BS0 |240×320|1|ui: title with Robinson |
+| BS1 |16×256|16|environment: terrain strip |
+| BS2 |156×158|126|animals: fish, mammals, reptiles, birds |
+| BS3 |348×36|20|characters: Robinson four-direction idle/walk |
+| BS4 |710×16|48|environment: rock edge strip |
+| BS5 |186×186|256|characters: clothing/action pieces |
+| BS6 |189×192|21|objects: shelters, boats, sails |
+| BS7 |222×222|86|environment: palms, trees, plants, wreckage, structural pieces |
+| BS8 |16×208|13|environment: terrain border shapes |
+| BS9 |48×123|15|characters: swimming/action/shadow pieces |
+| BS10 |124×124|73|ui: controls and status symbols |
+| BS11 |24×204|9|environment: water edge circles |
+| BS12 |134×37|1|ui: Exkee logo |
+| BS13 |32×636|92|objects: inventory resources and tools |
+| BS14 |240×320|1|ui: title background |
+
+The application icon is retained in evidence; no original audio files were present. `public/assets/audio/README.md` records that absence.
+
+## Packed atlas
+
+`data.w` reads D0 from byte 0. Header: 15 little-endian uint16 counts. Then bank-order regions, 12 bytes each: six little-endian signed int16 values `(sourceX, sourceY, widthFlags, heightFlags, anchorX, anchorY)`. Pixel widths/heights mask off bit15; width bit15 requests Java ME transform 2 (horizontal mirror). Drawing subtracts anchors from the requested location. Encoded sprite ID is `(bank << 16) | region`. There are 778 regions; table ends at byte 9366. Exact generated data: `public/assets/ui/atlas.json`. The Phaser loader adds regions directly to the intact bank textures and applies anchors/mirroring at placement.
+
+## Animation
+
+BS3: down 0…4, up 5…9, left 10…14, right 15…19. In each group, first frame is idle, next four are walking. Dimensions/anchors vary by frame; a uniform guessed grid is incorrect. Original direction mapping is verified in ab.java. Port's 125 ms interval is a documented adaptation. BS11 shoreline frames follow the verified four-step, 400 ms animation in c.java. BS5 outfit actions and most animal animations remain unported. Static animal sprites in the first milestone are not presented as recovered AI.
+
+## Text, objects and composites
+
+D0 also contains four localized banks in English, French, Italian, German, Spanish. Pointer directory starts at byte80048. Text is NUL terminated with LEB128 code points; not UTF-8. All text is archived in `evidence/localized-text.json`; browser receives English story and objects. Objects have zero-based names/recipes and one-based map IDs. All 13 CSV rows are preserved. Vegetation's 54 draw routines and exact constant offsets are exported as composites; deterministic variant selection replaces the original randomization.
+
+No character, tile or tree was guessed from a contact sheet. Semantic identifications combine actual sprite references, recovered item names, renderer call sites and visual inspection. Any incomplete world rendering is documented in REVERSE_ENGINEERING.md.
+
+Second milestone: objects.json additionally exposes typed `interaction`, `craftingTools` and `category` fields, verified against the original CSV and consuming methods. Source files/IDs are unchanged. See ITEM_RULES.md.

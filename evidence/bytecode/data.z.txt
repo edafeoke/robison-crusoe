@@ -1,0 +1,35 @@
+public final class data.z extends java.lang.Exception {
+  public data.z();
+    Code:
+       0: aload_0
+       1: invokespecial #8                  // Method java/lang/Exception."<init>":()V
+       4: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       7: new           #4                  // class java/lang/StringBuffer
+      10: dup
+      11: invokespecial #9                  // Method java/lang/StringBuffer."<init>":()V
+      14: ldc           #15                 // String CelsiusException:
+      16: invokevirtual #11                 // Method java/lang/StringBuffer.append:(Ljava/lang/String;)Ljava/lang/StringBuffer;
+      19: aload_0
+      20: invokevirtual #12                 // Method java/lang/Throwable.getMessage:()Ljava/lang/String;
+      23: invokevirtual #11                 // Method java/lang/StringBuffer.append:(Ljava/lang/String;)Ljava/lang/StringBuffer;
+      26: invokevirtual #14                 // Method java/lang/StringBuffer.toString:()Ljava/lang/String;
+      29: invokevirtual #13                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      32: return
+
+  public data.z(java.lang.String);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokespecial #10                 // Method java/lang/Exception."<init>":(Ljava/lang/String;)V
+       5: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       8: new           #4                  // class java/lang/StringBuffer
+      11: dup
+      12: invokespecial #9                  // Method java/lang/StringBuffer."<init>":()V
+      15: ldc           #15                 // String CelsiusException:
+      17: invokevirtual #11                 // Method java/lang/StringBuffer.append:(Ljava/lang/String;)Ljava/lang/StringBuffer;
+      20: aload_1
+      21: invokevirtual #11                 // Method java/lang/StringBuffer.append:(Ljava/lang/String;)Ljava/lang/StringBuffer;
+      24: invokevirtual #14                 // Method java/lang/StringBuffer.toString:()Ljava/lang/String;
+      27: invokevirtual #13                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      30: return
+}

@@ -1,0 +1,16 @@
+Compiled from "GAMECANVAS.java"
+public abstract class com.hellomoto.fullscreen.game.GAMECANVAS extends com.hellomoto.fullscreen.FullCn {
+  protected com.hellomoto.fullscreen.game.GAMECANVAS();
+    Code:
+       0: aload_0
+       1: iconst_0
+       2: invokespecial #1                  // Method com/hellomoto/fullscreen/FullCn."<init>":(Z)V
+       5: return
+
+  protected com.hellomoto.fullscreen.game.GAMECANVAS(boolean);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: invokespecial #1                  // Method com/hellomoto/fullscreen/FullCn."<init>":(Z)V
+       5: return
+}

@@ -1,0 +1,24 @@
+public abstract class com.mobiledistillery.celsius.CelsiusMIDlet extends javax.microedition.midlet.MIDlet {
+  public com.mobiledistillery.celsius.CelsiusMIDlet();
+    Code:
+       0: aload_0
+       1: invokespecial #4                  // Method javax/microedition/midlet/MIDlet."<init>":()V
+       4: aload_0
+       5: invokestatic  #5                  // Method javax/microedition/lcdui/Display.getDisplay:(Ljavax/microedition/midlet/MIDlet;)Ljavax/microedition/lcdui/Display;
+       8: pop
+       9: return
+
+  public void startApp();
+    Code:
+       0: return
+
+  public void pauseApp();
+    Code:
+       0: return
+
+  public void destroyApp(boolean);
+    Code:
+       0: aload_0
+       1: invokevirtual #6                  // Method javax/microedition/midlet/MIDlet.notifyDestroyed:()V
+       4: return
+}

@@ -1,0 +1,415 @@
+public final class data.c {
+  private data.p a;
+
+  private int a;
+
+  private int b;
+
+  private int c;
+
+  public int[] a;
+
+  public int[] b;
+
+  public data.c(data.p);
+    Code:
+       0: aload_0
+       1: invokespecial #15                 // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: iconst_0
+       6: putfield      #4                  // Field a:I
+       9: aload_0
+      10: iconst_0
+      11: putfield      #7                  // Field b:I
+      14: aload_0
+      15: iconst_0
+      16: putfield      #9                  // Field c:I
+      19: aload_0
+      20: iconst_2
+      21: newarray       int
+      23: dup
+      24: iconst_0
+      25: ldc           #18                 // int 393222
+      27: iastore
+      28: dup
+      29: iconst_1
+      30: ldc           #19                 // int 393223
+      32: iastore
+      33: putfield      #5                  // Field a:[I
+      36: aload_0
+      37: iconst_2
+      38: newarray       int
+      40: dup
+      41: iconst_0
+      42: ldc           #16                 // int 393220
+      44: iastore
+      45: dup
+      46: iconst_1
+      47: ldc           #17                 // int 393221
+      49: iastore
+      50: putfield      #8                  // Field b:[I
+      53: aload_0
+      54: aload_1
+      55: putfield      #6                  // Field a:Ldata/p;
+      58: return
+
+  public final void a();
+    Code:
+       0: aload_0
+       1: getfield      #6                  // Field a:Ldata/p;
+       4: getfield      #12                 // Field data/p.i:J
+       7: ldc2_w        #35                 // long 400l
+      10: lcmp
+      11: ifle          48
+      14: aload_0
+      15: getfield      #4                  // Field a:I
+      18: iconst_3
+      19: if_icmpne     30
+      22: aload_0
+      23: iconst_0
+      24: putfield      #4                  // Field a:I
+      27: goto          40
+      30: aload_0
+      31: aload_0
+      32: getfield      #4                  // Field a:I
+      35: iconst_1
+      36: iadd
+      37: putfield      #4                  // Field a:I
+      40: aload_0
+      41: getfield      #6                  // Field a:Ldata/p;
+      44: lconst_0
+      45: putfield      #12                 // Field data/p.i:J
+      48: aload_0
+      49: getfield      #4                  // Field a:I
+      52: tableswitch   { // 0 to 3
+                     0: 84
+                     1: 191
+                     2: 298
+                     3: 405
+               default: 511
+          }
+      84: aload_0
+      85: getfield      #6                  // Field a:Ldata/p;
+      88: getfield      #13                 // Field data/p.o:[I
+      91: iconst_4
+      92: ldc           #20                 // int 720896
+      94: iastore
+      95: aload_0
+      96: getfield      #6                  // Field a:Ldata/p;
+      99: getfield      #13                 // Field data/p.o:[I
+     102: iconst_5
+     103: ldc           #21                 // int 720897
+     105: iastore
+     106: aload_0
+     107: getfield      #6                  // Field a:Ldata/p;
+     110: getfield      #13                 // Field data/p.o:[I
+     113: bipush        6
+     115: ldc           #22                 // int 720898
+     117: iastore
+     118: aload_0
+     119: getfield      #6                  // Field a:Ldata/p;
+     122: getfield      #13                 // Field data/p.o:[I
+     125: bipush        16
+     127: ldc           #23                 // int 720899
+     129: iastore
+     130: aload_0
+     131: getfield      #6                  // Field a:Ldata/p;
+     134: getfield      #13                 // Field data/p.o:[I
+     137: bipush        17
+     139: ldc           #24                 // int 720900
+     141: iastore
+     142: aload_0
+     143: getfield      #6                  // Field a:Ldata/p;
+     146: getfield      #13                 // Field data/p.o:[I
+     149: bipush        18
+     151: ldc           #25                 // int 720901
+     153: iastore
+     154: aload_0
+     155: getfield      #6                  // Field a:Ldata/p;
+     158: getfield      #13                 // Field data/p.o:[I
+     161: bipush        19
+     163: ldc           #26                 // int 720902
+     165: iastore
+     166: aload_0
+     167: getfield      #6                  // Field a:Ldata/p;
+     170: getfield      #13                 // Field data/p.o:[I
+     173: bipush        20
+     175: ldc           #27                 // int 720903
+     177: iastore
+     178: aload_0
+     179: getfield      #6                  // Field a:Ldata/p;
+     182: getfield      #13                 // Field data/p.o:[I
+     185: bipush        21
+     187: ldc           #28                 // int 720904
+     189: iastore
+     190: return
+     191: aload_0
+     192: getfield      #6                  // Field a:Ldata/p;
+     195: getfield      #13                 // Field data/p.o:[I
+     198: iconst_4
+     199: ldc           #21                 // int 720897
+     201: iastore
+     202: aload_0
+     203: getfield      #6                  // Field a:Ldata/p;
+     206: getfield      #13                 // Field data/p.o:[I
+     209: iconst_5
+     210: ldc           #22                 // int 720898
+     212: iastore
+     213: aload_0
+     214: getfield      #6                  // Field a:Ldata/p;
+     217: getfield      #13                 // Field data/p.o:[I
+     220: bipush        6
+     222: ldc           #21                 // int 720897
+     224: iastore
+     225: aload_0
+     226: getfield      #6                  // Field a:Ldata/p;
+     229: getfield      #13                 // Field data/p.o:[I
+     232: bipush        16
+     234: ldc           #24                 // int 720900
+     236: iastore
+     237: aload_0
+     238: getfield      #6                  // Field a:Ldata/p;
+     241: getfield      #13                 // Field data/p.o:[I
+     244: bipush        17
+     246: ldc           #25                 // int 720901
+     248: iastore
+     249: aload_0
+     250: getfield      #6                  // Field a:Ldata/p;
+     253: getfield      #13                 // Field data/p.o:[I
+     256: bipush        18
+     258: ldc           #24                 // int 720900
+     260: iastore
+     261: aload_0
+     262: getfield      #6                  // Field a:Ldata/p;
+     265: getfield      #13                 // Field data/p.o:[I
+     268: bipush        19
+     270: ldc           #27                 // int 720903
+     272: iastore
+     273: aload_0
+     274: getfield      #6                  // Field a:Ldata/p;
+     277: getfield      #13                 // Field data/p.o:[I
+     280: bipush        20
+     282: ldc           #28                 // int 720904
+     284: iastore
+     285: aload_0
+     286: getfield      #6                  // Field a:Ldata/p;
+     289: getfield      #13                 // Field data/p.o:[I
+     292: bipush        21
+     294: ldc           #27                 // int 720903
+     296: iastore
+     297: return
+     298: aload_0
+     299: getfield      #6                  // Field a:Ldata/p;
+     302: getfield      #13                 // Field data/p.o:[I
+     305: iconst_4
+     306: ldc           #22                 // int 720898
+     308: iastore
+     309: aload_0
+     310: getfield      #6                  // Field a:Ldata/p;
+     313: getfield      #13                 // Field data/p.o:[I
+     316: iconst_5
+     317: ldc           #21                 // int 720897
+     319: iastore
+     320: aload_0
+     321: getfield      #6                  // Field a:Ldata/p;
+     324: getfield      #13                 // Field data/p.o:[I
+     327: bipush        6
+     329: ldc           #20                 // int 720896
+     331: iastore
+     332: aload_0
+     333: getfield      #6                  // Field a:Ldata/p;
+     336: getfield      #13                 // Field data/p.o:[I
+     339: bipush        16
+     341: ldc           #25                 // int 720901
+     343: iastore
+     344: aload_0
+     345: getfield      #6                  // Field a:Ldata/p;
+     348: getfield      #13                 // Field data/p.o:[I
+     351: bipush        17
+     353: ldc           #24                 // int 720900
+     355: iastore
+     356: aload_0
+     357: getfield      #6                  // Field a:Ldata/p;
+     360: getfield      #13                 // Field data/p.o:[I
+     363: bipush        18
+     365: ldc           #23                 // int 720899
+     367: iastore
+     368: aload_0
+     369: getfield      #6                  // Field a:Ldata/p;
+     372: getfield      #13                 // Field data/p.o:[I
+     375: bipush        19
+     377: ldc           #28                 // int 720904
+     379: iastore
+     380: aload_0
+     381: getfield      #6                  // Field a:Ldata/p;
+     384: getfield      #13                 // Field data/p.o:[I
+     387: bipush        20
+     389: ldc           #27                 // int 720903
+     391: iastore
+     392: aload_0
+     393: getfield      #6                  // Field a:Ldata/p;
+     396: getfield      #13                 // Field data/p.o:[I
+     399: bipush        21
+     401: ldc           #26                 // int 720902
+     403: iastore
+     404: return
+     405: aload_0
+     406: getfield      #6                  // Field a:Ldata/p;
+     409: getfield      #13                 // Field data/p.o:[I
+     412: iconst_4
+     413: ldc           #21                 // int 720897
+     415: iastore
+     416: aload_0
+     417: getfield      #6                  // Field a:Ldata/p;
+     420: getfield      #13                 // Field data/p.o:[I
+     423: iconst_5
+     424: ldc           #20                 // int 720896
+     426: iastore
+     427: aload_0
+     428: getfield      #6                  // Field a:Ldata/p;
+     431: getfield      #13                 // Field data/p.o:[I
+     434: bipush        6
+     436: ldc           #21                 // int 720897
+     438: iastore
+     439: aload_0
+     440: getfield      #6                  // Field a:Ldata/p;
+     443: getfield      #13                 // Field data/p.o:[I
+     446: bipush        16
+     448: ldc           #24                 // int 720900
+     450: iastore
+     451: aload_0
+     452: getfield      #6                  // Field a:Ldata/p;
+     455: getfield      #13                 // Field data/p.o:[I
+     458: bipush        17
+     460: ldc           #23                 // int 720899
+     462: iastore
+     463: aload_0
+     464: getfield      #6                  // Field a:Ldata/p;
+     467: getfield      #13                 // Field data/p.o:[I
+     470: bipush        18
+     472: ldc           #24                 // int 720900
+     474: iastore
+     475: aload_0
+     476: getfield      #6                  // Field a:Ldata/p;
+     479: getfield      #13                 // Field data/p.o:[I
+     482: bipush        19
+     484: ldc           #27                 // int 720903
+     486: iastore
+     487: aload_0
+     488: getfield      #6                  // Field a:Ldata/p;
+     491: getfield      #13                 // Field data/p.o:[I
+     494: bipush        20
+     496: ldc           #26                 // int 720902
+     498: iastore
+     499: aload_0
+     500: getfield      #6                  // Field a:Ldata/p;
+     503: getfield      #13                 // Field data/p.o:[I
+     506: bipush        21
+     508: ldc           #27                 // int 720903
+     510: iastore
+     511: return
+
+  public final void b();
+    Code:
+       0: aload_0
+       1: getfield      #6                  // Field a:Ldata/p;
+       4: getfield      #11                 // Field data/p.h:J
+       7: ldc2_w        #31                 // long 100l
+      10: lcmp
+      11: ifle          48
+      14: aload_0
+      15: getfield      #7                  // Field b:I
+      18: iconst_1
+      19: if_icmpne     30
+      22: aload_0
+      23: iconst_0
+      24: putfield      #7                  // Field b:I
+      27: goto          40
+      30: aload_0
+      31: aload_0
+      32: getfield      #7                  // Field b:I
+      35: iconst_1
+      36: iadd
+      37: putfield      #7                  // Field b:I
+      40: aload_0
+      41: getfield      #6                  // Field a:Ldata/p;
+      44: lconst_0
+      45: putfield      #11                 // Field data/p.h:J
+      48: aload_0
+      49: getfield      #7                  // Field b:I
+      52: lookupswitch  { // 2
+                     0: 80
+                     1: 93
+               default: 105
+          }
+      80: aload_0
+      81: getfield      #6                  // Field a:Ldata/p;
+      84: getfield      #10                 // Field data/p.f:[I
+      87: bipush        16
+      89: ldc           #29                 // int 851968
+      91: iastore
+      92: return
+      93: aload_0
+      94: getfield      #6                  // Field a:Ldata/p;
+      97: getfield      #10                 // Field data/p.f:[I
+     100: bipush        16
+     102: ldc           #30                 // int 851969
+     104: iastore
+     105: return
+
+  public final void c();
+    Code:
+       0: aload_0
+       1: getfield      #6                  // Field a:Ldata/p;
+       4: getfield      #14                 // Field data/p.w:J
+       7: ldc2_w        #33                 // long 300l
+      10: lcmp
+      11: ifle          48
+      14: aload_0
+      15: getfield      #9                  // Field c:I
+      18: iconst_1
+      19: if_icmpne     30
+      22: aload_0
+      23: iconst_0
+      24: putfield      #9                  // Field c:I
+      27: goto          40
+      30: aload_0
+      31: aload_0
+      32: getfield      #9                  // Field c:I
+      35: iconst_1
+      36: iadd
+      37: putfield      #9                  // Field c:I
+      40: aload_0
+      41: getfield      #6                  // Field a:Ldata/p;
+      44: lconst_0
+      45: putfield      #14                 // Field data/p.w:J
+      48: aload_0
+      49: getfield      #9                  // Field c:I
+      52: lookupswitch  { // 2
+                     0: 80
+                     1: 97
+               default: 113
+          }
+      80: aload_0
+      81: getfield      #5                  // Field a:[I
+      84: iconst_0
+      85: ldc           #18                 // int 393222
+      87: iastore
+      88: aload_0
+      89: getfield      #8                  // Field b:[I
+      92: iconst_0
+      93: ldc           #16                 // int 393220
+      95: iastore
+      96: return
+      97: aload_0
+      98: getfield      #5                  // Field a:[I
+     101: iconst_0
+     102: ldc           #19                 // int 393223
+     104: iastore
+     105: aload_0
+     106: getfield      #8                  // Field b:[I
+     109: iconst_0
+     110: ldc           #17                 // int 393221
+     112: iastore
+     113: return
+}

@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+MIDlet-Name: Shipwrecked
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: Exkee
+MIDlet-Icon: /icon32_32.png
+MIDlet-1: Shipwrecked,/icon32_32.png,Robinson.MyMidlet
+MIDlet-Data-Size: 4000
+MicroEdition-Profile: MIDP-2.0
+MicroEdition-Configuration: CLDC-1.0
+Nokia-MIDlet-Category: Game
+Adapted-By: JAM-2.0.0.2
