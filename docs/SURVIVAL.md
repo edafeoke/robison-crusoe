@@ -76,7 +76,7 @@ Examples:
 
 The browser uses a ten-second active countdown, restores energy at its completion, and keeps hunger/thirst ticking. A minute-boundary loss takes precedence over later rest recovery. Cancelling from the browser UI grants no recovery; this explicit cancel control is a usability adaptation. Rest can be paused by opening a panel.
 
-**Sleep/save-and-exit is a different original operation.** It serializes RMS state and exits to a menu; the later `v.c(boolean)` path calculates recovery or depletion from elapsed hours. Neither offline recovery nor offline death is implemented here. Browser Save retains the current state without simulating a night's sleep.
+**Sleep/save-and-exit is a different original operation.** It serializes RMS state and exits to a menu; the later `v.c(boolean)` path calculates recovery or depletion from elapsed hours. Explicit offline recovery is now implemented in HOUSE_AND_SLEEP.md; offline death/depletion remains deferred. Ordinary browser Save retains the current state without simulating sleep. Explicit Sleep writes a pending real-time checkpoint.
 
 ## Browser integration and explicit adaptations
 
@@ -91,10 +91,13 @@ The browser uses a ten-second active countdown, restores energy at its completio
 
 ## Still deferred
 
-Animal contact damage remains paused until clothing protections and loss interactions are integrated. Weight's nutrition counter (`v.a(int)`, a bar increment after 50 nutrition units), clothing, direct world consumption, shelter sleep benefits, offline saved-time arithmetic, workstation placement restrictions, weather/tide scheduling and original save compatibility need further implementation/comparison. All are distinct from the now-working reserve/food/rest loop. No Java ME emulator fidelity comparison is claimed.
+Animal contact damage remains paused until clothing protections and loss interactions are integrated. Weight's nutrition counter (`v.a(int)`, a bar increment after 50 nutrition units), clothing, direct world consumption, non-sleep offline arithmetic, device clock parity, weather/tide scheduling and original save compatibility need further implementation/comparison. All are distinct from the now-working reserve/food/rest loop. No Java ME emulator fidelity comparison is claimed.
 
 Automated and browser observations are recorded in VALIDATION.md. The tests cover exact CSV values, minute boundaries and rollover, rest/death ordering, food/tool consumption, poison, activity effects, save migration/validation, and loss recovery without inventory or save mutation.
 
 ## Hunting energy
 
 Hunting completion now applies Bow strength/energy effects. Source retaliation after ten misses drains energy for dangerous species; clothing protection is not implemented, so the documented unprotected branch applies. World-contact damage remains paused. HUNTING.md distinguishes verified source values from this protection assumption.
+
+
+The subsequent house/sleep milestone implements the positive `v.c(true)` recovery bands for explicit Sleep. Source furniture creation effects are applied once and house entries persist separately; no bed bonus is inferred. See HOUSE_AND_SLEEP.md for timing and transaction adaptations.

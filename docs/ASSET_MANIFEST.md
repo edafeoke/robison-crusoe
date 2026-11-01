@@ -57,3 +57,8 @@ Fifth milestone: Coconut challenge uses BS13 regions 2/17 (coconut/projectile) a
 ## Camp appearance
 
 The fixed original flag now renders its recovered upgrade: packed 393219 (BS6 frame 3) → Tent 393216 (frame 0) → Cabin 393217 (frame 1). D0 crop bounds/anchors, PNG transparency and original map placement stay unchanged. The workbench/map/inspection reflect the persistent tier. No replacement art or guessed sprite mapping is introduced. Animated source flag overlays remain unported; see SHELTERS.md.
+
+
+## House furnishing illustrations
+
+Barrel uses source 852041 (BS13 frame 41). Single bed (15), Rug (60) and Double bed (85) have source sprite -1; their recipe/house records use named text entries and the neutral missing-art marker. No crop, unrelated sprite mapping, invented furniture placement or replacement art is introduced. See HOUSE_AND_SLEEP.md.

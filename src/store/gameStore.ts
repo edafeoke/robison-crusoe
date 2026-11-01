@@ -4,6 +4,7 @@ import type {
   RecoveredItem,
 } from "../game/assets/assetManifest";
 import { canPickup, craftInventory } from "../game/systems/ItemRules";
+import { isFurnishing, furnish } from "../game/systems/HouseSystem";
 import { isShelterUpgrade, type Shelter } from "../game/systems/ShelterSystem";
 import { SaveSystem, type SaveData } from "../game/systems/SaveSystem";
 import type { WildlifeSnapshot } from "../game/entities/WildlifeState";
@@ -59,6 +60,7 @@ export type Panel =
   | "map"
   | "settings"
   | "dialogue"
+  | "house"
   | null;
 export interface FocusObject {
   index: number;
@@ -84,6 +86,7 @@ interface GameState {
   survival: SurvivalState;
   inventory: Record<number, number>;
   shelter: Shelter;
+  furnishings: Record<number, number>;
   worldObjects: readonly number[] | null;
   worldDecor: readonly number[] | null;
   worldTerrain: readonly number[] | null;
@@ -124,6 +127,8 @@ interface GameState {
   cancelRest: () => void;
   setSurvivalEnabled: (enabled: boolean) => void;
   save: () => Promise<void>;
+  writeSave: (sleep: boolean) => Promise<void>;
+  sleep: () => Promise<void>;
   load: () => Promise<void>;
   startHunting: (index: number, itemId: number, actorId: number) => boolean;
   aimHunt: (angle: number, power: number) => void;
@@ -160,6 +165,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   survival: initialSurvival(),
   inventory: {},
   shelter: 17,
+  furnishings: {},
   worldObjects: null,
   worldDecor: null,
   worldTerrain: null,
@@ -263,19 +269,29 @@ export const useGameStore = create<GameState>((set, get) => ({
     )
       return false;
     if (isShelterUpgrade(id) && !s.worldObjects?.includes(18)) return false;
-    const inventory = craftInventory(item, s.inventory, s.shelter);
+    const inventory = craftInventory(
+      item,
+      s.inventory,
+      s.shelter,
+      s.furnishings,
+    );
     if (!inventory) return false;
     const survival = activityEffect(s.survival, item, "craft");
     set({
       inventory,
       shelter: isShelterUpgrade(id) ? id : s.shelter,
+      furnishings: isFurnishing(id)
+        ? furnish(s.furnishings, id)
+        : s.furnishings,
       survival,
       ...(survival.death ? { panel: null, focus: null } : {}),
     });
     get().notify(
       isShelterUpgrade(id)
         ? `Your camp is now a ${item.name.toLowerCase()}`
-        : `${item.name} crafted`,
+        : isFurnishing(id)
+          ? `${item.name} added to your house`
+          : `${item.name} crafted`,
     );
     return true;
   },
@@ -350,6 +366,21 @@ export const useGameStore = create<GameState>((set, get) => ({
       },
     })),
   save: async () => {
+    await get().writeSave(false);
+  },
+  sleep: async () => {
+    await get().writeSave(true);
+  },
+  writeSave: async (sleep) => {
+    const before = get();
+    if (
+      before.saving ||
+      (sleep &&
+        (!before.ready ||
+          !before.started ||
+          before.survival.restRemainingMs !== null))
+    )
+      return;
     if (
       get().coconutGame ||
       get().fishingGame ||
@@ -363,7 +394,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       get().notify("Load an earlier save or continue in exploration mode.");
       return;
     }
-    set({ saving: true });
+    set({ saving: true, ...(sleep ? { panel: "settings" as const } : {}) });
     try {
       const s = get();
       const data: SaveData = {
@@ -380,10 +411,17 @@ export const useGameStore = create<GameState>((set, get) => ({
         survival: s.survival,
         coconutUses: s.coconutUses,
         shelter: s.shelter,
+        furnishings: s.furnishings,
+        ...(sleep ? { sleepStartedAt: Date.now() } : {}),
       };
       await SaveSystem.save(data);
       set({ saveMessage: "Expedition saved on this device" });
-      get().notify("Your expedition has been saved");
+      if (sleep) set({ started: false, panel: null, focus: null });
+      get().notify(
+        sleep
+          ? "Sleeping expedition saved. Return after time away to recover."
+          : "Your expedition has been saved",
+      );
     } catch {
       set({
         saveMessage: "Storage unavailable. Please allow browser storage.",
@@ -394,6 +432,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
   },
   load: async () => {
+    if (get().saving) return;
     if (
       get().coconutGame ||
       get().fishingGame ||
@@ -411,6 +450,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           wildlife: saved.wildlife,
           coconutUses: saved.coconutUses ?? 0,
           shelter: saved.shelter ?? 17,
+          furnishings: saved.furnishings ?? {},
           coconutGame: null,
           fishingGame: null,
           rodGame: null,

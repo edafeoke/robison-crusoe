@@ -1,6 +1,35 @@
 # Validation record
 
-## Current milestone: camp upgrades and recipe tiers
+## Current milestone: house furnishings and explicit sleep recovery
+
+Date: 2026-11-01. **80 tests passed**, including eight house/sleep checks. TypeScript and production build passed. Final classic entry: **index-Bg1SzBZ3.js**, 1,608.17 kB / 451.21 kB gzip. The existing 1,600 kB chunk advisory remains; the intentional single classic bundle preserves verified offline loading. Original sprite/map integrity checks remain green. `git diff --check` passed. No dependency was added.
+
+### Source assessment and automated coverage
+
+- Four source furnishing recipes (Single bed, Barrel, Rug, Double bed), kept tools, Tent/Cabin requirements, creation costs, unique house entries and no portable furnishing output. Three have original sprite -1; no replacement mapping is invented.
+- Satchel Rug loot from the original net-fishing reward quirk stays in the satchel, separate from a crafted house Rug. Old saves default to empty house records; malformed furnishing/timestamp fields reject validation.
+- Sleep's positive `v.c(true)` branch restores all three reserves using 0/10/20/30/40/50 whole-hour bands. Tests cover exact boundaries, partial hours, caps, clock rollback, legacy/exploration/dead states and immutable inputs. No bed multiplier is introduced.
+- Sleep saves successfully before returning to title; failed persistence leaves the active expedition intact. Readiness/rest/loss/save locks are covered, with shared activity save exclusions covered by the existing minigame checks.
+- `SaveSystem.load` reads, claims a pending sleep interval, writes the recovered snapshot and removes its marker in one read/write IndexedDB transaction. Promise resolution waits for commit. Repeated loads cannot award that interval twice. Ordinary saves retain paused offline reserves.
+
+### Browser observations
+
+QA used separate origin **4192**; the existing user **4173** save was untouched.
+
+- Dev-only `tests/browser/house.html` explicitly supplies a Cabin and exact four-recipe materials/tools, sets active reserves to **40 hunger / 50 thirst / 90 energy**, and labels its setup. This does not claim the gathering/crafting chain was played from a new expedition.
+- Built all four furnishings through their real workbench buttons. All four became disabled as Built; materials were consumed, four reusable tools remained in the satchel, energy became **50**, Morale **20**, Strength **0**. House storage displayed one of each furnishing with original descriptions; only Barrel used recovered artwork.
+- Chose the real Sleep button in settings. The successful IndexedDB write returned to the title screen with unchanged reserves. The labelled fixture then **simulated two hours away** by changing only that pending checkpoint's timestamp through its visible QA control. No two-hour wall-clock wait is claimed.
+- Continue restored **50 hunger / 60 thirst / 60 energy**. Loaded the same save again through settings; those values stayed unchanged, verifying the real IndexedDB one-claim write. Screenshot `evidence/sleep-fixture-recovery.jpg` retains the simulated-time label.
+- Navigated the same isolated tab to the production root, which contains no fixture controls. Continued the saved state, observed the same reserves and Cabin, then chose production Sleep and continued immediately. No bonus appeared before one hour elapsed; values stayed **50/60/60**.
+- Stopped the preview server and cold-reloaded the cached production root. Continue restored position **(23,128)**, Cabin, all four house furnishings, four kept tools and **50/60/60** reserves. The saved sleep bonus did not repeat. House storage remained accessible from the restored workbench.
+- Final DOM check: exactly **one canvas**, final entry **index-Bg1SzBZ3.js**; captured production warnings/errors empty. Final screenshot `evidence/house-offline-restored.jpg` shows the four restored entries. Other evidence: `evidence/house-fixture.jpg`, `evidence/sleep-fixture-recovery.jpg`.
+- Initial test-page creation reported a disconnected target even though the page had opened; rebinding that existing tab recovered browser control. No game error was observed. No viewport override was used. Dev and preview processes are stopped; the cached production tab is retained with House storage open, pausing survival. Restart `npm run dev`, or `npm run preview -- --port 4192` after building to serve the QA origin again.
+
+### Remaining limits
+
+No original MIDlet emulator comparison, comprehensive browser-family testing or real multi-hour manual wait is claimed. Other sleep hour bands and failure paths are checked automatically. Source house artwork omissions remain intentional. Arbitrary supply containers, water capacity/refills, furnishing placement, bed bonuses, non-sleep offline depletion, device clock parity, outfits/protection, world-contact hazards, weight, changing tides/weather and original story/boat/raft progression remain unported or unverified. See HOUSE_AND_SLEEP.md for evidence and the absolute-timestamp, one-claim, ordinary-save and presentation adaptations.
+
+## Ninth milestone: camp upgrades and recipe tiers (historical)
 
 Date: 2026-11-01. **72 tests passed**, including eight shelter checks. TypeScript and production build passed. Final classic entry: **index-PvVUqI1m.js**, 1,603.98 kB / 450.06 kB gzip. Vite reports its existing 1,600 kB chunk advisory; the intentional self-contained classic bundle retains the verified offline-loading behavior. A loading guard keeps early workbench shortcuts safe while recovered items load. Original map/sprite integrity checks remain green. Objects/maps/atlas regenerate byte-for-byte; dev fixtures are absent from dist. `git diff --check` passed.
 

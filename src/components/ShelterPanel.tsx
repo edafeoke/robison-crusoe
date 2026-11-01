@@ -1,6 +1,7 @@
 import { ArrowUpRight, Hammer, MapPin, Moon } from "lucide-react";
 import { useGameStore } from "../store/gameStore";
 import { SpriteIcon } from "./SpriteIcon";
+import { FURNISHING_IDS } from "../game/systems/HouseSystem";
 
 export function CampOverview() {
   const s = useGameStore(),
@@ -26,6 +27,14 @@ export function CampOverview() {
             {Math.floor(index / 180)} · view map
           </button>
         )}
+        <button
+          className="camp-map-link house-link"
+          onClick={() => s.setPanel("house")}
+        >
+          House storage ·{" "}
+          {FURNISHING_IDS.filter((id) => (s.furnishings[id] ?? 0) > 0).length}{" "}
+          furnishings
+        </button>
       </div>
     </aside>
   );
@@ -62,13 +71,19 @@ export function ShelterDialogue() {
         <button className="secondary-button" onClick={s.beginRest}>
           <Moon size={16} /> Take a breather
         </button>
+        <button
+          className="secondary-button"
+          onClick={() => s.setPanel("house")}
+        >
+          House storage
+        </button>
         <button className="secondary-button" onClick={() => s.setPanel(null)}>
           Return to the island <ArrowUpRight size={16} />
         </button>
       </div>
       <p className="muted">
-        A breather uses the same ten-second rest available elsewhere. Shelter
-        sleep and storage are still being reconstructed.
+        A breather restores energy after ten seconds. For recovery while away,
+        choose Sleep from settings.
       </p>
     </div>
   );

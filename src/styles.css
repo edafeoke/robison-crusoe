@@ -2726,3 +2726,35 @@ i {
   line-height: 15px;
   box-shadow: 0 1px 3px #0006;
 }
+
+.house-link {
+  margin-left: 14px;
+}
+.house-list {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.house-entry {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 20px;
+  border: 1px solid #d4c6a4;
+  border-radius: 5px;
+  background: #ede8d9;
+}
+.house-entry h3 {
+  font:
+    23px Georgia,
+    serif;
+  color: #264c3c;
+  margin: 5px 0 10px;
+}
+.house-entry blockquote {
+  margin: 0;
+  font:
+    italic 15px/1.5 Georgia,
+    serif;
+  color: #5a6350;
+}

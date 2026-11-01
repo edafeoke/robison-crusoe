@@ -86,14 +86,14 @@ test("tent and cabin consume exact materials, retain tools, never add a building
     assert.equal(cabin[r.item], r.quantity);
   assert.equal(cabin[10], undefined);
 });
-test("camp progression cannot repeat or downgrade; unsupported furnishings stay unavailable", () => {
-  assert.equal(supportedRecipes(items).length, 22);
+test("camp progression cannot repeat or downgrade; boat and clothing paths stay separate", () => {
+  assert.equal(supportedRecipes(items).length, 26);
   for (const stage of [9, 10] as const) {
     assert.equal(shelterOwned(9, stage), true);
     assert.equal(craftInventory(items[9], materials(9), stage), null);
   }
   assert.equal(craftInventory(items[10], materials(10), 10), null);
-  for (const id of [15, 50, 60, 85, 94, 99])
+  for (const id of [94, 99])
     assert.equal(
       craftAvailability(items[id], materials(id), 10).supported,
       false,

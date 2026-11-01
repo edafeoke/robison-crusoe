@@ -130,9 +130,35 @@ export function SurvivalSettings() {
       </div>
       <p className="muted survival-note">
         Strength {Math.floor(life.strength)} · Morale {Math.floor(life.morale)}.
-        World-contact damage and offline sleep recovery are still paused.
-        Turning survival off restores the three reserves for exploration.
+        World-contact damage remains paused. Turning survival off restores the
+        three reserves for exploration.
       </p>
+      <div className="rest-setting">
+        <div>
+          <h4>
+            <Moon size={17} /> Sleep while away
+          </h4>
+          <p>
+            Save and return to the title screen. After one real hour away,
+            recover 10 hunger, thirst and energy; longer sleep restores up to
+            50. Ordinary saves pause your reserves.
+          </p>
+        </div>
+        <button
+          className="secondary-button"
+          onClick={s.sleep}
+          disabled={
+            !s.ready ||
+            !s.started ||
+            s.saving ||
+            !!(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame) ||
+            !!life.death ||
+            life.restRemainingMs !== null
+          }
+        >
+          <Moon size={16} /> Sleep · save & return to title
+        </button>
+      </div>
     </>
   );
 }

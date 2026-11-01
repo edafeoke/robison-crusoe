@@ -4,6 +4,8 @@ import {
 } from "../entities/WildlifeState";
 import { validSurvival, type SurvivalState } from "./SurvivalSystem";
 import { validShelter, type Shelter } from "./ShelterSystem";
+import { validFurnishings } from "./HouseSystem";
+import { claimSleep } from "./SleepSystem";
 export interface SaveData {
   version: 1;
   x: number;
@@ -18,6 +20,8 @@ export interface SaveData {
   survival?: SurvivalState;
   coconutUses?: number;
   shelter?: Shelter;
+  furnishings?: Record<number, number>;
+  sleepStartedAt?: number;
 }
 export function validSave(value: unknown): value is SaveData {
   const d = value as SaveData;
@@ -36,6 +40,11 @@ export function validSave(value: unknown): value is SaveData {
     (d.wildlife === undefined || validWildlife(d.wildlife)) &&
     (d.survival === undefined || validSurvival(d.survival)) &&
     (d.shelter === undefined || validShelter(d.shelter)) &&
+    (d.furnishings === undefined || validFurnishings(d.furnishings)) &&
+    (d.sleepStartedAt === undefined ||
+      (Number.isSafeInteger(d.sleepStartedAt) &&
+        d.sleepStartedAt >= 0 &&
+        d.sleepStartedAt <= 8640000000000000)) &&
     (d.coconutUses === undefined ||
       (Number.isInteger(d.coconutUses) &&
         d.coconutUses >= 0 &&
@@ -87,20 +96,31 @@ export class SaveSystem {
     const db = await this.db();
     try {
       return await new Promise((resolve, reject) => {
-        const req = db
-          .transaction("saves")
-          .objectStore("saves")
-          .get("expedition");
+        // Claim a pending sleep checkpoint in the same transaction as the read.
+        // Repeated/concurrent loads cannot award the same offline interval twice.
+        const tx = db.transaction("saves", "readwrite"),
+          store = tx.objectStore("saves"),
+          req = store.get("expedition");
+        let result: SaveData | null = null;
         req.onsuccess = () => {
           if (req.result !== undefined && !validSave(req.result)) {
+            tx.abort();
             reject(
               new Error("The saved expedition is invalid or unsupported."),
             );
             return;
           }
-          resolve(req.result ?? null);
+          result = req.result ?? null;
+          if (result?.sleepStartedAt !== undefined) {
+            result = claimSleep(result, Date.now());
+            store.put(result, "expedition");
+          }
         };
         req.onerror = () => reject(req.error);
+        tx.oncomplete = () => resolve(result);
+        tx.onerror = () => reject(tx.error);
+        tx.onabort = () =>
+          reject(tx.error ?? new Error("Save transaction aborted."));
       });
     } finally {
       db.close();

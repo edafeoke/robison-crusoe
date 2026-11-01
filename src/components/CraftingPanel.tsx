@@ -9,12 +9,14 @@ import {
 import { SpriteIcon } from "./SpriteIcon";
 import { CampOverview } from "./ShelterPanel";
 import { isShelterUpgrade } from "../game/systems/ShelterSystem";
+import { isFurnishing } from "../game/systems/HouseSystem";
 export function CraftingPanel() {
   const s = useGameStore(),
     [readyOnly, setReadyOnly] = useState(false);
   const recipes = supportedRecipes(s.items),
     ready = recipes.filter(
-      (item) => craftAvailability(item, s.inventory, s.shelter).allowed,
+      (item) =>
+        craftAvailability(item, s.inventory, s.shelter, s.furnishings).allowed,
     );
   const shown = readyOnly ? ready : recipes;
   return (
@@ -40,7 +42,13 @@ export function CraftingPanel() {
       </div>
       <div className="recipe-list">
         {shown.map((item) => {
-          const status = craftAvailability(item, s.inventory, s.shelter);
+          const status = craftAvailability(
+              item,
+              s.inventory,
+              s.shelter,
+              s.furnishings,
+            ),
+            building = isShelterUpgrade(item.id) || isFurnishing(item.id);
           return (
             <article className="recipe" key={item.id}>
               <div className="recipe-illustration">
@@ -57,6 +65,11 @@ export function CraftingPanel() {
                 {isShelterUpgrade(item.id) && (
                   <p className="craft-energy">
                     Upgrades your original camp in place · no item to carry
+                  </p>
+                )}
+                {isFurnishing(item.id) && (
+                  <p className="craft-energy">
+                    Kept in your house · one of each furnishing
                   </p>
                 )}
                 {item.shelterRequirement >= 0 && (
@@ -127,7 +140,7 @@ export function CraftingPanel() {
               </div>
               <button
                 className="primary-button"
-                aria-label={`${isShelterUpgrade(item.id) ? "Build" : "Craft"} ${item.name}`}
+                aria-label={`${building ? "Build" : "Craft"} ${item.name}`}
                 disabled={!status.allowed}
                 onClick={() => s.craft(item.id)}
               >
@@ -139,12 +152,12 @@ export function CraftingPanel() {
                   <LockKeyhole size={15} />
                 )}{" "}
                 {status.alreadyOwned
-                  ? isShelterUpgrade(item.id)
+                  ? building
                     ? "Built"
                     : "Owned"
                   : !status.shelterReady
                     ? `Needs ${s.items[item.shelterRequirement]?.name}`
-                    : isShelterUpgrade(item.id)
+                    : building
                       ? "Build"
                       : "Craft"}
               </button>
@@ -169,8 +182,8 @@ export function CraftingPanel() {
           <br />
           Crafting uses the listed materials. Required tools stay in your
           satchel. Camp upgrades unlock recipes everywhere on the island.
-          Furnishings, storage, clothing and boat repair are still being
-          reconstructed.
+          Furnishings stay in your house. Clothing and boat repair are still
+          being reconstructed.
         </p>
       </div>
     </>

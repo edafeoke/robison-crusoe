@@ -43,7 +43,7 @@ Other CSV rows retain their original strings in `rawFields`. Status rows 3–7 a
 | Net | Rope×4, Stone×4 | Knife×1 |
 | Arrow | Branch×5, Stone×1 | Knife×1, Bow×1 |
 
-The UI now lists 20 supplies/equipment recipes plus the two recovered camp upgrades. Materials, reusable tools and global shelter-tier prerequisites are enforced. The original Flag upgrades in place to Tent and Cabin; structures never become portable inventory items. Clothes, furnishings/storage and boat repair remain separate. See SHELTERS.md for source call paths, exact recipes and adaptations.
+The UI now lists 20 supplies/equipment recipes, two camp upgrades and four house furnishings. Materials, reusable tools and global shelter-tier prerequisites are enforced. The original Flag upgrades in place to Tent and Cabin; structures never become portable inventory items. Furnishings use a separate house record; clothes and boat repair remain separate. See SHELTERS.md and HOUSE_AND_SLEEP.md for source call paths, exact recipes and adaptations.
 
 `ad.k()` stores crafted equipment uniquely. The browser prevents crafting an already-owned equipment item instead of consuming materials for no additional result; this is a documented usability fix. Supply results can stack. Output quantity is one, matching `ad.n()`/`ad.k()`.
 

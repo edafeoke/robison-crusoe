@@ -1,4 +1,5 @@
 import type { RecoveredItem } from "../assets/assetManifest";
+import { isFurnishing } from "./HouseSystem";
 import {
   isShelterUpgrade,
   shelterAllows,
@@ -58,8 +59,11 @@ export function supportedRecipes(items: RecoveredItem[]): RecoveredItem[] {
   return items.filter(
     (item) =>
       item.recipe.length > 0 &&
-      item.sprite >= 0 &&
-      (item.category === 0 || item.category === 1 || isShelterUpgrade(item.id)),
+      ((item.sprite >= 0 &&
+        (item.category === 0 ||
+          item.category === 1 ||
+          isShelterUpgrade(item.id))) ||
+        isFurnishing(item.id)),
   );
 }
 export interface CraftAvailability {
@@ -74,11 +78,15 @@ export function craftAvailability(
   item: RecoveredItem,
   inventory: Inventory,
   shelter: Shelter = 17,
+  furnishings: Inventory = {},
 ): CraftAvailability {
   const supported =
     !!item.recipe.length &&
-    item.sprite >= 0 &&
-    (item.category === 0 || item.category === 1 || isShelterUpgrade(item.id));
+    ((item.sprite >= 0 &&
+      (item.category === 0 ||
+        item.category === 1 ||
+        isShelterUpgrade(item.id))) ||
+      isFurnishing(item.id));
   const missing = (rs: Requirement[]) =>
     rs.filter((r) => (inventory[r.item] ?? 0) < r.quantity);
   const missingMaterials = missing(item.recipe),
@@ -86,7 +94,8 @@ export function craftAvailability(
   // The original equipment list is unique (ad.k). Prevent wasting ingredients on a duplicate.
   const alreadyOwned =
     (item.category === 1 && (inventory[item.id] ?? 0) > 0) ||
-    shelterOwned(item.id, shelter);
+    shelterOwned(item.id, shelter) ||
+    (isFurnishing(item.id) && (furnishings[item.id] ?? 0) > 0);
   const shelterReady = shelterAllows(item, shelter);
   return {
     allowed:
@@ -106,11 +115,14 @@ export function craftInventory(
   item: RecoveredItem,
   inventory: Inventory,
   shelter: Shelter = 17,
+  furnishings: Inventory = {},
 ): Record<number, number> | null {
-  if (!craftAvailability(item, inventory, shelter).allowed) return null;
+  if (!craftAvailability(item, inventory, shelter, furnishings).allowed)
+    return null;
   const next = { ...inventory };
   for (const r of item.recipe) next[r.item] -= r.quantity;
   // a.G changes the camp's sprite/name, rather than adding a portable building.
-  if (!isShelterUpgrade(item.id)) next[item.id] = (next[item.id] ?? 0) + 1;
+  if (!isShelterUpgrade(item.id) && !isFurnishing(item.id))
+    next[item.id] = (next[item.id] ?? 0) + 1;
   return next;
 }

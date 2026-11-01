@@ -33,6 +33,7 @@ import { RodFishingDialogue } from "./RodFishingPanel";
 import { NetFishingDialogue } from "./NetFishingPanel";
 import { CoconutPalmDialogue } from "./CoconutGamePanel";
 import { ShelterDialogue } from "./ShelterPanel";
+import { HousePanel } from "./HousePanel";
 const titles: Record<
   Exclude<Panel, null>,
   { eyebrow: string; title: string; icon: typeof Backpack }
@@ -40,6 +41,11 @@ const titles: Record<
   inventory: {
     eyebrow: "EVERYTHING YOU CARRY",
     title: "Your satchel",
+    icon: Backpack,
+  },
+  house: {
+    eyebrow: "THE COMFORTS YOU’VE MADE",
+    title: "House storage",
     icon: Backpack,
   },
   crafting: {
@@ -136,6 +142,8 @@ export function PanelOverlay() {
         <div className="modal-body">
           {s.panel === "inventory" ? (
             <InventoryPanel />
+          ) : s.panel === "house" ? (
+            <HousePanel />
           ) : s.panel === "crafting" ? (
             <CraftingPanel />
           ) : s.panel === "journal" ? (
@@ -479,9 +487,9 @@ export function PauseMenu() {
           Original game and art © Exkee. This exploration build preserves the
           original island and sprites. Wildlife roams, flees and takes flight.
           Original reserve depletion, food effects and short rest are playable.
-          Coconut throwing, fishing, bow hunting and camp upgrades are playable.
-          Clothing, furnishings, storage, offline sleep and story progression
-          are still in development. World-contact animal damage remains paused.
+          Coconut throwing, fishing, bow hunting, camp upgrades, furnishings and
+          sleep recovery are playable. Clothing and story progression are still
+          in development. World-contact animal damage remains paused.
         </p>
       </div>
     </>
