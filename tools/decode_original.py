@@ -75,6 +75,9 @@ def main():
             return [] if value=='-1' else [{'item':int(a),'quantity':int(b)} for a,b in (part.split('|') for part in value.split('#'))]
         recipe=pairs(rows[8][i])
         objects.append({'id':i,'mapId':i+1,'name':name,'description':textbanks[2][0][i] if i<60 else textbanks[3][0][i-60], 'sprite':icons.get(i,-1),'rawFields':[r[i] for r in rows],'recipe':recipe,'craftingTools':pairs(rows[9][i]),'category':int(rows[12][i]),'interaction':{'pickupTool':int(rows[0][i]),'useTool':int(rows[1][i]),'huntingTool':int(rows[2][i])},'effects':{name:int(rows[row][i]) for name,row in [('hunger',3),('thirst',4),('morale',5),('energy',6),('strength',7)]}})
+    # y.d case 13 -> p.e byte[]; aa.c(StringBuffer) accepts -1 / 9 / 10 by global camp tier.
+    for item in objects:
+        item['shelterRequirement'] = int(rows[10][item['id']])
     write(Path('public/assets/objects/objects.json'),objects)
     write(Path('public/assets/ui/atlas.json'),{'sheets':sheets,'decor':decor,'borders':borders,'icons':icons,'composites':composites,'variants':variants})
     write(Path('public/assets/ui/story.json'),textbanks[0][0])

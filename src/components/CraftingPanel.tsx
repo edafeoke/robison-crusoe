@@ -3,20 +3,23 @@ import { BookOpen, Hammer, LockKeyhole, Check } from "lucide-react";
 import { useGameStore } from "../store/gameStore";
 import {
   craftAvailability,
-  portableRecipes,
+  supportedRecipes,
   categoryName,
 } from "../game/systems/ItemRules";
 import { SpriteIcon } from "./SpriteIcon";
+import { CampOverview } from "./ShelterPanel";
+import { isShelterUpgrade } from "../game/systems/ShelterSystem";
 export function CraftingPanel() {
   const s = useGameStore(),
     [readyOnly, setReadyOnly] = useState(false);
-  const recipes = portableRecipes(s.items),
+  const recipes = supportedRecipes(s.items),
     ready = recipes.filter(
-      (item) => craftAvailability(item, s.inventory).allowed,
+      (item) => craftAvailability(item, s.inventory, s.shelter).allowed,
     );
   const shown = readyOnly ? ready : recipes;
   return (
     <>
+      <CampOverview />
       <p className="panel-intro">
         Ingenuity is its own kind of survival. Follow the island’s recovered
         recipes, with the right supplies and tools.
@@ -37,7 +40,7 @@ export function CraftingPanel() {
       </div>
       <div className="recipe-list">
         {shown.map((item) => {
-          const status = craftAvailability(item, s.inventory);
+          const status = craftAvailability(item, s.inventory, s.shelter);
           return (
             <article className="recipe" key={item.id}>
               <div className="recipe-illustration">
@@ -45,9 +48,30 @@ export function CraftingPanel() {
               </div>
               <div className="recipe-content">
                 <p className="eyebrow">
-                  {categoryName(item.category).toUpperCase()} · RECOVERED RECIPE
+                  {isShelterUpgrade(item.id)
+                    ? "CAMP UPGRADE"
+                    : categoryName(item.category).toUpperCase()}{" "}
+                  · RECOVERED RECIPE
                 </p>
                 <h3>{item.name}</h3>
+                {isShelterUpgrade(item.id) && (
+                  <p className="craft-energy">
+                    Upgrades your original camp in place · no item to carry
+                  </p>
+                )}
+                {item.shelterRequirement >= 0 && (
+                  <p
+                    className={`craft-tier ${status.shelterReady ? "unlocked" : ""}`}
+                  >
+                    {status.shelterReady ? (
+                      <Check size={12} />
+                    ) : (
+                      <LockKeyhole size={12} />
+                    )}
+                    {s.items[item.shelterRequirement]?.name} required ·{" "}
+                    {status.shelterReady ? "unlocked" : "build your camp first"}
+                  </p>
+                )}
                 {item.effects.energy < 0 && (
                   <p className="craft-energy">
                     Energy −{Math.abs(item.effects.energy)}
@@ -103,7 +127,7 @@ export function CraftingPanel() {
               </div>
               <button
                 className="primary-button"
-                aria-label={`Craft ${item.name}`}
+                aria-label={`${isShelterUpgrade(item.id) ? "Build" : "Craft"} ${item.name}`}
                 disabled={!status.allowed}
                 onClick={() => s.craft(item.id)}
               >
@@ -114,7 +138,15 @@ export function CraftingPanel() {
                 ) : (
                   <LockKeyhole size={15} />
                 )}{" "}
-                {status.alreadyOwned ? "Owned" : "Craft"}
+                {status.alreadyOwned
+                  ? isShelterUpgrade(item.id)
+                    ? "Built"
+                    : "Owned"
+                  : !status.shelterReady
+                    ? `Needs ${s.items[item.shelterRequirement]?.name}`
+                    : isShelterUpgrade(item.id)
+                      ? "Build"
+                      : "Craft"}
               </button>
             </article>
           );
@@ -136,8 +168,9 @@ export function CraftingPanel() {
           <b>A tool is worth keeping.</b>
           <br />
           Crafting uses the listed materials. Required tools stay in your
-          satchel. Buildings, clothing and the original minigames are still
-          being reconstructed.
+          satchel. Camp upgrades unlock recipes everywhere on the island.
+          Furnishings, storage, clothing and boat repair are still being
+          reconstructed.
         </p>
       </div>
     </>

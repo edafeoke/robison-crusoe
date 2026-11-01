@@ -298,7 +298,9 @@ export default function App() {
                         ? "Shallow water"
                         : s.focus.kind === "rod-fishing"
                           ? "Deep water"
-                          : s.items[s.focus.itemId]?.name}
+                          : s.items[
+                              s.focus.itemId === 17 ? s.shelter : s.focus.itemId
+                            ]?.name}
                   </b>
                 </span>
                 <ChevronRight size={17} />

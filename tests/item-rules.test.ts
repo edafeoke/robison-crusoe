@@ -27,6 +27,7 @@ test("typed object rules preserve all CSV requirement fields and reusable-tool l
     assert.equal(item.interaction.useTool, +rows[1][item.id]);
     assert.equal(item.interaction.huntingTool, +rows[2][item.id]);
     assert.equal(item.category, +rows[12][item.id]);
+    assert.equal(item.shelterRequirement, +rows[10][item.id]);
     assert.deepEqual(item.craftingTools, decode(rows[9][item.id]));
   }
   assert.deepEqual(items[91].craftingTools, [{ item: 76, quantity: 1 }]);
@@ -61,10 +62,10 @@ test("wildlife and special structures require their own interactions rather than
 });
 test("rope requires both materials and the knife; crafting keeps tools and rejects atomic failures", () => {
   const materialOnly = { 6: 2, 8: 1 };
-  assert.equal(craftAvailability(items[91], materialOnly).allowed, false);
-  assert.equal(craftInventory(items[91], materialOnly), null);
+  assert.equal(craftAvailability(items[91], materialOnly, 9).allowed, false);
+  assert.equal(craftInventory(items[91], materialOnly, 9), null);
   const inventory = { ...materialOnly, 76: 1 };
-  const next = craftInventory(items[91], inventory)!;
+  const next = craftInventory(items[91], inventory, 9)!;
   assert.equal(next[6], 0);
   assert.equal(next[8], 0);
   assert.equal(next[91], 1);

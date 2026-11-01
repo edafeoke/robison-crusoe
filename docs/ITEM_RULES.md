@@ -13,9 +13,10 @@ Evidence is from this workspace's supplied JAR, not a generic survival design. I
 | 2 | `p.d : byte[]` | Specialized tool action, dispatched by `a.a(byte,int)` to fishing/hunting minigames. Not equivalent to generic pickup. |
 | 8 | `p.a : byte[][]` | Recipe materials. `r.a(StringBuffer)` checks supplies/quantities; `a.G()` calls `ad.o()`, which subtracts these entries. |
 | 9 | `p.b : byte[][]` | Required crafting equipment/quantities. `r.a(StringBuffer)` checks equipment quantities; `ad.o()` does **not** subtract this list. |
+| 10 | `p.e : byte[]` | Global camp requirement. `aa.c(StringBuffer)` accepts -1 at Flag, -1/9 at Tent, -1/9/10 at Cabin. Exported as `shelterRequirement`; boats/rafts use separate paths. |
 | 12 | `p.f : byte[]` | Inventory category. `ad.a()` and `a.G()` route item storage by category. 0 supplies, 1 equipment; construction, storage, furnishings and clothing use separate branches. |
 
-Other CSV rows retain their original strings in `rawFields`. Their numeric status/consumption semantics are still being audited and are not enabled as a survival model.
+Other CSV rows retain their original strings in `rawFields`. Status rows 3–7 are now audited and implemented; see SURVIVAL.md. Row 11's clothing-related path remains separate.
 
 ## Pickup examples
 
@@ -42,7 +43,7 @@ Other CSV rows retain their original strings in `rawFields`. Their numeric statu
 | Net | Rope×4, Stone×4 | Knife×1 |
 | Arrow | Branch×5, Stone×1 | Knife×1, Bow×1 |
 
-The UI now lists 20 recovered recipes whose result belongs to the original supplies/equipment categories and has a supported sprite. This includes equipment such as the original crafting machines; their equipment-list prerequisites are enforced. Construction placement, clothes, furnishings/storage and boat repair have separate original paths and are not automatically unlocked by this generic recipe interface.
+The UI now lists 20 supplies/equipment recipes plus the two recovered camp upgrades. Materials, reusable tools and global shelter-tier prerequisites are enforced. The original Flag upgrades in place to Tent and Cabin; structures never become portable inventory items. Clothes, furnishings/storage and boat repair remain separate. See SHELTERS.md for source call paths, exact recipes and adaptations.
 
 `ad.k()` stores crafted equipment uniquely. The browser prevents crafting an already-owned equipment item instead of consuming materials for no additional result; this is a documented usability fix. Supply results can stack. Output quantity is one, matching `ad.n()`/`ad.k()`.
 

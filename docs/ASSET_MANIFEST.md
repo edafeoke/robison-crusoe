@@ -53,3 +53,7 @@ Fifth milestone: Coconut challenge uses BS13 regions 2/17 (coconut/projectile) a
 ## Bow hunting
 
 `src/game/data/huntingRules.ts` preserves all 15 s.k frame pairs, hitboxes, speeds and danger flags. Six arrow regions `[851993,851995,851991,851996,851994,851992]` come from javap constructor array extraction; bow is 851990. Turtle/iguana repeated idle frames are retained. No shark profile is guessed, and no original sheet is altered. See HUNTING.md.
+
+## Camp appearance
+
+The fixed original flag now renders its recovered upgrade: packed 393219 (BS6 frame 3) → Tent 393216 (frame 0) → Cabin 393217 (frame 1). D0 crop bounds/anchors, PNG transparency and original map placement stay unchanged. The workbench/map/inspection reflect the persistent tier. No replacement art or guessed sprite mapping is introduced. Animated source flag overlays remain unported; see SHELTERS.md.

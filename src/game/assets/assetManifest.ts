@@ -55,6 +55,7 @@ export interface RecoveredItem {
   rawFields: string[];
   recipe: { item: number; quantity: number }[];
   craftingTools: { item: number; quantity: number }[];
+  shelterRequirement: number;
   category: number;
   interaction: { pickupTool: number; useTool: number; huntingTool: number };
   effects: {

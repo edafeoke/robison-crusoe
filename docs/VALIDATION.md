@@ -1,6 +1,35 @@
 # Validation record
 
-## Current milestone: bow hunting
+## Current milestone: camp upgrades and recipe tiers
+
+Date: 2026-11-01. **72 tests passed**, including eight shelter checks. TypeScript and production build passed. Final classic entry: **index-PvVUqI1m.js**, 1,603.98 kB / 450.06 kB gzip. Vite reports its existing 1,600 kB chunk advisory; the intentional self-contained classic bundle retains the verified offline-loading behavior. A loading guard keeps early workbench shortcuts safe while recovered items load. Original map/sprite integrity checks remain green. Objects/maps/atlas regenerate byte-for-byte; dev fixtures are absent from dist. `git diff --check` passed.
+
+### Source assessment and automated coverage
+
+- CSV row 10 is a global camp-tier gate: Flag allows -1, Tent allows -1/9, Cabin allows -1/9/10. Reusable crafting equipment remains independently required. No proximity-only workstation requirement is invented.
+- Bytecode confirms that Tent/Cabin replace item 17's sprite/name/description without relocating the original camp or changing Objects map ID 18. Source placement stays at (24,129), index 23244; original single-cell collision is retained.
+- Exact Tent/Cabin materials, kept tools, activity effects and no portable building output; rejection of missing tools/materials, duplicates, downgrades and unsupported furnishings/boat paths.
+- Store transactions respect activity/rest/loss/readiness locks and original camp presence; a committed fatal construction settles once. All 120 exported tier requirements are checked against source raw data.
+- Version-1 saves accept optional valid camp tiers, reject malformed tiers, persist the new tier and reset correctly to Flag when an old save is loaded over a Cabin session.
+
+### Browser observations
+
+The user's existing **4173** expedition was untouched. QA used separate origin **4191**.
+
+- `tests/browser/shelter.html` explicitly labels its setup: original camp position, supplied Tent/Cabin/Rope ingredients/tools, survival active. No end-to-end manual supply collection is claimed.
+- Camp dialogue showed the original Flag observation and construction action. Workbench displayed **22 recipes**, one initially ready; Cabin/Rope/Bow/Net remained tier-locked.
+- Built Tent through its real workbench button. Energy changed **100 → 80**, source Tent artwork appeared at the original camp, previous Tent build became disabled, and Tent-tier recipes unlocked.
+- Ready filter exposed actual available recipes. Crafted Rope through the UI: energy **80 → 77**, supplies consumed and Knife kept. Upgraded to Cabin: energy **77 → 47**, camp artwork changed in place, Cabin recipes unlocked and both upgrade buttons became disabled. Settings showed **Morale 15 / Strength 0**.
+- Saved through normal IndexedDB UI. Production root loaded that save with **Cabin**, position **(23,128)**, energy **47**, and four remaining items (Knife, Axe, Hammer, Rope). Source camp remains at (24,129); player stands alongside it. Workbench confirmed restored Cabin tier and kept tools.
+- With the preview process stopped, cold-reloaded the production root from its asset cache and chose Continue. Restored the Cabin artwork/marker, position, **energy 47**, four-item inventory and unlocked Cabin recipe tier. Exactly one canvas; captured production warnings/errors empty; final script confirmed as index-PvVUqI1m.js.
+- Screenshots: `evidence/shelter-tent-fixture.jpg`, `evidence/shelter-cabin-fixture.jpg`, `evidence/shelter-workbench-restored.jpg`, `evidence/shelter-offline-restored.jpg`. Fixture screenshots are explicitly labelled; the production root has no fixture controls. The nearby generic prompt can target the original adjacent “dummi” object rather than the camp; camp inspection remains available by clicking its own cell.
+- One cache-refresh browser call timed out; a fresh accessibility read recovered immediately and the final script was confirmed before its successful offline reload. No viewport override was used. Owned dev/preview processes stopped, fixture tab closed, cached production tab retained with inventory open to pause survival. Restart with `npm run dev`, or `npm run preview -- --port 4191` after building to serve the same QA origin.
+
+### Remaining limits
+
+Furnishings/storage, overnight shelter sleep and saved-time recovery, outfits/protection, world-contact animal hazards, original story/boat/raft progression, weight, weather/tides and emulator comparison remain outstanding. Camp upgrades are immediate rather than the source skippable completion interstitial; locked-recipe visibility/map camp markers are browser usability additions. Source animated flag overlays remain unported. No arbitrary placement, relocated shelter, larger collision footprint, storage capacity or shelter rest bonus is claimed. See SHELTERS.md for evidence and adaptations.
+
+## Eighth milestone: bow hunting (historical)
 
 Date: 2026-11-01. **64 tests passed**, including eight hunting checks. TypeScript/production build passed. Final classic entry is **index-DJdfJBni.js**, 1,598.94 kB / 448.66 kB gzip. Hunting rule exports regenerated byte-for-byte, all copied sprite/map integrity checks remain green, and `git diff --check` passed. The explicit hunting fixture is excluded from production dist.
 

@@ -3,6 +3,7 @@ import {
   type WildlifeSnapshot,
 } from "../entities/WildlifeState";
 import { validSurvival, type SurvivalState } from "./SurvivalSystem";
+import { validShelter, type Shelter } from "./ShelterSystem";
 export interface SaveData {
   version: 1;
   x: number;
@@ -16,6 +17,7 @@ export interface SaveData {
   wildlife?: WildlifeSnapshot[];
   survival?: SurvivalState;
   coconutUses?: number;
+  shelter?: Shelter;
 }
 export function validSave(value: unknown): value is SaveData {
   const d = value as SaveData;
@@ -33,6 +35,7 @@ export function validSave(value: unknown): value is SaveData {
     typeof d.enhancements === "boolean" &&
     (d.wildlife === undefined || validWildlife(d.wildlife)) &&
     (d.survival === undefined || validSurvival(d.survival)) &&
+    (d.shelter === undefined || validShelter(d.shelter)) &&
     (d.coconutUses === undefined ||
       (Number.isInteger(d.coconutUses) &&
         d.coconutUses >= 0 &&

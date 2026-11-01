@@ -66,7 +66,7 @@ export class IslandScene extends Phaser.Scene {
       this.wildlife.objects,
     );
     this.world = new MapRenderer(this, this.map, state.atlas!, state.items);
-    this.world.render(this.removed, this.wildlife.managed);
+    this.world.render(this.removed, this.wildlife.managed, state.shelter);
     this.animals = this.wildlife.actors.map(
       (a) => new Animal(this, state.atlas!, a, this.wildlife),
     );
@@ -224,6 +224,7 @@ export class IslandScene extends Phaser.Scene {
         this.scene.stop("Hunting");
       }
       if (s.zoom !== prev.zoom) this.cameras.main.setZoom(s.zoom);
+      if (s.shelter !== prev.shelter) this.world.updateShelter(s.shelter);
       if (s.collected !== prev.collected) {
         // Loading restores removed objects too; rebuild safely only when the collection shrinks or differs.
         if (prev.collected.some((i) => !s.collected.includes(i))) {

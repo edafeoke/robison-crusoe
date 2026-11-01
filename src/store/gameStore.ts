@@ -4,6 +4,7 @@ import type {
   RecoveredItem,
 } from "../game/assets/assetManifest";
 import { canPickup, craftInventory } from "../game/systems/ItemRules";
+import { isShelterUpgrade, type Shelter } from "../game/systems/ShelterSystem";
 import { SaveSystem, type SaveData } from "../game/systems/SaveSystem";
 import type { WildlifeSnapshot } from "../game/entities/WildlifeState";
 import {
@@ -82,6 +83,7 @@ interface GameState {
   elapsed: number;
   survival: SurvivalState;
   inventory: Record<number, number>;
+  shelter: Shelter;
   worldObjects: readonly number[] | null;
   worldDecor: readonly number[] | null;
   worldTerrain: readonly number[] | null;
@@ -157,6 +159,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   elapsed: 0,
   survival: initialSurvival(),
   inventory: {},
+  shelter: 17,
   worldObjects: null,
   worldDecor: null,
   worldTerrain: null,
@@ -248,6 +251,8 @@ export const useGameStore = create<GameState>((set, get) => ({
     const s = get(),
       item = s.items[id];
     if (
+      !s.ready ||
+      !s.started ||
       !item ||
       s.coconutGame ||
       s.fishingGame ||
@@ -257,15 +262,21 @@ export const useGameStore = create<GameState>((set, get) => ({
       s.survival.restRemainingMs !== null
     )
       return false;
-    const inventory = craftInventory(item, s.inventory);
+    if (isShelterUpgrade(id) && !s.worldObjects?.includes(18)) return false;
+    const inventory = craftInventory(item, s.inventory, s.shelter);
     if (!inventory) return false;
     const survival = activityEffect(s.survival, item, "craft");
     set({
       inventory,
+      shelter: isShelterUpgrade(id) ? id : s.shelter,
       survival,
       ...(survival.death ? { panel: null, focus: null } : {}),
     });
-    get().notify(`${item.name} crafted`);
+    get().notify(
+      isShelterUpgrade(id)
+        ? `Your camp is now a ${item.name.toLowerCase()}`
+        : `${item.name} crafted`,
+    );
     return true;
   },
   discard: (id) =>
@@ -368,6 +379,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         wildlife: s.captureWildlife?.() ?? s.wildlife,
         survival: s.survival,
         coconutUses: s.coconutUses,
+        shelter: s.shelter,
       };
       await SaveSystem.save(data);
       set({ saveMessage: "Expedition saved on this device" });
@@ -398,6 +410,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           ...saved,
           wildlife: saved.wildlife,
           coconutUses: saved.coconutUses ?? 0,
+          shelter: saved.shelter ?? 17,
           coconutGame: null,
           fishingGame: null,
           rodGame: null,

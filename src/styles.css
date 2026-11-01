@@ -2667,3 +2667,62 @@ i {
   color: #e1bc84;
   font-size: 11px;
 }
+
+.camp-overview {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 20px;
+  margin-bottom: 22px;
+  border: 1px solid #d4c6a4;
+  background: #ece6d4;
+  border-radius: 6px;
+}
+.camp-overview h3 {
+  margin: 4px 0 7px;
+  font:
+    24px Georgia,
+    serif;
+  color: #264c3c;
+}
+.camp-overview p:not(.eyebrow) {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.camp-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 9px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #46674e;
+  text-decoration: underline;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.craft-tier {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #93673b;
+}
+.craft-tier.unlocked {
+  color: #496b4e;
+}
+.map-camp {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: #fff3d0;
+  background: #325643;
+  border: 1px solid #e8d494;
+  border-radius: 3px;
+  padding: 0 2px;
+  font-size: 13px;
+  line-height: 15px;
+  box-shadow: 0 1px 3px #0006;
+}

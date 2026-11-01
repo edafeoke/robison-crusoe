@@ -113,7 +113,7 @@ No audio files or Java ME media player references were found in this supplied va
 ## Fidelity limitations / next work
 
 - Original MIDlet not yet emulator-tested; static bytecode inspection cannot establish every runtime interaction.
-- Exact entity scheduling/emulator comparison, world-contact animal hazards, clothing composition, construction placement, story triggers, weather, tide timing, offline sleep/weight and original save formats remain unported.
+- Exact entity scheduling/emulator comparison, world-contact animal hazards, clothing composition, furnishings/storage, story triggers, weather, tide timing, offline sleep/weight and original save formats remain unported. Tent/Cabin now upgrade the existing original flag in place, with persistent global recipe tiers; see SHELTERS.md. No free placement is inferred from those upgrade paths.
 - Object icon references are exact; some original world entities use special multipart/animated rendering. The 16 traced animal profiles are animated; other special entities remain static until their specific rendering paths are ported.
 - Original map loader filters progress-dependent objects in runtime state. The source export always retains every byte; milestone shows recoverable static placements and does not implement all original filters.
 - Decoration variants were randomized at runtime by the original. The port selects a stable variant using cell ID; piece coordinates and variant choices are recovered, random seed is new.
@@ -122,3 +122,8 @@ No audio files or Java ME media player references were found in this supplied va
 ## Validation record
 
 Decoder validates all layer lengths and all 778 frame bounds against original image dimensions. Further automated and browser checks are recorded in `docs/VALIDATION.md` once run; remaining features are tracked in GAME_DESIGN.md.
+
+
+## Camp upgrades and crafting tiers
+
+`y.d()` parser case 13 reads CSV row 10 into `p.e : byte[]`. `aa.c(StringBuffer)` gates recipes globally by current Flag/Tent/Cabin state, accepting -1 / -1+9 / -1+9+10 respectively. `a.G()` bytecode offsets 0–177 confirms that Tent (9) and Cabin (10) replace item 17's sprite/name/description in place, call `ad.l()` for effects and `ad.o()` for material subtraction. The original map's lone flag remains map ID 18 at (24,129); terrain/placement/occupancy are unchanged. `t` persists the resulting camp stage. The browser now ports these two upgrades and gates all supported recipes; source equipment prerequisites remain reusable. Furnishings, storage, overnight sleep and boats remain separate. Exact recipes, sources, tests and immediate-completion/UI adaptations are documented in SHELTERS.md.

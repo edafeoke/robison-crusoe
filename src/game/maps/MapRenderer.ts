@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import type { AtlasManifest, RecoveredItem } from "../assets/assetManifest";
 import type { IslandMap } from "./MapDecoder";
 import { decorVariantIndex } from "./DecorVariants";
+import { campItem, type Shelter } from "../systems/ShelterSystem";
 // Animated BS11 shoreline borders are drawn separately using the recovered data.c cycle.
 const ANIMATED_BORDERS = new Set([5, 6, 7, 17, 18, 19, 20, 21, 22]);
 export function drawRegion(
@@ -76,7 +77,11 @@ export class MapRenderer {
     private atlas: AtlasManifest,
     private items: RecoveredItem[],
   ) {}
-  render(removed: Set<number>, managed = new Set<number>()) {
+  render(
+    removed: Set<number>,
+    managed = new Set<number>(),
+    shelter: Shelter = 17,
+  ) {
     const { scene, map, atlas } = this;
     for (let cy = 0; cy < 6; cy++)
       for (let cx = 0; cx < 6; cx++) {
@@ -162,7 +167,7 @@ export class MapRenderer {
         const sprite = makeRegion(
           scene,
           atlas,
-          this.items[obj - 1].sprite,
+          this.items[campItem(obj - 1, shelter)].sprite,
           x,
           y,
           y + 0.5,
@@ -174,5 +179,22 @@ export class MapRenderer {
   remove(index: number) {
     this.objectSprites.get(index)?.destroy();
     this.objectSprites.delete(index);
+  }
+  updateShelter(shelter: Shelter) {
+    this.map.layers.Objects.forEach((id, index) => {
+      if (id !== 18 || !this.objectSprites.has(index)) return;
+      this.remove(index);
+      const x = (index % 180) * 16 + 8,
+        y = Math.floor(index / 180) * 16 + 8;
+      const sprite = makeRegion(
+        this.scene,
+        this.atlas,
+        this.items[shelter].sprite,
+        x,
+        y,
+        y + 0.5,
+      );
+      if (sprite) this.objectSprites.set(index, sprite);
+    });
   }
 }

@@ -43,3 +43,7 @@ Arrays here are abbreviated for documentation only; actual arrays each have 3240
 Phaser renders base terrain, rocks and borders into 36 independent 480×480 CanvasTextures (30×30 tiles each), avoiding oversized textures. Decorations and objects are sprite regions sorted by foot depth; recovered vegetation commands preserve their relative drawing order. Camera shows a fraction of the island and follows the character. Full island overview derives from the same source data and sprite metadata.
 
 No guessed IDs or newly generated terrain replace the original map. Tiled export is deferred: plain terrain tileset JSON cannot accurately encode the anchored composite vegetation and special objects without a separate object layer.
+
+## Camp progression overlay
+
+Objects map ID 18 occurs at original grid (24,129), index 23244. Source `a.G` upgrades its item-17 sprite/name in place; it does not rewrite the map. The browser likewise retains map ID 18 and its original collision cell while selecting recovered Tent/Cabin artwork from the persistent camp tier. No terrain, border, decor, rock or object bytes change, and no free-placement grid is invented. See SHELTERS.md.

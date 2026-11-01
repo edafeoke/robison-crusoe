@@ -32,6 +32,7 @@ import { HuntingControls } from "./HuntingPanel";
 import { RodFishingDialogue } from "./RodFishingPanel";
 import { NetFishingDialogue } from "./NetFishingPanel";
 import { CoconutPalmDialogue } from "./CoconutGamePanel";
+import { ShelterDialogue } from "./ShelterPanel";
 const titles: Record<
   Exclude<Panel, null>,
   { eyebrow: string; title: string; icon: typeof Backpack }
@@ -478,9 +479,9 @@ export function PauseMenu() {
           Original game and art © Exkee. This exploration build preserves the
           original island and sprites. Wildlife roams, flees and takes flight.
           Original reserve depletion, food effects and short rest are playable.
-          Coconut throwing, fishing and bow hunting are playable. Clothing,
-          construction, offline sleep and story progression are still in
-          development. World-contact animal damage remains paused.
+          Coconut throwing, fishing, bow hunting and camp upgrades are playable.
+          Clothing, furnishings, storage, offline sleep and story progression
+          are still in development. World-contact animal damage remains paused.
         </p>
       </div>
     </>
@@ -491,6 +492,7 @@ export function Dialogue() {
   if (s.focus?.kind === "rod-fishing") return <RodFishingDialogue />;
   if (s.focus?.kind === "net-fishing") return <NetFishingDialogue />;
   if (s.focus?.kind === "coconut-palm") return <CoconutPalmDialogue />;
+  if (s.selected === 17 && s.focus?.itemId === 17) return <ShelterDialogue />;
   if (s.selected === null) return null;
   const item = s.items[s.selected],
     focus = s.focus,
