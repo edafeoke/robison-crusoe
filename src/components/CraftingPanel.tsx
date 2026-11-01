@@ -10,13 +10,20 @@ import { SpriteIcon } from "./SpriteIcon";
 import { CampOverview } from "./ShelterPanel";
 import { isShelterUpgrade } from "../game/systems/ShelterSystem";
 import { isFurnishing } from "../game/systems/HouseSystem";
+import { isClothing } from "../game/systems/ClothingSystem";
 export function CraftingPanel() {
   const s = useGameStore(),
     [readyOnly, setReadyOnly] = useState(false);
   const recipes = supportedRecipes(s.items),
     ready = recipes.filter(
       (item) =>
-        craftAvailability(item, s.inventory, s.shelter, s.furnishings).allowed,
+        craftAvailability(
+          item,
+          s.inventory,
+          s.shelter,
+          s.furnishings,
+          s.clothing,
+        ).allowed,
     );
   const shown = readyOnly ? ready : recipes;
   return (
@@ -47,6 +54,7 @@ export function CraftingPanel() {
               s.inventory,
               s.shelter,
               s.furnishings,
+              s.clothing,
             ),
             building = isShelterUpgrade(item.id) || isFurnishing(item.id);
           return (
@@ -62,6 +70,11 @@ export function CraftingPanel() {
                   · RECOVERED RECIPE
                 </p>
                 <h3>{item.name}</h3>
+                {isClothing(item.id) && (
+                  <p className="craft-energy">
+                    Kept in your wardrobe · equip from Change clothes
+                  </p>
+                )}
                 {isShelterUpgrade(item.id) && (
                   <p className="craft-energy">
                     Upgrades your original camp in place · no item to carry
@@ -182,8 +195,8 @@ export function CraftingPanel() {
           <br />
           Crafting uses the listed materials. Required tools stay in your
           satchel. Camp upgrades unlock recipes everywhere on the island.
-          Furnishings stay in your house. Clothing and boat repair are still
-          being reconstructed.
+          Furnishings stay in your house; garments stay in your wardrobe. Boat
+          repair is still being reconstructed.
         </p>
       </div>
     </>

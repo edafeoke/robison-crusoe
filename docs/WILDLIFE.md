@@ -47,9 +47,9 @@ BS9 provides the recovered ground shadow (region 3), generic shallow-water overl
 
 ## Hazards recovered but paused
 
-`d.a()` accumulates contact time within one tile while Robinson is not sailing. After more than 1000 ms it subtracts a percentage of maximum reserve `p.d` from current reserve `p.c`: alligator/jaguar 50%, green snake 10%, boa 20%. Equipment checks reduce those to 25%,25%,5%,10% respectively (trousers, shirt, shoes, hat slots). The shark contact branch sets the reserve to zero and the loss flag. These are verified numeric operations; this document does **not** relabel the reserve as a separate health meter. Its complete relationship to survival, outfits, sleeping and loss flow still needs porting.
+`d.a()` accumulates contact time within one tile while Robinson is not sailing. After more than 1000 ms it subtracts a percentage of maximum reserve `p.d` from current reserve `p.c`: alligator/jaguar 50%, green snake 10%, boa 20%. Equipment checks reduce those to 25%,25%,5%,10% respectively (trousers, shirt, shoes, hat slots). The shark contact branch sets the reserve to zero and the loss flag. These are verified numeric operations; this document does **not** relabel the reserve as a separate health meter. These contacts now integrate with energy, worn slots, interrupted short rest and collapse; see WORLD_HAZARDS.md for the verified call path and source loss quirks.
 
-**World-contact animal damage and generic meat drops remain paused.** Bow hunting now removes the actual caught actor and grants its original animal item; see HUNTING.md. Net and rod fishing are now implemented separately; see NET_FISHING.md and ROD_FISHING.md. Animals cannot be gathered through generic resource pickup; a bow uses the dedicated hunting mode. These deliberate milestone boundaries appear in settings. No new food loop is substituted.
+**World-contact animal hazards are now playable; generic meat drops are not invented.** Bow hunting now removes the actual caught actor and grants its original animal item; see HUNTING.md. Net and rod fishing are now implemented separately; see NET_FISHING.md and ROD_FISHING.md. Animals cannot be gathered through generic resource pickup; a bow uses the dedicated hunting mode. These deliberate milestone boundaries appear in settings. No new food loop is substituted.
 
 ## Browser implementation and adaptations
 

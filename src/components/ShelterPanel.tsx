@@ -35,6 +35,12 @@ export function CampOverview() {
           {FURNISHING_IDS.filter((id) => (s.furnishings[id] ?? 0) > 0).length}{" "}
           furnishings
         </button>
+        <button
+          className="camp-map-link house-link"
+          onClick={() => s.setPanel("wardrobe")}
+        >
+          Your wardrobe
+        </button>
       </div>
     </aside>
   );

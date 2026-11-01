@@ -34,6 +34,7 @@ import { NetFishingDialogue } from "./NetFishingPanel";
 import { CoconutPalmDialogue } from "./CoconutGamePanel";
 import { ShelterDialogue } from "./ShelterPanel";
 import { HousePanel } from "./HousePanel";
+import { WardrobePanel } from "./WardrobePanel";
 const titles: Record<
   Exclude<Panel, null>,
   { eyebrow: string; title: string; icon: typeof Backpack }
@@ -41,6 +42,11 @@ const titles: Record<
   inventory: {
     eyebrow: "EVERYTHING YOU CARRY",
     title: "Your satchel",
+    icon: Backpack,
+  },
+  wardrobe: {
+    eyebrow: "DRESS FOR THE JOURNEY",
+    title: "Your wardrobe",
     icon: Backpack,
   },
   house: {
@@ -144,6 +150,8 @@ export function PanelOverlay() {
             <InventoryPanel />
           ) : s.panel === "house" ? (
             <HousePanel />
+          ) : s.panel === "wardrobe" ? (
+            <WardrobePanel />
           ) : s.panel === "crafting" ? (
             <CraftingPanel />
           ) : s.panel === "journal" ? (
@@ -179,6 +187,12 @@ export function InventoryPanel() {
       <p className="panel-intro">
         A few things washed ashore. Others are waiting to be found.
       </p>
+      <button
+        className="secondary-button wardrobe-shortcut"
+        onClick={() => s.setPanel("wardrobe")}
+      >
+        Change clothes · {s.clothing.owned.length} garments
+      </button>
       {!!entries.length && (
         <div
           className="panel-filters"
@@ -488,8 +502,9 @@ export function PauseMenu() {
           original island and sprites. Wildlife roams, flees and takes flight.
           Original reserve depletion, food effects and short rest are playable.
           Coconut throwing, fishing, bow hunting, camp upgrades, furnishings and
-          sleep recovery are playable. Clothing and story progression are still
-          in development. World-contact animal damage remains paused.
+          sleep recovery, clothing and predator protection are playable. Nearby
+          predators attack and interrupt rest; sharks exhaust energy instantly.
+          Story progression is still in development.
         </p>
       </div>
     </>

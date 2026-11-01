@@ -10,6 +10,10 @@ import { Animal } from "../entities/Animal";
 import type { WildlifeManifest } from "../entities/WildlifeState";
 import { WildlifeSystem } from "../systems/WildlifeSystem";
 import { advanceSurvival } from "../systems/SurvivalSystem";
+import {
+  advanceWorldContact,
+  applyWorldContact,
+} from "../systems/WorldHazardSystem";
 import { useGameStore } from "../../store/gameStore";
 export class IslandScene extends Phaser.Scene {
   player!: Player;
@@ -20,6 +24,7 @@ export class IslandScene extends Phaser.Scene {
   marker!: Phaser.GameObjects.Graphics;
   ring!: Phaser.GameObjects.Ellipse;
   private syncTime = 0;
+  private survivalTime = 0;
   private removed = new Set<number>();
   private unsubscribe?: () => void;
   private discovered = new Set<number>();
@@ -54,6 +59,7 @@ export class IslandScene extends Phaser.Scene {
       return;
     }
     this.syncTime = 0;
+    this.survivalTime = 0;
     this.wildlife = new WildlifeSystem(
       this.map,
       manifest,
@@ -81,6 +87,7 @@ export class IslandScene extends Phaser.Scene {
       spawn.x,
       spawn.y,
     );
+    this.player.setOutfit(state.clothing.equipped);
     this.cameras.main
       .setBounds(0, 0, 2880, 2880)
       .setZoom(state.zoom)
@@ -225,6 +232,8 @@ export class IslandScene extends Phaser.Scene {
       }
       if (s.zoom !== prev.zoom) this.cameras.main.setZoom(s.zoom);
       if (s.shelter !== prev.shelter) this.world.updateShelter(s.shelter);
+      if (s.clothing !== prev.clothing)
+        this.player.setOutfit(s.clothing.equipped);
       if (s.collected !== prev.collected) {
         // Loading restores removed objects too; rebuild safely only when the collection shrinks or differs.
         if (prev.collected.some((i) => !s.collected.includes(i))) {
@@ -323,17 +332,55 @@ export class IslandScene extends Phaser.Scene {
       this.player.path = [];
       this.player.move(dx, dy, delta / 1000);
     } else this.player.updatePath(delta / 1000);
-    if (this.wildlife.update(delta, this.player, this.cameras.main.worldView))
-      for (const animal of this.animals) animal.render();
     this.syncTime += delta;
+    this.survivalTime += delta;
+    let survival = s.survival;
+    let rested = false;
+    const flushSurvival = () => {
+      const before = survival.restRemainingMs;
+      survival = advanceSurvival(survival, this.survivalTime);
+      this.survivalTime = 0;
+      rested ||=
+        before !== null && survival.restRemainingMs === null && !survival.death;
+    };
+    const attacks: string[] = [];
+    if (
+      this.wildlife.update(
+        delta,
+        this.player,
+        this.cameras.main.worldView,
+        (actor) => {
+          if (!survival.enabled) {
+            actor.contactMs = 0;
+            return;
+          }
+          if (survival.death) return;
+          const contact = advanceWorldContact(
+            actor,
+            this.player,
+            this.wildlife.manifest.tickMs,
+          );
+          if (!contact) return;
+          flushSurvival();
+          if (survival.death) return;
+          const result = applyWorldContact(
+            survival,
+            contact,
+            s.clothing.equipped,
+          );
+          survival = result.survival;
+          attacks.push(
+            `${actor.profile.name} · ${contact.kind === "instant" ? "energy depleted" : `−${result.cost} energy`}${result.interrupted && contact.kind === "timed" ? ` · Rest interrupted (+${result.restCredit} energy)` : ""}`,
+          );
+        },
+      )
+    )
+      for (const animal of this.animals) animal.render();
+    if (attacks.length) s.notify(attacks.join(" · "));
     if (this.syncTime > 100) {
       const elapsed = s.elapsed + this.syncTime / 1000;
-      const survival = advanceSurvival(s.survival, this.syncTime);
-      if (
-        s.survival.restRemainingMs !== null &&
-        survival.restRemainingMs === null &&
-        !survival.death
-      )
+      flushSurvival();
+      if (rested && !attacks.length)
         s.notify("Rested · Energy restored by up to 30 points");
       this.syncTime = 0;
       const tx = Math.floor(this.player.x / 16),
@@ -379,6 +426,10 @@ export class IslandScene extends Phaser.Scene {
         focus,
         discovered: [...this.discovered],
       });
-    }
+    } else if (attacks.length)
+      useGameStore.setState({
+        survival,
+        ...(survival.death ? { focus: null } : {}),
+      });
   }
 }

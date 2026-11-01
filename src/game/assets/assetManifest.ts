@@ -56,6 +56,7 @@ export interface RecoveredItem {
   recipe: { item: number; quantity: number }[];
   craftingTools: { item: number; quantity: number }[];
   shelterRequirement: number;
+  clothingSlot: number;
   category: number;
   interaction: { pickupTool: number; useTool: number; huntingTool: number };
   effects: {

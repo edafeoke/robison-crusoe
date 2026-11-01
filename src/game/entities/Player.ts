@@ -3,6 +3,11 @@ import type { AtlasManifest } from "../assets/assetManifest";
 import { assetManifest } from "../assets/assetManifest";
 import { CollisionSystem } from "../systems/CollisionSystem";
 import type { Point } from "../systems/MovementSystem";
+import {
+  clothingLayers,
+  emptyOutfit,
+  type Outfit,
+} from "../systems/ClothingSystem";
 export class Player {
   sprite: Phaser.GameObjects.Image;
   shadow: Phaser.GameObjects.Ellipse;
@@ -11,6 +16,8 @@ export class Player {
   frame = 0;
   animationTime = 0;
   path: Point[] = [];
+  private clothes: Phaser.GameObjects.Image[];
+  private outfit: Outfit = emptyOutfit();
   constructor(
     private scene: Phaser.Scene,
     public atlas: AtlasManifest,
@@ -20,6 +27,9 @@ export class Player {
   ) {
     this.shadow = scene.add.ellipse(x, y, 13, 6, 0x112f29, 0.24);
     this.sprite = scene.add.image(x, y, "bank-3", 0).setOrigin(0);
+    this.clothes = Array.from({ length: 4 }, () =>
+      scene.add.image(x, y, "bank-5", 0).setOrigin(0).setVisible(false),
+    );
     this.render();
   }
   move(dx: number, dy: number, dt: number) {
@@ -77,6 +87,7 @@ export class Player {
     if (!this.walking) this.path = [];
   }
   rest(elapsedMs: number) {
+    this.clothes.forEach((image) => image.setVisible(false));
     this.walking = false;
     const frame = Math.floor(elapsedMs / 700) % 2,
       f = this.atlas.sheets[9].frames[frame];
@@ -96,5 +107,26 @@ export class Player {
       .setFlipX(f.flipX)
       .setDepth(this.y + 0.4);
     this.shadow.setPosition(this.x, this.y + 5).setDepth(this.y - 0.1);
+    const layers = clothingLayers(this.outfit, this.facing, this.frame);
+    this.clothes.forEach((image, i) => {
+      const layer = layers[i],
+        frame =
+          layer &&
+          this.atlas.sheets[layer.sprite >>> 16]?.frames[layer.sprite & 65535];
+      image.setVisible(!!frame);
+      if (frame)
+        image
+          .setTexture(`bank-${layer.sprite >>> 16}`, layer.sprite & 65535)
+          .setPosition(
+            this.x + layer.dx - frame.anchorX,
+            this.y + 8 + layer.dy - frame.anchorY,
+          )
+          .setFlipX(frame.flipX)
+          .setDepth(this.y + 0.41 + i * 0.01);
+    });
+  }
+  setOutfit(outfit: Outfit) {
+    this.outfit = { ...outfit };
+    this.render();
   }
 }

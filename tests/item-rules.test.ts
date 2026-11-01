@@ -28,6 +28,7 @@ test("typed object rules preserve all CSV requirement fields and reusable-tool l
     assert.equal(item.interaction.huntingTool, +rows[2][item.id]);
     assert.equal(item.category, +rows[12][item.id]);
     assert.equal(item.shelterRequirement, +rows[10][item.id]);
+    assert.equal(item.clothingSlot, +rows[11][item.id]);
     assert.deepEqual(item.craftingTools, decode(rows[9][item.id]));
   }
   assert.deepEqual(items[91].craftingTools, [{ item: 76, quantity: 1 }]);

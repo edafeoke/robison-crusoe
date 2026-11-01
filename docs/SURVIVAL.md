@@ -91,13 +91,13 @@ The browser uses a ten-second active countdown, restores energy at its completio
 
 ## Still deferred
 
-Animal contact damage remains paused until clothing protections and loss interactions are integrated. Weight's nutrition counter (`v.a(int)`, a bar increment after 50 nutrition units), clothing, direct world consumption, non-sleep offline arithmetic, device clock parity, weather/tide scheduling and original save compatibility need further implementation/comparison. All are distinct from the now-working reserve/food/rest loop. No Java ME emulator fidelity comparison is claimed.
+Animal contact damage is now independently audited and playable, including predator clothing protection, interrupted short rest and immediate shark energy loss. See WORLD_HAZARDS.md and CLOTHING.md. Weight's nutrition counter (`v.a(int)`, a bar increment after 50 nutrition units), direct world consumption, non-sleep offline arithmetic, device clock parity, weather/tide scheduling and original save compatibility need further implementation/comparison. All are distinct from the now-working reserve/food/rest loop. No Java ME emulator fidelity comparison is claimed.
 
 Automated and browser observations are recorded in VALIDATION.md. The tests cover exact CSV values, minute boundaries and rollover, rest/death ordering, food/tool consumption, poison, activity effects, save migration/validation, and loss recovery without inventory or save mutation.
 
 ## Hunting energy
 
-Hunting completion now applies Bow strength/energy effects. Source retaliation after ten misses drains energy for dangerous species; clothing protection is not implemented, so the documented unprotected branch applies. World-contact damage remains paused. HUNTING.md distinguishes verified source values from this protection assumption.
+Hunting completion now applies Bow strength/energy effects. Source retaliation after ten misses drains energy for dangerous species with recovered clothing protection. Timed world contacts run separately and are paused throughout minigames. See HUNTING.md, CLOTHING.md and WORLD_HAZARDS.md.
 
 
 The subsequent house/sleep milestone implements the positive `v.c(true)` recovery bands for explicit Sleep. Source furniture creation effects are applied once and house entries persist separately; no bed bonus is inferred. See HOUSE_AND_SLEEP.md for timing and transaction adaptations.

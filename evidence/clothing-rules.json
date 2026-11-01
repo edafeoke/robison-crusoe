@@ -1,0 +1,279 @@
+{
+  "source": "data.ab.j, javap ab constructor; data.y/ad/a/aa/t; data.s retaliation",
+  "layerOrder": [
+    "shoes",
+    "pants",
+    "shirt",
+    "hat"
+  ],
+  "hatOffsets": {
+    "down": {
+      "x": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "y": [
+        0,
+        -1,
+        0,
+        -1,
+        0
+      ]
+    },
+    "up": {
+      "x": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "y": [
+        0,
+        -1,
+        0,
+        -1,
+        0
+      ]
+    },
+    "left": {
+      "x": [
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "y": [
+        -1,
+        0,
+        -1,
+        0,
+        -1
+      ]
+    },
+    "right": {
+      "x": [
+        -3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "y": [
+        -1,
+        0,
+        -1,
+        0,
+        -1
+      ]
+    }
+  },
+  "profiles": [
+    {
+      "item": 99,
+      "slot": "shirt",
+      "sequences": {
+        "up": 327695,
+        "down": 327680,
+        "left": 327710,
+        "right": 327725
+      },
+      "frames": 5
+    },
+    {
+      "item": 100,
+      "slot": "shirt",
+      "sequences": {
+        "up": 327700,
+        "down": 327685,
+        "left": 327715,
+        "right": 327730
+      },
+      "frames": 5
+    },
+    {
+      "item": 101,
+      "slot": "shirt",
+      "sequences": {
+        "up": 327705,
+        "down": 327690,
+        "left": 327720,
+        "right": 327735
+      },
+      "frames": 5
+    },
+    {
+      "item": 102,
+      "slot": "shirt",
+      "sequences": {
+        "up": 327755,
+        "down": 327740,
+        "left": 327770,
+        "right": 327785
+      },
+      "frames": 5
+    },
+    {
+      "item": 103,
+      "slot": "pants",
+      "sequences": {
+        "up": 327760,
+        "down": 327745,
+        "left": 327775,
+        "right": 327790
+      },
+      "frames": 5
+    },
+    {
+      "item": 104,
+      "slot": "pants",
+      "sequences": {
+        "up": 327765,
+        "down": 327750,
+        "left": 327780,
+        "right": 327795
+      },
+      "frames": 5
+    },
+    {
+      "item": 105,
+      "slot": "pants",
+      "sequences": {
+        "up": 327815,
+        "down": 327800,
+        "left": 327830,
+        "right": 327845
+      },
+      "frames": 5
+    },
+    {
+      "item": 106,
+      "slot": "pants",
+      "sequences": {
+        "up": 327820,
+        "down": 327805,
+        "left": 327835,
+        "right": 327850
+      },
+      "frames": 5
+    },
+    {
+      "item": 107,
+      "slot": "shoes",
+      "sequences": {
+        "up": 327825,
+        "down": 327810,
+        "left": 327840,
+        "right": 327855
+      },
+      "frames": 5
+    },
+    {
+      "item": 108,
+      "slot": "shoes",
+      "sequences": {
+        "up": 327875,
+        "down": 327860,
+        "left": 327890,
+        "right": 327905
+      },
+      "frames": 5
+    },
+    {
+      "item": 109,
+      "slot": "shoes",
+      "sequences": {
+        "up": 327880,
+        "down": 327865,
+        "left": 327895,
+        "right": 327910
+      },
+      "frames": 5
+    },
+    {
+      "item": 110,
+      "slot": "shoes",
+      "sequences": {
+        "up": 327885,
+        "down": 327870,
+        "left": 327900,
+        "right": 327915
+      },
+      "frames": 5
+    },
+    {
+      "item": 111,
+      "slot": "hat",
+      "sequences": {
+        "up": 327921,
+        "down": 327920,
+        "left": 327922,
+        "right": 327923
+      },
+      "frames": 1
+    },
+    {
+      "item": 112,
+      "slot": "hat",
+      "sequences": {
+        "up": 327925,
+        "down": 327924,
+        "left": 327926,
+        "right": 327927
+      },
+      "frames": 1
+    },
+    {
+      "item": 113,
+      "slot": "hat",
+      "sequences": {
+        "up": 327929,
+        "down": 327928,
+        "left": 327930,
+        "right": 327931
+      },
+      "frames": 1
+    },
+    {
+      "item": 114,
+      "slot": "hat",
+      "sequences": {
+        "up": 327933,
+        "down": 327932,
+        "left": 327934,
+        "right": 327935
+      },
+      "frames": 1
+    }
+  ],
+  "protection": [
+    {
+      "item": 42,
+      "slot": "pants",
+      "protected": 25,
+      "unprotected": 50
+    },
+    {
+      "item": 43,
+      "slot": "shirt",
+      "protected": 25,
+      "unprotected": 50
+    },
+    {
+      "item": 48,
+      "slot": "shoes",
+      "protected": 5,
+      "unprotected": 10
+    },
+    {
+      "item": 49,
+      "slot": "hat",
+      "protected": 10,
+      "unprotected": 20
+    }
+  ]
+}

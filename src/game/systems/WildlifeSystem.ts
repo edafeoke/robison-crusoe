@@ -50,6 +50,7 @@ export class WildlifeSystem {
         frame: 0,
         seed: ((id + 1) * 2654435761) >>> 0 || 1,
         reaction: null,
+        contactMs: 0,
       };
       this.wander(actor);
       this.actors.push(actor);
@@ -256,7 +257,12 @@ export class WildlifeSystem {
     }
     a.frame = (a.frame + 1) % (family === "shark" ? 6 : 4);
   }
-  update(delta: number, player: Point, view?: View) {
+  update(
+    delta: number,
+    player: Point,
+    view?: View,
+    afterTick?: (actor: WildlifeActor) => void,
+  ) {
     // No background-tab catch-up burst. UI pause callers never advance this clock.
     this.accumulator += Math.max(0, Math.min(delta, 180));
     let advanced = false;
@@ -273,6 +279,7 @@ export class WildlifeSystem {
         )
           continue;
         this.tick(a, player);
+        afterTick?.(a);
       }
     }
     return advanced;

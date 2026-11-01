@@ -16,7 +16,7 @@ Evidence is from this workspace's supplied JAR, not a generic survival design. I
 | 10 | `p.e : byte[]` | Global camp requirement. `aa.c(StringBuffer)` accepts -1 at Flag, -1/9 at Tent, -1/9/10 at Cabin. Exported as `shelterRequirement`; boats/rafts use separate paths. |
 | 12 | `p.f : byte[]` | Inventory category. `ad.a()` and `a.G()` route item storage by category. 0 supplies, 1 equipment; construction, storage, furnishings and clothing use separate branches. |
 
-Other CSV rows retain their original strings in `rawFields`. Status rows 3–7 are now audited and implemented; see SURVIVAL.md. Row 11's clothing-related path remains separate.
+Other CSV rows retain their original strings in `rawFields`. Status rows 3–7 are now audited and implemented; see SURVIVAL.md. Row 11's matching garment slot metadata is now exported; its scratch-array parser has no confirmed runtime consumer. Actual slots are verified independently by category/renderer switches; see CLOTHING.md.
 
 ## Pickup examples
 
@@ -43,7 +43,7 @@ Other CSV rows retain their original strings in `rawFields`. Status rows 3–7 a
 | Net | Rope×4, Stone×4 | Knife×1 |
 | Arrow | Branch×5, Stone×1 | Knife×1, Bow×1 |
 
-The UI now lists 20 supplies/equipment recipes, two camp upgrades and four house furnishings. Materials, reusable tools and global shelter-tier prerequisites are enforced. The original Flag upgrades in place to Tent and Cabin; structures never become portable inventory items. Furnishings use a separate house record; clothes and boat repair remain separate. See SHELTERS.md and HOUSE_AND_SLEEP.md for source call paths, exact recipes and adaptations.
+The UI now lists 20 supplies/equipment recipes, two camp upgrades four house furnishings and 16 garments. Materials, reusable tools and global shelter-tier prerequisites are enforced. The original Flag upgrades in place to Tent and Cabin; structures never become portable inventory items. Furnishings use a separate house record; garments use separate wardrobe ownership/equipment; boat repair remains separate. See SHELTERS.md and HOUSE_AND_SLEEP.md for source call paths, exact recipes and adaptations.
 
 `ad.k()` stores crafted equipment uniquely. The browser prevents crafting an already-owned equipment item instead of consuming materials for no additional result; this is a documented usability fix. Supply results can stack. Output quantity is one, matching `ad.n()`/`ad.k()`.
 

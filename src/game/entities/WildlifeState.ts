@@ -34,6 +34,8 @@ export interface WildlifeSnapshot {
   duration: number;
   frame: number;
   seed: number;
+  /** Optional in older browser saves; elapsed nearby time in data.d, at most 1000 ms. */
+  contactMs?: number;
 }
 export interface WildlifeActor extends WildlifeSnapshot {
   profile: WildlifeProfile;
@@ -69,7 +71,11 @@ export function validWildlife(value: unknown): value is WildlifeSnapshot[] {
       s.frame < 6 &&
       Number.isInteger(s.seed) &&
       s.seed > 0 &&
-      s.seed <= 0xffffffff
+      s.seed <= 0xffffffff &&
+      (s.contactMs === undefined ||
+        (Number.isSafeInteger(s.contactMs) &&
+          s.contactMs >= 0 &&
+          s.contactMs <= 1000))
     );
   });
 }

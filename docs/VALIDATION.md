@@ -1,6 +1,65 @@
 # Validation record
 
-## Current milestone: house furnishings and explicit sleep recovery
+## Current milestone: recovered world-contact hazards
+
+Date: 2026-11-01. **97 tests passed**, including eight new world-hazard checks. TypeScript and production build passed. Final classic entry: **index-B5pno_Wk.js**, 1,619.79 kB / 454.66 kB gzip. The existing 1,600 kB chunk advisory remains; no dependency added. Full decoding succeeds; hazard/clothing JSON/TypeScript and typed object metadata regenerate byte-for-byte. Original map and sprite integrity tests pass. QA fixtures are absent from dist. See WORLD_HAZARDS.md for verified source facts and explicit adaptations.
+
+### Automated coverage
+
+- All four independently extracted `d` slot/cost rules, irrelevant/wrong-slot clothing and `i` shark loss. No invented health meter or generic drops.
+- Chebyshev-one tile range including diagonals, strict >1000 ms, leaving-range reset, source sailing timer exemption and immediate shark behavior without that exemption.
+- Actual wildlife tick integration, per-animal 1080 ms attack cycles at the fixed browser cadence, view freezing, removal, partial-exposure save continuation and legacy zero migration. Invalid contact timers rejected.
+- Partial short-rest credit after damage, one-time interruption, preserved unprotected clamp quirks, normalized protected fatal loss, valid collapsed saves and exploration safety.
+- Existing map, sprites, movement, resources, inventory, all crafting/camp/house/clothing, food, sleep and four minigame regression checks remain green.
+
+### Browser observations
+
+The user's existing **4173** expedition was untouched. QA used isolated origin **4194**.
+
+- `tests/browser/world-hazards.html` explicitly labels its setup, supplied Hat and automatic pause after the first energy change. It moves Robinson to actual original actors without moving animals or modifying map layers. No manual travel/crafting supply chain is claimed for this fixture.
+- Beside original **Boa actor 1091**, at walkable player grid **(11,5)**: bare **100 → 80** energy; with the supplied worn Hat, **100 → 90**. Each real world attack produced the corresponding named notice. Between tests, settings kept the world paused.
+- Prepared energy 60 and Hat, then used the actual **Rest a moment** game control. The Boa interrupted rest: **60 → 53**, with notice **−10 energy / +3 partial-rest energy**, rest cleared, no collapse. Screenshot: `evidence/world-hazards-interrupted-rest.jpg`.
+- Prepared original **Shark actor 1111**, leaving it at its actual source cell **(31,6)** and placing Robinson on a walkable original shore at **(31,8)**. The shark approached through water and immediately exhausted energy: **100 → 0**, animal-loss state, original dangerous-animal message and disabled save. Continued through the real exploration recovery button; reserves returned to 100. Screenshot: `evidence/world-hazards-shark-loss.jpg`.
+- Returned to the protected Boa case, observed **100 → 90**, then saved through normal IndexedDB UI. Loaded the production root on the same origin: position **(11,5)**, energy **90**, one owned/equipped Hat and its **10-energy** Boa protection restored. No fixture controls in production.
+- Stopped the preview server, cold-reloaded production and continued the save: the same position/energy/outfit restored offline. Resumed the actual world offline and observed another protected attack **90 → 80**, then paused in settings. `evidence/world-hazards-offline-world.jpg` captures the actual production world, original Boa, Robinson's Hat, energy 80 and the **Boa · −10 energy** notice. The saved checkpoint remains at 90; the final paused in-memory state is 80.
+- Production entry confirmed as **index-B5pno_Wk.js**, exactly one canvas and captured warnings/errors empty, including after offline reload. Retained the cached production tab, paused; owned dev/preview processes stopped.
+- One development HMR accessibility snapshot timed out, recovered on a fresh read. One full-page screenshot failed; a native screenshot then succeeded. These did not prevent the final production/offline verification. No viewport override used. Screenshots `world-hazards-bare.jpg` and `world-hazards-protected.jpg` retain the labelled fixture comparisons.
+
+### Remaining limits
+
+Java ME execution/emulator comparison, original boat/raft and story/escape progression, remaining special object actions, inventory weight/capacity, weather/tides, non-sleep offline arithmetic and original RMS save compatibility remain outstanding. The browser's fixed wildlife ticks, menu/hidden-tab pause, optional exploration mode, new warnings and normalized negative-reserve loss are documented adaptations. No exhaustive manual tour of all predator placements or full source timing parity is claimed.
+
+## Previous milestone: recovered clothing and hunting protection
+
+Date: 2026-11-01. **89 tests passed**, including nine clothing checks. TypeScript and production build passed. Final classic entry: **index-BwCtSQDL.js**, 1,617.21 kB / 453.71 kB gzip. The existing 1,600 kB chunk advisory remains; the single classic bundle preserves the verified offline behavior. Original map/sprite integrity checks are green. Clothing JSON/TypeScript and typed object metadata regenerate byte-for-byte. QA fixtures are absent from dist; `git diff --check` passed. No dependency added.
+
+### Automated coverage and source assessment
+
+- All 16 source garments, slot/category mappings, exact recipes, reusable tools, global camp gates and unique wardrobe ownership. Crafting does not auto-equip or add garments to the satchel.
+- All **256 BS5 regions**, source layer order, four directional five-frame sequences, static directional hats and all eight bytecode hat-offset arrays (four omitted by CFR).
+- Ownership and correct-slot checks, immutable equip/remove operations, invalid/duplicate/wrong-slot save rejection and legacy unequipped migration.
+- All garments tested against all four predators: pants/alligator 25 vs 50, shirt/jaguar 25 vs 50, shoes/green snake 5 vs 10, hat/boa 10 vs 20. No effect for unrelated slots/species.
+- Hunting captures the worn outfit; grouped protected retaliation totals **65**, bare total **130**. Existing ammunition, one-time settlement, source timing and actual animal removal tests remain green. Wardrobe changes are blocked during challenges/rest/collapse.
+- Creation energy/morale, tool retention and persistence of ownership/worn IDs. CSV row 11 matches garment slot metadata but has no confirmed runtime consumer; actual slots are independently verified by category and renderer switches. See CLOTHING.md.
+
+### Browser observations
+
+Isolated origin **4193** was used; the user's existing **4173** save was untouched.
+
+- Dev-only `tests/browser/clothing.html` labels its supplied Cabin, garment materials/tools and active survival. Through the real workbench buttons crafted **T-shirt, Loincloth, Straw shoe and Hat**. Energy changed **100 → 55**; Morale became **4**, Strength **0**; Needle and Scissors remained in the satchel. The four new recipes became Owned. No manual gathering or complete textile/camp supply chain is claimed.
+- Opened the wardrobe, which initially showed no garment equipped. Equipped one in each slot through visible controls; the protection table changed **50/50/10/20 → 25/25/5/10**. Garments remained owned when worn. Four directional preview controls were exercised; down/left screenshots were visually inspected, and representative original layers aligned correctly.
+- Returned to the actual starting shore, moved using Right/Down/Up, and reached grid **(10,148)**. Original clothes rendered on Robinson in the world; screenshot `evidence/clothing-world-fixture.jpg` is visibly labelled as a prepared fixture. Exact walking-frame mappings are checked automatically, not claimed to have been individually captured manually.
+- The visible fixture control then positioned Robinson beside an **actual original Boa actor** near **(12,6)** and supplied Bow×1/Arrow×1, without replacing the actor or map. Boa dialogue showed its original observation and **10 energy** retaliation cost with the worn Hat. Entered a real three-target hunt; the HUD showed **Boa 10 energy** from the captured outfit. Left before shooting, preserving Arrow and reserves. No manual protected-retaliation loss is claimed; those calculations are checked automatically.
+- Saved through normal settings UI. Navigated the same isolated tab to the production root, which has no fixture controls, and loaded the save. Restored four owned/worn garments, original preview, table **25/25/5/10**, energy **55**, and **Arrow×1 / Bow×1 / Needle×1 / Scissors×1** at **(12,6)**.
+- Stopped preview, cold-reloaded the cached production root, and chose Continue. The same position, energy, equipment, wardrobe ownership and four worn slots returned. Opened Change clothes from the satchel and verified the protected table again.
+- Final DOM check: exactly **one canvas**, script **index-BwCtSQDL.js**, captured production warnings/errors empty. Final screenshot: `evidence/clothing-offline-restored.jpg`. Other screenshots: `evidence/clothing-wardrobe-fixture.jpg`, `evidence/clothing-world-fixture.jpg`, `evidence/clothing-hunt-protection.jpg`. The saved expedition used explicit QA preparation; it is not a claimed new-game progression playthrough.
+- No viewport override or browser-control failure occurred. Owned dev/preview servers stopped; the cached production tab is retained with wardrobe open, pausing survival. Restart `npm run dev`, or `npm run preview -- --port 4193` after building to serve the same QA origin.
+
+### Remaining limits
+
+World-contact animal hazards remain disabled pending their separate collision/attack consequence audit. No emulator comparison, complete 16-garment manual animation/retaliation playthrough or broad browser-family comparison is claimed. Outfit preview and direct selection are browser UI adaptations; wardrobe saves use stable item IDs rather than source list indices. Rest uses the source separate unclothed pose; raft-specific clothing rendering is deferred with travel. Weight, special object actions, tides/weather, non-sleep offline behavior, source save import and original story/boat/raft progression remain outstanding. See CLOTHING.md for complete evidence and scope.
+
+## Tenth milestone: house furnishings and explicit sleep recovery (historical)
 
 Date: 2026-11-01. **80 tests passed**, including eight house/sleep checks. TypeScript and production build passed. Final classic entry: **index-Bg1SzBZ3.js**, 1,608.17 kB / 451.21 kB gzip. The existing 1,600 kB chunk advisory remains; the intentional single classic bundle preserves verified offline loading. Original sprite/map integrity checks remain green. `git diff --check` passed. No dependency was added.
 

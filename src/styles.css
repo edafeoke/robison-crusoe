@@ -2758,3 +2758,89 @@ i {
     serif;
   color: #5a6350;
 }
+
+.wardrobe-shortcut {
+  margin-bottom: 20px;
+}
+.outfit-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  margin-bottom: 22px;
+  padding: 16px;
+  background: #ebe5d3;
+  border: 1px solid #d4c6a4;
+  border-radius: 5px;
+}
+.outfit-portrait {
+  position: relative;
+  flex-shrink: 0;
+  width: 144px;
+  height: 164px;
+}
+.outfit-directions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.outfit-directions button,
+.wardrobe-choices button {
+  border: 1px solid #c8c3ac;
+  border-radius: 4px;
+  background: #f6f2e6;
+  color: #345443;
+  padding: 8px 12px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+}
+.outfit-directions button.selected,
+.wardrobe-choices button.selected {
+  background: #345443;
+  border-color: #345443;
+  color: #f8f1dc;
+}
+.wardrobe-slots {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+.wardrobe-slot h3 {
+  margin: 0 0 9px;
+  font:
+    21px Georgia,
+    serif;
+}
+.wardrobe-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.wardrobe-choices button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.wardrobe-protection-title {
+  margin-top: 26px;
+  font:
+    23px Georgia,
+    serif;
+}
+.protection-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+  font-size: 13px;
+  text-align: left;
+}
+.protection-table th,
+.protection-table td {
+  border-bottom: 1px solid #d4c6a4;
+  padding: 10px 8px;
+}
+.protection-table th {
+  color: #345443;
+  font-size: 11px;
+}

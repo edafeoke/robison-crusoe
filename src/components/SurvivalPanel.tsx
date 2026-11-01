@@ -8,9 +8,14 @@ import {
 } from "lucide-react";
 import { useGameStore } from "../store/gameStore";
 import { useEffect, useRef } from "react";
+import {
+  worldHazardRule,
+  worldContactCost,
+} from "../game/systems/WorldHazardSystem";
 export function ConditionPanel() {
   const s = useGameStore(),
-    life = s.survival;
+    life = s.survival,
+    hazard = s.focus ? worldHazardRule(s.focus.itemId + 1) : undefined;
   return (
     <div className="condition-plaque">
       <p>
@@ -58,6 +63,14 @@ export function ConditionPanel() {
           <button onClick={s.cancelRest}>Cancel</button>
         </div>
       )}
+      {life.enabled && !life.death && hazard && (
+        <small className="condition-warning" role="status">
+          Keep your distance · {s.items[hazard.mapId - 1]?.name}{" "}
+          {hazard.kind === "instant"
+            ? "can exhaust your energy instantly."
+            : `drains ${worldContactCost(hazard, s.clothing.equipped)} energy per attack.`}
+        </small>
+      )}
       {life.enabled &&
         !life.death &&
         Math.min(life.hunger, life.thirst, life.energy) <= 20 && (
@@ -66,7 +79,7 @@ export function ConditionPanel() {
               ? "Find fruit to restore your thirst."
               : life.hunger <= 20
                 ? "Eat from your satchel."
-                : "Rest to restore your energy."}
+                : "Find a safe place to rest."}
           </small>
         )}
     </div>
@@ -130,8 +143,9 @@ export function SurvivalSettings() {
       </div>
       <p className="muted survival-note">
         Strength {Math.floor(life.strength)} · Morale {Math.floor(life.morale)}.
-        World-contact damage remains paused. Turning survival off restores the
-        three reserves for exploration.
+        Nearby predators drain energy and interrupt rest. Clothing reduces their
+        attacks; sharks exhaust energy instantly. Turning survival off restores
+        the three reserves for exploration.
       </p>
       <div className="rest-setting">
         <div>
@@ -204,13 +218,15 @@ export function SurvivalLoss() {
           <p className="eyebrow">THE ISLAND TAKES ITS TOLL</p>
           <h2 id="loss-title">Robinson has collapsed.</h2>
           <p>
-            {cause === "poison"
-              ? s.story[110]
-              : cause === "energy"
-                ? s.story[96]
-                : cause === "hunger"
-                  ? "His hunger reserve is empty."
-                  : "His thirst reserve is empty."}
+            {cause === "animal"
+              ? s.story[95]
+              : cause === "poison"
+                ? s.story[110]
+                : cause === "energy"
+                  ? s.story[96]
+                  : cause === "hunger"
+                    ? "His hunger reserve is empty."
+                    : "His thirst reserve is empty."}
           </p>
           <button className="primary-button" onClick={s.load}>
             <RotateCcw size={16} />

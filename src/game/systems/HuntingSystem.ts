@@ -1,5 +1,6 @@
 import { huntingRules as R } from "../data/huntingRules";
 import { coconutRules as T } from "../data/coconutRules";
+import { emptyOutfit, huntingDamage, type Outfit } from "./ClothingSystem";
 export interface HuntSource {
   id: number;
   itemId: number;
@@ -34,6 +35,7 @@ export interface HuntShot {
   offsetY: number;
 }
 export interface HuntingGame {
+  outfit: Outfit;
   seed: number;
   angle: number;
   power: number;
@@ -69,6 +71,7 @@ function random(s: HuntingGame, limit: number) {
 export function createHuntingGame(
   sources: readonly HuntSource[],
   seed: number,
+  outfit: Outfit = emptyOutfit(),
 ): HuntingGame {
   if (
     !sources.length ||
@@ -84,6 +87,7 @@ export function createHuntingGame(
   )
     throw new Error("Unsupported hunting targets");
   const s: HuntingGame = {
+    outfit: { ...outfit },
     seed: seed >>> 0 || 1,
     angle: 70,
     power: 40,
@@ -244,8 +248,7 @@ export function stepHunting(state: HuntingGame, delta: number): HuntingGame {
     if (s.phase === "attacking") {
       if (s.attackMs >= R.attackMs) {
         s.attackEnergy = s.targets.reduce(
-          (sum, t) =>
-            sum + ((R.attackEnergy as Record<number, number>)[t.itemId] ?? 0),
+          (sum, t) => sum + huntingDamage(t.itemId, s.outfit),
           0,
         );
         s.status = "lost";

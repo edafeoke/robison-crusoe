@@ -5,6 +5,7 @@ import { SpriteIcon } from "./SpriteIcon";
 import type { RecoveredItem } from "../game/assets/assetManifest";
 import { huntingProfile } from "../game/systems/HuntingSystem";
 import { huntingRules as R } from "../game/data/huntingRules";
+import { huntingDamage } from "../game/systems/ClothingSystem";
 export function HuntingControls({ item }: { item: RecoveredItem }) {
   const s = useGameStore(),
     f = s.focus;
@@ -37,8 +38,10 @@ export function HuntingControls({ item }: { item: RecoveredItem }) {
       </div>
       {huntingProfile(item.id)!.dangerous && (
         <p className="hunt-warning">
-          This animal can attack after ten misses. Hunting without protective
-          clothing can drain energy.
+          This animal can attack after ten misses. With your current outfit, its
+          retaliation costs {huntingDamage(item.id, s.clothing.equipped)}{" "}
+          energy, in addition to the hunt cost. The matching clothing slot
+          halves this attack cost.
         </p>
       )}
       <button
@@ -114,8 +117,16 @@ export function HuntingPanel() {
             </p>
             {g.targets.some((t) => huntingProfile(t.itemId)!.dangerous) && (
               <p className="hunt-warning">
-                Dangerous targets attack after ten misses. No protection is
-                applied in this build.
+                Dangerous targets attack after ten misses. Your outfit sets each
+                attack cost:{" "}
+                {g.targets
+                  .filter((t) => huntingProfile(t.itemId)!.dangerous)
+                  .map(
+                    (t) =>
+                      `${s.items[t.itemId].name} ${huntingDamage(t.itemId, g.outfit)} energy`,
+                  )
+                  .join("; ")}
+                .
               </p>
             )}
             <small>

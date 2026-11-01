@@ -5,6 +5,13 @@ import type {
 } from "../game/assets/assetManifest";
 import { canPickup, craftInventory } from "../game/systems/ItemRules";
 import { isFurnishing, furnish } from "../game/systems/HouseSystem";
+import {
+  initialClothing,
+  isClothing,
+  equipClothing,
+  type ClothingState,
+  type ClothingSlot,
+} from "../game/systems/ClothingSystem";
 import { isShelterUpgrade, type Shelter } from "../game/systems/ShelterSystem";
 import { SaveSystem, type SaveData } from "../game/systems/SaveSystem";
 import type { WildlifeSnapshot } from "../game/entities/WildlifeState";
@@ -61,6 +68,7 @@ export type Panel =
   | "settings"
   | "dialogue"
   | "house"
+  | "wardrobe"
   | null;
 export interface FocusObject {
   index: number;
@@ -87,6 +95,7 @@ interface GameState {
   inventory: Record<number, number>;
   shelter: Shelter;
   furnishings: Record<number, number>;
+  clothing: ClothingState;
   worldObjects: readonly number[] | null;
   worldDecor: readonly number[] | null;
   worldTerrain: readonly number[] | null;
@@ -121,6 +130,7 @@ interface GameState {
   collect: (index: number, itemId: number) => boolean;
   inspect: (index: number, itemId: number) => void;
   craft: (id: number) => boolean;
+  equip: (slot: ClothingSlot, id: number | null) => boolean;
   discard: (id: number) => void;
   consume: (id: number) => boolean;
   beginRest: () => void;
@@ -166,6 +176,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   inventory: {},
   shelter: 17,
   furnishings: {},
+  clothing: initialClothing(),
   worldObjects: null,
   worldDecor: null,
   worldTerrain: null,
@@ -274,6 +285,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       s.inventory,
       s.shelter,
       s.furnishings,
+      s.clothing,
     );
     if (!inventory) return false;
     const survival = activityEffect(s.survival, item, "craft");
@@ -283,6 +295,9 @@ export const useGameStore = create<GameState>((set, get) => ({
       furnishings: isFurnishing(id)
         ? furnish(s.furnishings, id)
         : s.furnishings,
+      clothing: isClothing(id)
+        ? { ...s.clothing, owned: [...s.clothing.owned, id] }
+        : s.clothing,
       survival,
       ...(survival.death ? { panel: null, focus: null } : {}),
     });
@@ -291,8 +306,28 @@ export const useGameStore = create<GameState>((set, get) => ({
         ? `Your camp is now a ${item.name.toLowerCase()}`
         : isFurnishing(id)
           ? `${item.name} added to your house`
-          : `${item.name} crafted`,
+          : isClothing(id)
+            ? `${item.name} added to your wardrobe`
+            : `${item.name} crafted`,
     );
+    return true;
+  },
+  equip: (slot, id) => {
+    const s = get();
+    if (
+      !s.ready ||
+      !s.started ||
+      s.coconutGame ||
+      s.fishingGame ||
+      s.rodGame ||
+      s.huntingGame ||
+      s.survival.death ||
+      s.survival.restRemainingMs !== null
+    )
+      return false;
+    const clothing = equipClothing(s.clothing, slot, id);
+    if (!clothing) return false;
+    set({ clothing });
     return true;
   },
   discard: (id) =>
@@ -412,6 +447,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         coconutUses: s.coconutUses,
         shelter: s.shelter,
         furnishings: s.furnishings,
+        clothing: s.clothing,
         ...(sleep ? { sleepStartedAt: Date.now() } : {}),
       };
       await SaveSystem.save(data);
@@ -451,6 +487,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           coconutUses: saved.coconutUses ?? 0,
           shelter: saved.shelter ?? 17,
           furnishings: saved.furnishings ?? {},
+          clothing: saved.clothing ?? initialClothing(),
           coconutGame: null,
           fishingGame: null,
           rodGame: null,
@@ -524,6 +561,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       huntingGame: createHuntingGame(
         group.map((a) => ({ id: a.id, itemId: a.mapId - 1 })),
         ((actorId + 1) * 2654435761 + s.huntingSerial) >>> 0,
+        s.clothing.equipped,
       ),
       huntingSerial: s.huntingSerial + 1,
       panel: null,

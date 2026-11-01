@@ -1,6 +1,11 @@
 import type { RecoveredItem } from "../assets/assetManifest";
 import { isFurnishing } from "./HouseSystem";
 import {
+  isClothing,
+  initialClothing,
+  type ClothingState,
+} from "./ClothingSystem";
+import {
   isShelterUpgrade,
   shelterAllows,
   shelterOwned,
@@ -62,7 +67,8 @@ export function supportedRecipes(items: RecoveredItem[]): RecoveredItem[] {
       ((item.sprite >= 0 &&
         (item.category === 0 ||
           item.category === 1 ||
-          isShelterUpgrade(item.id))) ||
+          isShelterUpgrade(item.id) ||
+          isClothing(item.id))) ||
         isFurnishing(item.id)),
   );
 }
@@ -79,13 +85,15 @@ export function craftAvailability(
   inventory: Inventory,
   shelter: Shelter = 17,
   furnishings: Inventory = {},
+  clothing: ClothingState = initialClothing(),
 ): CraftAvailability {
   const supported =
     !!item.recipe.length &&
     ((item.sprite >= 0 &&
       (item.category === 0 ||
         item.category === 1 ||
-        isShelterUpgrade(item.id))) ||
+        isShelterUpgrade(item.id) ||
+        isClothing(item.id))) ||
       isFurnishing(item.id));
   const missing = (rs: Requirement[]) =>
     rs.filter((r) => (inventory[r.item] ?? 0) < r.quantity);
@@ -95,7 +103,8 @@ export function craftAvailability(
   const alreadyOwned =
     (item.category === 1 && (inventory[item.id] ?? 0) > 0) ||
     shelterOwned(item.id, shelter) ||
-    (isFurnishing(item.id) && (furnishings[item.id] ?? 0) > 0);
+    (isFurnishing(item.id) && (furnishings[item.id] ?? 0) > 0) ||
+    clothing.owned.includes(item.id);
   const shelterReady = shelterAllows(item, shelter);
   return {
     allowed:
@@ -116,13 +125,20 @@ export function craftInventory(
   inventory: Inventory,
   shelter: Shelter = 17,
   furnishings: Inventory = {},
+  clothing: ClothingState = initialClothing(),
 ): Record<number, number> | null {
-  if (!craftAvailability(item, inventory, shelter, furnishings).allowed)
+  if (
+    !craftAvailability(item, inventory, shelter, furnishings, clothing).allowed
+  )
     return null;
   const next = { ...inventory };
   for (const r of item.recipe) next[r.item] -= r.quantity;
   // a.G changes the camp's sprite/name, rather than adding a portable building.
-  if (!isShelterUpgrade(item.id) && !isFurnishing(item.id))
+  if (
+    !isShelterUpgrade(item.id) &&
+    !isFurnishing(item.id) &&
+    !isClothing(item.id)
+  )
     next[item.id] = (next[item.id] ?? 0) + 1;
   return next;
 }

@@ -1,7 +1,7 @@
 import type { RecoveredItem } from "../assets/assetManifest";
 import type { Inventory } from "./ItemRules";
 
-export type LossCause = "hunger" | "thirst" | "energy" | "poison";
+export type LossCause = "hunger" | "thirst" | "energy" | "poison" | "animal";
 export interface SurvivalState {
   enabled: boolean;
   hunger: number;
@@ -58,7 +58,9 @@ export function validSurvival(value: unknown): value is SurvivalState {
     Number.isInteger(s.stoneUses) &&
     s.stoneUses >= 0 &&
     s.stoneUses < 6 &&
-    [null, "hunger", "thirst", "energy", "poison"].includes(s.death) &&
+    [null, "hunger", "thirst", "energy", "poison", "animal"].includes(
+      s.death,
+    ) &&
     (s.death === null
       ? s.hunger > 0 && s.thirst > 0 && s.energy > 0
       : s.enabled && (s.hunger === 0 || s.thirst === 0 || s.energy === 0)) &&

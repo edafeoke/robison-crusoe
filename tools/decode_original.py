@@ -78,6 +78,7 @@ def main():
     # y.d case 13 -> p.e byte[]; aa.c(StringBuffer) accepts -1 / 9 / 10 by global camp tier.
     for item in objects:
         item['shelterRequirement'] = int(rows[10][item['id']])
+        item['clothingSlot'] = int(rows[11][item['id']])
     write(Path('public/assets/objects/objects.json'),objects)
     write(Path('public/assets/ui/atlas.json'),{'sheets':sheets,'decor':decor,'borders':borders,'icons':icons,'composites':composites,'variants':variants})
     write(Path('public/assets/ui/story.json'),textbanks[0][0])
@@ -97,5 +98,9 @@ def main():
     recover_rod_fishing()
     from recover_hunting import recover as recover_hunting
     recover_hunting()
+    from recover_clothing import recover as recover_clothing
+    recover_clothing()
+    from recover_hazards import recover as recover_hazards
+    recover_hazards()
     print(f'Exported {len(inventory)} archive entries, {sum(counts)} exact sprite regions, 5 lossless layers, {len(composites)} composites, 120 objects, 5 languages.')
 if __name__=='__main__':main()

@@ -1,6 +1,6 @@
 # Bow hunting recovery
 
-Milestone eight ports the original `data.s` bow-hunting mode. All source JAR/map/sprite files remain intact. World-contact damage, clothing protection and story progression are separate systems and remain deferred.
+Milestone eight ports the original `data.s` bow-hunting mode. All source JAR/map/sprite files remain intact. World-contact damage is now independently ported (WORLD_HAZARDS.md); story progression remains deferred. Clothing protection is implemented separately; see CLOTHING.md.
 
 ## Entry, targets and inventory
 
@@ -47,7 +47,7 @@ After ten unsuccessful shots, non-dangerous groups lose immediately. A group con
 | Green snake | 10 | 5 |
 | Boa | 20 | 10 |
 
-These are **energy** effects, not a new health stat. The browser currently has no worn-clothing state, so it explicitly applies the unprotected branch. This is an implementation assumption, not proof of the original starting outfit. Protected values are documented/exported for the future clothing port. Overworld contact damage remains paused. Exploration mode keeps reserves full, including during hunting; strength and completion inventory still change.
+These are **energy** effects, not a new health stat. Milestone eight used the unprotected branch while clothing was unported. The clothing milestone now captures the actual equipped outfit and checks the source slot for each target, using the protected values above. Source new-game slot lists begin at -1; legacy browser saves migrate to unequipped state. See CLOTHING.md. Overworld contact damage remains paused. Exploration mode keeps reserves full, including during hunting; strength and completion inventory still change.
 
 Retaliation is a committed outcome: settings/hidden tabs can pause it, but Leave cannot cancel it to avoid its cost. A hit on shot ten is prioritized as success. Original `j()` can also set retaliation flags on that shot while the success branch is active; those overlapping source result paths are not allowed to double-charge or both win and lose in the browser.
 
@@ -64,7 +64,7 @@ In-progress hunting is transient and cannot be saved. World motion, wildlife, in
 - React sliders, keyboard/click shooting, persistent instructions, readable counters and immediate result settlement replace device-specific controls and skippable interstitials. The original first-fire warning acknowledgement is not an extra consumed shot.
 - Leaving before retaliation abandons an unfinished hunt without reward or completion charge, following the established browser minigame cancellation policy. The save is not overwritten.
 - Browser PRNG, fresh per-attempt transient timers, fixed ticks, reference viewport and radial grouping differ from original Java runtime/device scheduling. No emulator equivalence is claimed.
-- Clothing protection, overworld contact hazards, construction/workstations, weight, weather/tides, sleep and original quest/escape progression remain incomplete.
+- Overworld contact hazards, weight, weather/tides and original quest/escape progression remain incomplete. Camp upgrades, crafting tiers, house records, explicit sleep recovery and clothing protection are now ported in their respective milestone documents.
 
 ## Verification
 
