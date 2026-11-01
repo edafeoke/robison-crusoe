@@ -1,5 +1,6 @@
 import type { RecoveredItem } from "../assets/assetManifest";
 import { isFurnishing } from "./HouseSystem";
+import { isLargeSail } from "./ShipSystem";
 import {
   isClothing,
   initialClothing,
@@ -56,7 +57,7 @@ export function portableRecipes(items: RecoveredItem[]): RecoveredItem[] {
   return items.filter(
     (item) =>
       item.recipe.length > 0 &&
-      item.sprite >= 0 &&
+      (item.sprite >= 0 || isLargeSail(item.id)) &&
       (item.category === 0 || item.category === 1),
   );
 }
@@ -64,7 +65,7 @@ export function supportedRecipes(items: RecoveredItem[]): RecoveredItem[] {
   return items.filter(
     (item) =>
       item.recipe.length > 0 &&
-      ((item.sprite >= 0 &&
+      (((item.sprite >= 0 || isLargeSail(item.id)) &&
         (item.category === 0 ||
           item.category === 1 ||
           isShelterUpgrade(item.id) ||
@@ -89,7 +90,7 @@ export function craftAvailability(
 ): CraftAvailability {
   const supported =
     !!item.recipe.length &&
-    ((item.sprite >= 0 &&
+    (((item.sprite >= 0 || isLargeSail(item.id)) &&
       (item.category === 0 ||
         item.category === 1 ||
         isShelterUpgrade(item.id) ||

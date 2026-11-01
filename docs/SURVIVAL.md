@@ -68,7 +68,7 @@ Examples:
 - Successful collection applies energy/morale/strength effects when pickup-tool is not `-1` and use-tool **is** `-1`. A fruit's food benefits therefore wait until consumption; merely taking it does not feed Robinson.
 - Successful creation applies its energy/morale/strength effect once. For example, collecting a stone costs 3 energy and adds 1 strength; making an axe costs 10 energy and adds 1 strength. Failed/missing-tool/duplicate actions have no effect.
 - Activities may exhaust Robinson after their original successful item transaction. The acquired or made item is retained, but movement stops on loss.
-- Direct USE on an object in the world follows a separate `ad.j()` path, with its own duplicate-effect behavior. This milestone uses **Gather → Satchel → Eat**. Direct world consumption is not silently treated as equivalent to inventory use.
+- Direct USE on an object in the world follows a separate `ad.j()` path, with its own duplicate-effect behavior. Both **Gather → Satchel → Eat** and **Eat … here** are now ported separately. WORLD_FOOD.md documents its 22 static food gates, doubled free-fruit Energy, skipped sentinels, kept tools and fatal return before object removal/nutrition.
 
 ## Verified short rest
 
@@ -91,7 +91,7 @@ The browser uses a ten-second active countdown, restores energy at its completio
 
 ## Still deferred
 
-Animal contact damage is now independently audited and playable, including predator clothing protection, interrupted short rest and immediate shark energy loss. See WORLD_HAZARDS.md and CLOTHING.md. Nutrition-driven body weight is now ported separately, retaining the one-step-per-meal counter and exact tool/sentinel branches (BODY_WEIGHT.md). Direct world consumption, non-sleep offline arithmetic, device clock parity, weather/tide scheduling and original save compatibility need further implementation/comparison. All are distinct from the now-working reserve/food/rest loop. No Java ME emulator fidelity comparison is claimed.
+Animal contact damage is now independently audited and playable, including predator clothing protection, interrupted short rest and immediate shark energy loss. See WORLD_HAZARDS.md and CLOTHING.md. Nutrition-driven body weight is now ported separately, retaining the one-step-per-meal counter and exact tool/sentinel branches (BODY_WEIGHT.md). Direct world consumption is now ported separately (WORLD_FOOD.md). Non-sleep offline arithmetic, device clock parity, weather/tide scheduling and original save compatibility need further implementation/comparison. All are distinct from the now-working reserve/food/rest loop. No Java ME emulator fidelity comparison is claimed.
 
 Automated and browser observations are recorded in VALIDATION.md. The tests cover exact CSV values, minute boundaries and rollover, rest/death ordering, food/tool consumption, poison, activity effects, save migration/validation, and loss recovery without inventory or save mutation.
 

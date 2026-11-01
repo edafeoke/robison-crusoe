@@ -3,6 +3,8 @@ import type { AtlasManifest, RecoveredItem } from "../assets/assetManifest";
 import type { IslandMap } from "./MapDecoder";
 import { decorVariantIndex } from "./DecorVariants";
 import { campItem, type Shelter } from "../systems/ShelterSystem";
+import { shipRules as R } from "../data/shipRules";
+import { initialShip, type ShipState } from "../systems/ShipSystem";
 // Animated BS11 shoreline borders are drawn separately using the recovered data.c cycle.
 const ANIMATED_BORDERS = new Set([5, 6, 7, 17, 18, 19, 20, 21, 22]);
 export function drawRegion(
@@ -71,16 +73,38 @@ export function makeRegion(
 }
 export class MapRenderer {
   objectSprites = new Map<number, Phaser.GameObjects.Image>();
+  private shipFlags: {
+    image: Phaser.GameObjects.Image;
+    x: number;
+    y: number;
+  }[] = [];
+  private flagFrame = 0;
   constructor(
     private scene: Phaser.Scene,
     private map: IslandMap,
     private atlas: AtlasManifest,
     private items: RecoveredItem[],
-  ) {}
+  ) {
+    scene.time.addEvent({
+      delay: R.flagMs,
+      loop: true,
+      callback: () => {
+        this.flagFrame = (this.flagFrame + 1) % R.flagFrames.length;
+        const key = R.flagFrames[this.flagFrame],
+          f = atlas.sheets[key >>> 16].frames[key & 65535];
+        for (const flag of this.shipFlags)
+          flag.image
+            .setTexture(`bank-${key >>> 16}`, key & 65535)
+            .setPosition(flag.x - f.anchorX, flag.y - f.anchorY)
+            .setFlipX(f.flipX);
+      },
+    });
+  }
   render(
     removed: Set<number>,
     managed = new Set<number>(),
     shelter: Shelter = 17,
+    ship: ShipState = initialShip(),
   ) {
     const { scene, map, atlas } = this;
     for (let cy = 0; cy < 6; cy++)
@@ -167,7 +191,11 @@ export class MapRenderer {
         const sprite = makeRegion(
           scene,
           atlas,
-          this.items[campItem(obj - 1, shelter)].sprite,
+          this.items[
+            obj - 1 === R.wreckItem && ship.phase !== "wreck"
+              ? R.repairItem
+              : campItem(obj - 1, shelter)
+          ].sprite,
           x,
           y,
           y + 0.5,
@@ -175,6 +203,43 @@ export class MapRenderer {
         if (sprite) this.objectSprites.set(i, sprite);
       }
     }
+    this.addShipFlags(ship);
+  }
+  private addShipFlags(ship: ShipState) {
+    this.shipFlags.forEach((f) => f.image.destroy());
+    this.shipFlags = [];
+    if (!this.objectSprites.has(R.index)) return;
+    const x = (R.index % 180) * 16 + 8,
+      y = Math.floor(R.index / 180) * 16 + 8;
+    for (const offset of ship.phase === "wreck"
+      ? R.wreckFlags
+      : R.repairedFlags) {
+      const image = makeRegion(
+        this.scene,
+        this.atlas,
+        R.flagFrames[this.flagFrame],
+        x + offset.dx,
+        y + offset.dy,
+        y + 0.6,
+      );
+      if (image)
+        this.shipFlags.push({ image, x: x + offset.dx, y: y + offset.dy });
+    }
+  }
+  updateShip(ship: ShipState) {
+    this.remove(R.index);
+    const x = (R.index % 180) * 16 + 8,
+      y = Math.floor(R.index / 180) * 16 + 8;
+    const image = makeRegion(
+      this.scene,
+      this.atlas,
+      ship.phase === "wreck" ? R.wreckSprite : R.repairedSprite,
+      x,
+      y,
+      y + 0.5,
+    );
+    if (image) this.objectSprites.set(R.index, image);
+    this.addShipFlags(ship);
   }
   remove(index: number) {
     this.objectSprites.get(index)?.destroy();

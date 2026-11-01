@@ -135,6 +135,7 @@ export function SurvivalSettings() {
           className="secondary-button"
           disabled={
             !s.started ||
+            s.ship.phase !== "wreck" ||
             !!(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame) ||
             !!life.death ||
             life.restRemainingMs !== null
@@ -171,6 +172,7 @@ export function SurvivalSettings() {
           onClick={s.sleep}
           disabled={
             !s.ready ||
+            s.ship.phase !== "wreck" ||
             !s.started ||
             s.saving ||
             !!(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame) ||

@@ -11,6 +11,7 @@ import { CampOverview } from "./ShelterPanel";
 import { isShelterUpgrade } from "../game/systems/ShelterSystem";
 import { isFurnishing } from "../game/systems/HouseSystem";
 import { isClothing } from "../game/systems/ClothingSystem";
+import { isLargeSail } from "../game/systems/ShipSystem";
 export function CraftingPanel() {
   const s = useGameStore(),
     [readyOnly, setReadyOnly] = useState(false);
@@ -70,6 +71,11 @@ export function CraftingPanel() {
                   · RECOVERED RECIPE
                 </p>
                 <h3>{item.name}</h3>
+                {isLargeSail(item.id) && (
+                  <p className="craft-energy">
+                    Used to reconstruct the pirate ship for the voyage home.
+                  </p>
+                )}
                 {isClothing(item.id) && (
                   <p className="craft-energy">
                     Kept in your wardrobe · equip from Change clothes
@@ -195,8 +201,8 @@ export function CraftingPanel() {
           <br />
           Crafting uses the listed materials. Required tools stay in your
           satchel. Camp upgrades unlock recipes everywhere on the island.
-          Furnishings stay in your house; garments stay in your wardrobe. Boat
-          repair is still being reconstructed.
+          Furnishings stay in your house; garments stay in your wardrobe.
+          Rebuild the pirate ship at its wreck for the voyage home.
         </p>
       </div>
     </>

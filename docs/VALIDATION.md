@@ -1,6 +1,66 @@
 # Validation record
 
-## Current milestone: nutrition-driven Weight and carrying-capacity audit
+## Current milestone: Pirate ship reconstruction and escape
+
+Date: 2026-11-01. **125 tests passed**, including 11 new ship checks. TypeScript and production build passed. Final classic entry: **index-Dhcqv5Qb.js**, 1,637.28 kB / 458.80 kB gzip. Existing 1,600 kB chunk advisory remains; no dependency added. Full decoding succeeds; all typed rule files and object metadata regenerate byte-for-byte. Map/sprite integrity tests remain green. No development fixture files in dist. Source findings and explicit adaptations: SHIP_RECONSTRUCTION.md.
+
+### Source and automated coverage
+
+- Original single wreck at (152,30), map19/index5552, BS6 wreck/repaired frames19/20; both original flag anchors, frame IDs and cadence checked against D0/source.
+- Large sail54 with original sprite−1 is a valid supply recipe. All six ship material groups are consumed, all six tools retained, no portable ship created. Exact activity effects, missing materials/tools, rest/collapse, live cell/distance checks and duplicate settlement covered.
+- Northward 32px player shift, independent strict >8000 ms ending timer, action/menu locks and collapse/recovery clock behavior checked. The pure timer has no need effects; the normal Phaser world loop continues needs and wildlife while departure input is locked.
+- Optional version-1 phase/timer validation, malformed phases, loss consistency, legacy migration, completed-save load and new-expedition resets checked. Earlier checkpoints are retained until explicitly overwritten.
+- Separate raft audit retained without enabling an incomplete mode; terrain12/13/14 verified against the integer identity table and raft predicate, not CSV byte prerequisites.
+
+### Browser observations
+
+Isolated origin **4197** was used; the user's **4173** expedition was untouched. `tests/browser/ship.html` explicitly supplies reconstruction materials/equipment and Large sail ingredients and positions Robinson beside the actual unchanged wreck. It does not claim a manual full-island journey. The final fixture additionally starts active survival 0.5 seconds before a reserve tick.
+
+- Original wreck inspection lists six material groups and six kept tools; repair disabled with Large sail0/1. Actual workbench reports **43 recipes**; Craft Large sail consumes Sail×4/Fabric×1/Thread×1, retains Scissors/Needle and changes Energy100→90. Actual inspection then enables reconstruction.
+- Real repair consumes the materials, retains **eight tools total** (six ship tools plus Scissors/Needle), keeps source object19, moves Robinson from **(151,29) to (151,27)** and replaces the wreck with original repaired art and flags.
+- Paused departure at **315 ms**, Energy90. Save/Sleep/rest/inventory/crafting controls disabled. Resume plus held Right750ms and pause yielded **1238 ms**, unchanged position **(151,27)**, and **Hunger90 / Thirst86 / Energy86**. This confirms ongoing reserve depletion under the movement lock, rather than granting final-scene immunity.
+- Resumed to original victory text97/98 at terminal elapsed **8001 ms**, with the same reserves, source cell and eight tools. `evidence/ship-rebuilt-departure.jpg` shows the recovered ship and real countdown; `evidence/ship-ending-fixture.jpg` records the labelled ending setup. Actual completed-save control reported success.
+- Real Begin another expedition reset to spawn **(8,148)**, full reserves, empty satchel and unrepaired state. The saved completed checkpoint survived and was restored in the production root with **90/86/86**, eight tools and the original ending. No fixture controls appear in production.
+- After production reported assets cached, stopped the owned preview server and cold-reloaded. Real Continue restored the ending offline with the same **90/86/86**, position and tool count. Screenshot: `evidence/ship-ending-offline-restored.jpg`. Final DOM inspection confirmed **index-Dhcqv5Qb.js**, exactly **one canvas**, captured warnings/errors empty. Retained cached production tab; owned dev/preview servers stopped. No viewport override used.
+- During development, a nonexistent “Pause departure” locator timed out; a fresh accessibility read exposed the actual Pause button, which worked. An earlier eight-second locator wait hit the browser provider's short deadline; subsequent observed state confirmed completion. Source edits caused HMR reloads during early runs; the final source-stable transaction above was repeated before saving. No completion is inferred from a timed-out action.
+
+### Remaining limits
+
+The optimistic fixed-terrain walking audit reaches **13,251 cells**, with every Objects blocker ignored. The wreck, Saw, Hammer and Sextant remain outside that component. Raft travel, tides and remaining decor/resource updates are needed to complete the access journey; no full new-game-to-escape playthrough is claimed. The standalone ending is tested under explicit prepared preconditions. Original interstitial/menu timing, emulator comparison, RMS compatibility, weather/tides, non-sleep offline arithmetic and further original special actions remain pending. See SHIP_RECONSTRUCTION.md and evidence/ship-access-audit.json.
+
+## Previous milestone: recovered direct world-food consumption
+
+Date: 2026-11-01. **114 tests passed**, including nine new world-food checks. TypeScript and production build passed. Final classic entry: **index-CuFE_67H.js**, 1,626.47 kB / 456.20 kB gzip. The existing 1,600 kB chunk advisory remains; no dependency added. Full decoding succeeds; world-food/Weight/typed object metadata regenerate byte-for-byte. Original map/sprite integrity checks pass; development fixtures are absent from dist. Source branches and explicit adaptations are documented in WORLD_FOOD.md.
+
+### Source and automated coverage
+
+- All **22** static food profiles derived from original action priority, use-tool gates and typed object data. Original hunting/fishing targets, structures and decor palms do not get a generic eat shortcut.
+- Exact world effects for every supported food, doubled free-fruit Energy, source sentinel differences from satchel use, caps and once-only nutrition. Direct Coconut use keeps Stone and does not advance the six-opening satchel counter.
+- Both fatal Energy return points preserve the object and omit nutrition. Browser zero-reserve/actual-food poison-label normalization and exploration override are explicit; neither invents a new poison mechanic.
+- Matching live cells, integer IDs/bounds, range, removed-cell checks, tools, rest/minigame/start/collapse locks, immutable source maps, runtime occupancy, one-time settlement and prevention of fatal save overwrite.
+- Existing version-1 removal/state persistence and load continuation; all prior survival, Weight, food, inventory/crafting, camp/house/clothes, sleep, wildlife/hazards and minigame checks remain green.
+
+### Browser observations
+
+Isolated origin **4196** was used. The user's existing **4173** expedition was untouched.
+
+- `tests/browser/world-food.html` explicitly labels its preconditions: Robinson positioned near actual unchanged original food cells; reserves 40/40/40 (poison Energy 100), nutrition accumulator 49, and specifically supplied tools. Original wildlife snapshots reset between prepared cases. No manual journey, tool creation, gathering or food relocation is claimed for this fixture.
+- **Mango at (70,60)**, Robinson **(71,61)**: discovery offered separate **Eat mango here** and **Gather mango**. Direct eating produced **Hunger 43 / Thirst 55 / Energy 56**, body bar **1/64** (1.6%) / nutrition **2**, runtime object **0**, empty satchel. Screenshot `evidence/world-food-mango-dialogue.jpg` shows the labelled fixture's real action.
+- **Coconut at (108,15)**, Robinson **(107,15)**: supplied Stone×1 and opening counter **5/6**. Direct use produced **43 / 65 / 56**, body bar **1/64**, nutrition **2**. Runtime object became **0**, Stone remained **1**, counter stayed **5/6**. Screenshot: `evidence/world-food-coconut-kept-stone.jpg`.
+- **Pineapple at (24,32)**, Robinson **(23,32)**: direct Eat was disabled without Knife while Gather remained available. Supplied the labelled original Knife, then used the actual Eat control. Result **45 / 65 / 56**, nutrition **4**, object **0**, Knife×1 kept and no pineapple added to inventory.
+- **Red mushroom at (34,21)**, Robinson **(35,22)**: Fire×1 supplied, Energy 100. Warning displayed **−100 Energy**. Real use caused poison collapse, Energy **0**, Hunger/Thirst still **40/40**, object still **32**, nutrition still **49**, Fire×1 kept and save disabled. Screenshot: `evidence/world-food-poison-loss.jpg`.
+- Used the real exploration recovery control and re-inspected that still-present mushroom. Exploration use cleared it, kept reserves at 100, retained Fire and changed nutrition **49 → 48**, with no duplicate inventory effect. This is the documented browser loss override.
+- Prepared the original Mango again and saved **before** eating via normal IndexedDB UI. Production root restored **(71,61)**, **40/40/40**, empty satchel, zero Weight bar and the still-available Mango. No fixture controls in production.
+- Stopped the preview server and cold-reloaded production. Continued the checkpoint offline, resumed, and the actual nearest prompt was **E Examine Mango**. Pressed **E** and used **Eat mango here**: exact **43/55/56**, Weight **1.6%**, empty satchel, Mango gone and next prompt **Red berry**. The Weight step also confirms the saved nutrition remainder 49 was restored. Screenshot: `evidence/world-food-offline-dialogue.jpg`.
+- During the first offline observation, the world was left running and nearby wildlife eventually caused animal collapse. The earlier checkpoint was preserved. Reloaded it through the normal loss dialog, repeated the real offline meal, saved immediately and paused. Screenshot `evidence/world-food-offline-eaten.jpg` records that successful production world transaction. No poisoned/animal-loss state overwrote the save.
+- Cold-reloaded the new save with the server still stopped: **43/55/56**, Weight **1.6%** and empty satchel restored. The next actual interaction remained **Red berry**, with the eaten Mango absent. `evidence/world-food-offline-restored.jpg` shows the restored world. Final tab is paused; the saved checkpoint contains the completed meal.
+- One cold-load Continue click timed out while the page materialized; a fresh accessibility read showed the title screen, and its actual Continue control recovered the flow. Final production entry confirmed **index-CuFE_67H.js**, exactly one canvas and captured warnings/errors empty. Retained the cached production tab; owned dev/preview processes stopped. No viewport override used.
+
+### Remaining limits
+
+Exact source facing/menu presentation, Java ME emulator comparison, remaining special-object actions, boat/raft/story escape progression, weather/tides, non-sleep offline arithmetic and RMS compatibility remain outstanding. Radial mouse interaction, loss normalization, actual-food poison labelling, exploration recovery and guide wording are documented browser adaptations. No complete original adventure or exhaustive manual check of every food placement is claimed.
+
+## Previous milestone: nutrition-driven Weight and carrying-capacity audit
 
 Date: 2026-11-01. **105 tests passed**, including eight new Weight checks. TypeScript and production build passed. Final classic entry: **index-CxM8jFtp.js**, 1,622.75 kB / 455.46 kB gzip. The existing 1,600 kB chunk advisory remains; no dependency added. Full decoding succeeds, and Weight/hazard/typed object metadata regenerate byte-for-byte. Original map/sprite integrity checks pass. Development fixtures are absent from dist. Detailed source findings and explicit browser choices: BODY_WEIGHT.md.
 

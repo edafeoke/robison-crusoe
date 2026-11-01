@@ -31,7 +31,7 @@ This is a single **if**, not a loop or modulo operation. A 100-nutrition meal at
 
 `ad.g()` calls this routine once for successful satchel consumption: the positive use-tool branch passes the raw hunger effect even when it is **−1**; the free-food branch skips the call only when hunger equals the −1 sentinel. Thus a tool meal's duplicated Energy effect does **not** double its nutrition. Eating at already-full Hunger still counts the original raw nutrition, rather than the capped amount actually restored. Weight is updated in the same successful transaction as item use, including fatal poison, and does not change on unavailable food, missing tools, rest/activity locks, rejected input, crafting, gathering, discarding or ordinary rest.
 
-`ad.j()` is a separate direct-world consumption path with its own effect and fatal-return order; it also has one nutrition call. This milestone continues the supported **Gather → Satchel → Eat** flow. It does not silently route direct world use through satchel consumption. Direct world use remains the next item-action investigation.
+`ad.j()` is a separate direct-world consumption path with its own effect and fatal-return order; it also has one nutrition call. Direct world use is now independently ported in WORLD_FOOD.md; it does not route through satchel consumption. Its successful nutrition call and fatal non-commit behavior are preserved separately.
 
 ## Browser representation and saves
 
@@ -53,4 +53,4 @@ These array lengths are storage implementation details covering a 120-item catal
 
 Eight automated checks cover provenance/icons/reference scaling; threshold/queued large meals; maximum/signed arithmetic; tool/sentinel nutrition; successful/full/fatal/blocked food transactions; independence from crafting/discard/rest/exploration; save/sleep/legacy migration; and malformed saves. Browser checks exercise the real food buttons with labelled supplied food/tools, then normal IndexedDB and production offline loading. Exact observations are in VALIDATION.md.
 
-Direct world consumption, remaining special object actions, boat/raft/story escape progression, weather/tides, non-sleep offline arithmetic and original RMS compatibility remain unported. No original emulator comparison or exhaustive manual menu/action playthrough is claimed.
+Remaining special object actions, boat/raft/story escape progression, weather/tides, non-sleep offline arithmetic and original RMS compatibility remain unported. No original emulator comparison or exhaustive manual menu/action playthrough is claimed.

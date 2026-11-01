@@ -1,0 +1,62 @@
+{
+  "scope": "Current fixed-terrain browser walking collision; all Objects ignored optimistically; no tides, raft or decor-clearing simulation. Not proof of original Java game reachability.",
+  "walkingComponent": 13251,
+  "checks": [
+    {
+      "mapId": 19,
+      "index": 5552,
+      "x": 152,
+      "y": 30,
+      "reachableIgnoringAllObjects": false
+    },
+    {
+      "mapId": 85,
+      "index": 17014,
+      "x": 94,
+      "y": 94,
+      "reachableIgnoringAllObjects": true
+    },
+    {
+      "mapId": 79,
+      "index": 29570,
+      "x": 50,
+      "y": 164,
+      "reachableIgnoringAllObjects": false
+    },
+    {
+      "mapId": 78,
+      "index": 17804,
+      "x": 164,
+      "y": 98,
+      "reachableIgnoringAllObjects": false
+    },
+    {
+      "mapId": 81,
+      "index": 7499,
+      "x": 119,
+      "y": 41,
+      "reachableIgnoringAllObjects": true
+    },
+    {
+      "mapId": 24,
+      "index": 8705,
+      "x": 65,
+      "y": 48,
+      "reachableIgnoringAllObjects": true
+    },
+    {
+      "mapId": 23,
+      "index": 13845,
+      "x": 165,
+      "y": 76,
+      "reachableIgnoringAllObjects": false
+    },
+    {
+      "mapId": 80,
+      "index": 4246,
+      "x": 106,
+      "y": 23,
+      "reachableIgnoringAllObjects": true
+    }
+  ]
+}

@@ -33,6 +33,7 @@ import { HuntingPanel } from "./components/HuntingPanel";
 import { RodFishingPanel } from "./components/RodFishingPanel";
 import { NetFishingPanel } from "./components/NetFishingPanel";
 import { CoconutGamePanel } from "./components/CoconutGamePanel";
+import { DepartureStatus, EscapeResult } from "./components/EscapePanel";
 const toolbar: {
   panel: Panel;
   name: string;
@@ -46,12 +47,18 @@ const toolbar: {
 ];
 export default function App() {
   const s = useGameStore();
+  const worldLocked = s.ship.phase !== "wreck";
   useAmbience(s.ambience && s.started);
   useEffect(() => {
     const keydown = (e: KeyboardEvent) => {
       if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
       const key = e.key.toLowerCase();
       const state = useGameStore.getState();
+      if (
+        state.ship.phase === "escaped" ||
+        (state.ship.phase === "departing" && key !== "escape")
+      )
+        return;
       if (state.survival.death) return;
       if (
         (state.coconutGame ||
@@ -91,9 +98,9 @@ export default function App() {
   const goals = [
     { text: "Explore the shore", done: s.discovered.length > 200 },
     { text: "Examine an island object", done: s.inspected.length > 0 },
-    { text: "Gather your first supplies", done: s.collected.length >= 3 },
+    { text: "Make use of island supplies", done: s.collected.length >= 3 },
   ];
-  const begin = () => useGameStore.setState({ started: true });
+  const begin = () => s.beginExpedition();
   const fullscreen = () => {
     const host = document.querySelector(".game-shell");
     if (!document.fullscreenElement)
@@ -134,6 +141,7 @@ export default function App() {
             aria-label="Save expedition"
             disabled={
               !s.ready ||
+              worldLocked ||
               s.saving ||
               !!s.survival.death ||
               !!(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame)
@@ -145,6 +153,7 @@ export default function App() {
           <button
             className="icon-button"
             aria-label="Settings and pause"
+            disabled={s.ship.phase === "escaped"}
             onClick={() => s.setPanel("settings")}
           >
             <Settings2 size={20} />
@@ -176,6 +185,7 @@ export default function App() {
             <NetFishingPanel />
             <RodFishingPanel />
             <HuntingPanel />
+            <DepartureStatus />
             <div className="canvas-vignette" />
             {s.enhancements && (
               <div
@@ -306,7 +316,7 @@ export default function App() {
                 <ChevronRight size={17} />
               </button>
             )}
-            {s.help && s.started && (
+            {s.help && s.started && s.ship.phase === "wreck" && (
               <div className="control-note">
                 <span>
                   <kbd>W</kbd>
@@ -337,11 +347,15 @@ export default function App() {
             <div className="game-bottom-line">
               <span>
                 <span className="live-dot" />{" "}
-                {s.panel
-                  ? "EXPEDITION PAUSED"
-                  : s.started
-                    ? "EXPLORING THE ISLAND"
-                    : "A NEW CHAPTER AWAITS"}
+                {s.ship.phase === "escaped"
+                  ? "EXPEDITION COMPLETE"
+                  : s.panel
+                    ? "EXPEDITION PAUSED"
+                    : s.ship.phase === "departing"
+                      ? "HOMEWARD BOUND"
+                      : s.started
+                        ? "EXPLORING THE ISLAND"
+                        : "A NEW CHAPTER AWAITS"}
               </span>
               <span>
                 {Math.floor(s.x / 16)} E <i /> {Math.floor(s.y / 16)} S
@@ -356,6 +370,7 @@ export default function App() {
                   key={name}
                   disabled={
                     !s.ready ||
+                    worldLocked ||
                     !!(
                       s.coconutGame ||
                       s.fishingGame ||
@@ -378,6 +393,7 @@ export default function App() {
                 aria-label="Rest a moment"
                 disabled={
                   !s.ready ||
+                  worldLocked ||
                   !s.started ||
                   !!(
                     s.coconutGame ||
@@ -437,6 +453,7 @@ export default function App() {
               className="text-button"
               onClick={() => s.setPanel("journal")}
               disabled={
+                worldLocked ||
                 !!(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame)
               }
             >
@@ -469,6 +486,7 @@ export default function App() {
             onClick={() => s.setPanel("map")}
             aria-label="Open island map"
             disabled={
+              worldLocked ||
               !!(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame)
             }
           >
@@ -513,7 +531,8 @@ export default function App() {
                     s.coconutGame ||
                     s.fishingGame ||
                     s.rodGame ||
-                    s.huntingGame
+                    s.huntingGame ||
+                    worldLocked
                   )
                 }
                 onClick={() => s.setPanel("inventory")}
@@ -540,6 +559,7 @@ export default function App() {
       </footer>
       <PanelOverlay />
       <SurvivalLoss />
+      <EscapeResult />
     </div>
   );
 }

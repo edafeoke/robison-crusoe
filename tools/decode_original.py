@@ -104,5 +104,9 @@ def main():
     recover_hazards()
     from recover_weight import recover as recover_weight
     recover_weight()
+    from recover_world_food import recover as recover_world_food
+    recover_world_food()
+    from recover_ship import recover as recover_ship
+    recover_ship()
     print(f'Exported {len(inventory)} archive entries, {sum(counts)} exact sprite regions, 5 lossless layers, {len(composites)} composites, 120 objects, 5 languages.')
 if __name__=='__main__':main()

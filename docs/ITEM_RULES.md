@@ -25,7 +25,7 @@ Other CSV rows retain their original strings in `rawFields`. Status rows 3–7 a
 - Log (11): Axe (5).
 - Giant log (93): Saw (78).
 - Bamboo (38): Machete (96).
-- Pineapple (27) has a knife use action, but TAKE is available before obtaining the knife. Satchel eating now uses the original Knife requirement; direct world consumption remains separate.
+- Pineapple (27) has a knife use action, but TAKE is available before obtaining the knife. Both satchel eating and direct world eating require the original Knife, with their distinct effects retained (WORLD_FOOD.md).
 - Animals are not added to inventory merely because the relevant bow/net exists; the original specialized interaction must be played. Supported hunting and both fishing modes are now ported as specialized interactions. Coconut-bearing palms now have their verified throwing action; see COCONUT_CHALLENGE.md.
 - Structures and raft/boat/shelter progression have explicit special cases in `a.c(int)` and cannot be gathered as loose items.
 
@@ -43,7 +43,7 @@ Other CSV rows retain their original strings in `rawFields`. Status rows 3–7 a
 | Net | Rope×4, Stone×4 | Knife×1 |
 | Arrow | Branch×5, Stone×1 | Knife×1, Bow×1 |
 
-The UI now lists 20 supplies/equipment recipes, two camp upgrades four house furnishings and 16 garments. Materials, reusable tools and global shelter-tier prerequisites are enforced. The original Flag upgrades in place to Tent and Cabin; structures never become portable inventory items. Furnishings use a separate house record; garments use separate wardrobe ownership/equipment; boat repair remains separate. See SHELTERS.md and HOUSE_AND_SLEEP.md for source call paths, exact recipes and adaptations.
+The UI now lists 21 supplies/equipment recipes, two camp upgrades, four house furnishings and 16 garments. Materials, reusable tools and global shelter-tier prerequisites are enforced. The original Flag upgrades in place to Tent and Cabin; structures never become portable inventory items. Furnishings use a separate house record; garments use separate wardrobe ownership/equipment; Pirate ship repair/ending uses its separate original-world interaction (SHIP_RECONSTRUCTION.md). Large sail (54) is craftable despite its verified sprite −1; no replacement artwork is invented. See SHELTERS.md and HOUSE_AND_SLEEP.md for source call paths, exact recipes and adaptations.
 
 `ad.k()` stores crafted equipment uniquely. The browser prevents crafting an already-owned equipment item instead of consuming materials for no additional result; this is a documented usability fix. Supply results can stack. Output quantity is one, matching `ad.n()`/`ad.k()`.
 
@@ -51,7 +51,7 @@ The UI now lists 20 supplies/equipment recipes, two camp upgrades four house fur
 
 Existing version-1 IndexedDB saves still load; previously acquired items are retained. New restrictions apply to subsequent actions. This avoids silently deleting progress from the simplified first milestone.
 
-The browser's interaction radius/pathfinding, labels and recipe filters are adaptations. Exact original facing-only interaction, timed action presentation, direct world consumption and story gating remain to port. Animal contacts and supported minigames are now ported separately. The fourth milestone implements inventory food/poisoning and activity effects from rows 3–7; see SURVIVAL.md. The subsequent wildlife milestone ports the recovered animal behavior families; see WILDLIFE.md. No emulator comparison has been completed.
+The browser's interaction radius/pathfinding, labels and recipe filters are adaptations. Exact original facing-only interaction, timed action presentation, remaining special object actions and story gating remain to port. Direct world consumption is now independently ported in WORLD_FOOD.md. Animal contacts and supported minigames are now ported separately. The fourth milestone implements inventory food/poisoning and activity effects from rows 3–7; see SURVIVAL.md. The subsequent wildlife milestone ports the recovered animal behavior families; see WILDLIFE.md. No emulator comparison has been completed.
 
 ## Net fishing completion
 

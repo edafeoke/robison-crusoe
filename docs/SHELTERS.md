@@ -37,3 +37,7 @@ Both add zero Strength. They create no satchel item. Duplicate builds and downgr
 Eight new automated checks cover every item gate, exact upgrade transactions, tool retention, duplicate/downgrade prevention, supported recipe boundaries, immutable original placement/collision, active construction effects including exhaustion, and legacy/new saves. Browser setup and observations are recorded in VALIDATION.md; the dev-only fixture explicitly supplies ingredients/tools and positions Robinson near the original camp. It does not claim manual collection of the complete building supply chain.
 
 The subsequent house/sleep milestone traces the actual furnishings list and implements explicit sleep recovery; see HOUSE_AND_SLEEP.md. Clothing protection, world-contact hazards, story triggers, boat/raft progression, weight and tide/weather scheduling remain outstanding.
+
+## Later milestone status
+
+The recipe counts above describe this camp-upgrade milestone. The current workbench supports 43 recipes including Large sail, furnishings and garments. Pirate ship reconstruction/escape is a separate world action; raft/tide traversal and a verified complete island route remain pending. See SHIP_RECONSTRUCTION.md, BODY_WEIGHT.md, CLOTHING.md and WORLD_HAZARDS.md for later audits.

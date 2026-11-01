@@ -87,7 +87,7 @@ test("tent and cabin consume exact materials, retain tools, never add a building
   assert.equal(cabin[10], undefined);
 });
 test("camp progression cannot repeat or downgrade; boat paths stay separate", () => {
-  assert.equal(supportedRecipes(items).length, 42);
+  assert.equal(supportedRecipes(items).length, 43);
   for (const stage of [9, 10] as const) {
     assert.equal(shelterOwned(9, stage), true);
     assert.equal(craftInventory(items[9], materials(9), stage), null);

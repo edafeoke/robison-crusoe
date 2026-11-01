@@ -36,6 +36,8 @@ import { ShelterDialogue } from "./ShelterPanel";
 import { HousePanel } from "./HousePanel";
 import { WardrobePanel } from "./WardrobePanel";
 import { CharacterStatus } from "./CharacterStatus";
+import { WorldFoodControls } from "./WorldFoodControls";
+import { ShipDialogue } from "./ShipDialogue";
 const titles: Record<
   Exclude<Panel, null>,
   { eyebrow: string; title: string; icon: typeof Backpack }
@@ -309,8 +311,8 @@ export function QuestJournal() {
         done: s.inspected.length > 0,
       },
       {
-        title: "Something worth keeping",
-        text: "Gather three island finds.",
+        title: "Make use of the island",
+        text: "Gather, hunt or eat three island finds.",
         done: s.collected.length >= 3,
       },
       {
@@ -346,8 +348,9 @@ export function QuestJournal() {
       <div className="field-note">
         <Compass size={20} />
         <p>
-          This checklist guides the browser exploration build. The original
-          story progression and boat escape are still being reconstructed.
+          This checklist guides exploration. Rebuild the pirate ship for the
+          voyage home; raft travel and the complete island route are still being
+          reconstructed.
         </p>
       </div>
       <details className="original-notes">
@@ -394,6 +397,7 @@ export function PauseMenu() {
             className="primary-button"
             onClick={s.save}
             disabled={
+              s.ship.phase === "departing" ||
               s.saving ||
               !!(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame)
             }
@@ -520,6 +524,7 @@ export function Dialogue() {
   if (s.focus?.kind === "net-fishing") return <NetFishingDialogue />;
   if (s.focus?.kind === "coconut-palm") return <CoconutPalmDialogue />;
   if (s.selected === 17 && s.focus?.itemId === 17) return <ShelterDialogue />;
+  if (s.selected === 18 && s.focus?.itemId === 18) return <ShipDialogue />;
   if (s.selected === null) return null;
   const item = s.items[s.selected],
     focus = s.focus,
@@ -554,6 +559,7 @@ export function Dialogue() {
         </div>
       )}
       <HuntingControls item={item} />
+      <WorldFoodControls item={item} />
       <div className="discovery-actions">
         {canCollect && (
           <button

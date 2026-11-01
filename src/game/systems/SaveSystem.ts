@@ -8,6 +8,7 @@ import { validFurnishings } from "./HouseSystem";
 import { claimSleep } from "./SleepSystem";
 import { validClothing, type ClothingState } from "./ClothingSystem";
 import { validBodyWeight, type BodyWeightState } from "./BodyWeightSystem";
+import { validShip, type ShipState } from "./ShipSystem";
 export interface SaveData {
   version: 1;
   x: number;
@@ -26,6 +27,7 @@ export interface SaveData {
   sleepStartedAt?: number;
   clothing?: ClothingState;
   bodyWeight?: BodyWeightState;
+  ship?: ShipState;
 }
 export function validSave(value: unknown): value is SaveData {
   const d = value as SaveData;
@@ -47,6 +49,9 @@ export function validSave(value: unknown): value is SaveData {
     (d.furnishings === undefined || validFurnishings(d.furnishings)) &&
     (d.clothing === undefined || validClothing(d.clothing)) &&
     (d.bodyWeight === undefined || validBodyWeight(d.bodyWeight)) &&
+    (d.ship === undefined ||
+      (validShip(d.ship) &&
+        (d.ship.phase === "wreck" || !d.survival?.death))) &&
     (d.sleepStartedAt === undefined ||
       (Number.isSafeInteger(d.sleepStartedAt) &&
         d.sleepStartedAt >= 0 &&

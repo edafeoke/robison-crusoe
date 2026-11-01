@@ -1,0 +1,89 @@
+{
+  "ship": {
+    "source": "data.a.c/z/G, data.r.a, data.ad.l/o, data.v.b/d, data.y, data.c.c",
+    "wreckItem": 18,
+    "repairItem": 19,
+    "mapId": 19,
+    "index": 5552,
+    "sailItem": 54,
+    "wreckSprite": 393235,
+    "repairedSprite": 393236,
+    "strictDepartureMs": 8000,
+    "northShiftTiles": 2,
+    "winText": 97,
+    "endingText": 98,
+    "flagMs": 300,
+    "flagFrames": [
+      393222,
+      393223
+    ],
+    "wreckFlags": [
+      {
+        "dx": -25,
+        "dy": -82
+      },
+      {
+        "dx": 15,
+        "dy": -74
+      }
+    ],
+    "repairedFlags": [
+      {
+        "dx": -25,
+        "dy": -83
+      },
+      {
+        "dx": 15,
+        "dy": -65
+      }
+    ]
+  },
+  "raftAudit": {
+    "source": "data.a.G; data.ad.u/v; data.g.b(int,int)/n; data.ab.b/k; data.t",
+    "brokenItem": 84,
+    "repairedItem": 94,
+    "originalCell": 17014,
+    "waterTerrain": [
+      12,
+      13,
+      14
+    ],
+    "recipe": [
+      {
+        "item": 36,
+        "quantity": 6
+      },
+      {
+        "item": 91,
+        "quantity": 5
+      },
+      {
+        "item": 37,
+        "quantity": 5
+      },
+      {
+        "item": 13,
+        "quantity": 5
+      },
+      {
+        "item": 35,
+        "quantity": 3
+      },
+      {
+        "item": 39,
+        "quantity": 4
+      }
+    ],
+    "tools": [
+      {
+        "item": 78,
+        "quantity": 1
+      },
+      {
+        "item": 77,
+        "quantity": 1
+      }
+    ],
+    "implemented": false
+  }
+}

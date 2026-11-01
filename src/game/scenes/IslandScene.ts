@@ -72,14 +72,20 @@ export class IslandScene extends Phaser.Scene {
       this.wildlife.objects,
     );
     this.world = new MapRenderer(this, this.map, state.atlas!, state.items);
-    this.world.render(this.removed, this.wildlife.managed, state.shelter);
+    this.world.render(
+      this.removed,
+      this.wildlife.managed,
+      state.shelter,
+      state.ship,
+    );
     this.animals = this.wildlife.actors.map(
       (a) => new Animal(this, state.atlas!, a, this.wildlife),
     );
     new AnimationSystem(this, this.map, state.atlas!);
-    const spawn = this.collision.canStand(state.x, state.y)
-      ? { x: state.x, y: state.y }
-      : this.collision.nearest(state.x, state.y)!;
+    const spawn =
+      state.ship.phase !== "wreck" || this.collision.canStand(state.x, state.y)
+        ? { x: state.x, y: state.y }
+        : this.collision.nearest(state.x, state.y)!;
     this.player = new Player(
       this,
       state.atlas!,
@@ -88,6 +94,7 @@ export class IslandScene extends Phaser.Scene {
       spawn.y,
     );
     this.player.setOutfit(state.clothing.equipped);
+    this.player.shadow.setVisible(state.ship.phase === "wreck");
     this.cameras.main
       .setBounds(0, 0, 2880, 2880)
       .setZoom(state.zoom)
@@ -117,7 +124,8 @@ export class IslandScene extends Phaser.Scene {
         !s.huntingGame &&
         !s.survival.death &&
         s.survival.restRemainingMs === null &&
-        s.focus
+        s.focus &&
+        s.ship.phase === "wreck"
       )
         s.inspect(s.focus.index, s.focus.itemId);
     });
@@ -133,6 +141,7 @@ export class IslandScene extends Phaser.Scene {
       // Menu/save/zoom clicks must not issue a world movement command.
       if (
         s.panel ||
+        s.ship.phase !== "wreck" ||
         s.coconutGame ||
         s.fishingGame ||
         s.rodGame ||
@@ -258,6 +267,15 @@ export class IslandScene extends Phaser.Scene {
         this.scene.restart();
         return;
       }
+      if (prev.ship.phase === "wreck" && s.ship.phase !== "wreck") {
+        this.world.updateShip(s.ship);
+        this.player.x = s.x;
+        this.player.y = s.y;
+        this.player.facing = "down";
+        this.player.path = [];
+        this.player.shadow.setVisible(false);
+        this.input.keyboard?.resetKeys();
+      }
       if (
         s.panel !== prev.panel ||
         s.survival.restRemainingMs !== prev.survival.restRemainingMs ||
@@ -305,6 +323,13 @@ export class IslandScene extends Phaser.Scene {
   update(_time: number, delta: number) {
     if (!this.player) return;
     const s = useGameStore.getState();
+    if (s.ship.phase === "escaped") {
+      this.player.path = [];
+      this.player.facing = "down";
+      this.player.move(0, 0, 0);
+      this.player.shadow.setVisible(false);
+      return;
+    }
     if (
       s.panel ||
       s.coconutGame ||
@@ -325,7 +350,12 @@ export class IslandScene extends Phaser.Scene {
       dy =
         Number(this.keys.S.isDown || this.keys.DOWN.isDown) -
         Number(this.keys.W.isDown || this.keys.UP.isDown);
-    if (s.survival.restRemainingMs !== null) {
+    if (s.ship.phase === "departing") {
+      this.player.path = [];
+      this.player.facing = "down";
+      this.player.move(0, 0, 0);
+      this.player.shadow.setVisible(false);
+    } else if (s.survival.restRemainingMs !== null) {
       this.player.path = [];
       this.player.rest(10000 - s.survival.restRemainingMs);
     } else if (dx || dy) {
@@ -393,7 +423,9 @@ export class IslandScene extends Phaser.Scene {
             this.discovered.add(ax + ay * 180);
         }
       const focus =
-        survival.restRemainingMs !== null || survival.death
+        survival.restRemainingMs !== null ||
+        survival.death ||
+        s.ship.phase !== "wreck"
           ? null
           : nearestInteraction(
               this.map,
@@ -431,5 +463,7 @@ export class IslandScene extends Phaser.Scene {
         survival,
         ...(survival.death ? { focus: null } : {}),
       });
+    if (s.ship.phase === "departing")
+      useGameStore.getState().advanceShip(delta);
   }
 }

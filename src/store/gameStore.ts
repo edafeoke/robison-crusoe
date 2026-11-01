@@ -4,6 +4,10 @@ import type {
   RecoveredItem,
 } from "../game/assets/assetManifest";
 import { canPickup, craftInventory } from "../game/systems/ItemRules";
+import {
+  consumeWorldFood,
+  worldFoodTarget,
+} from "../game/systems/WorldConsumptionSystem";
 import { isFurnishing, furnish } from "../game/systems/HouseSystem";
 import {
   initialClothing,
@@ -14,6 +18,14 @@ import {
 } from "../game/systems/ClothingSystem";
 import { isShelterUpgrade, type Shelter } from "../game/systems/ShelterSystem";
 import { SaveSystem, type SaveData } from "../game/systems/SaveSystem";
+import {
+  initialShip,
+  SHIP_SHIFT_Y,
+  reconstructShip,
+  shipRepairTarget,
+  advanceShip,
+  type ShipState,
+} from "../game/systems/ShipSystem";
 import {
   initialBodyWeight,
   gainBodyWeight,
@@ -103,6 +115,7 @@ interface GameState {
   furnishings: Record<number, number>;
   clothing: ClothingState;
   bodyWeight: BodyWeightState;
+  ship: ShipState;
   worldObjects: readonly number[] | null;
   worldDecor: readonly number[] | null;
   worldTerrain: readonly number[] | null;
@@ -140,6 +153,10 @@ interface GameState {
   equip: (slot: ClothingSlot, id: number | null) => boolean;
   discard: (id: number) => void;
   consume: (id: number) => boolean;
+  consumeWorld: (index: number, itemId: number) => boolean;
+  repairShip: (index: number) => boolean;
+  advanceShip: (delta: number) => void;
+  beginExpedition: () => boolean;
   beginRest: () => void;
   cancelRest: () => void;
   setSurvivalEnabled: (enabled: boolean) => void;
@@ -185,6 +202,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   furnishings: {},
   clothing: initialClothing(),
   bodyWeight: initialBodyWeight(),
+  ship: initialShip(),
   worldObjects: null,
   worldDecor: null,
   worldTerrain: null,
@@ -214,9 +232,14 @@ export const useGameStore = create<GameState>((set, get) => ({
   help: true,
   setPanel: (panel) =>
     set((s) =>
-      (s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame) &&
-      panel !== "settings" &&
-      panel !== null
+      s.ship.phase === "escaped" ||
+      ((s.coconutGame ||
+        s.fishingGame ||
+        s.rodGame ||
+        s.huntingGame ||
+        s.ship.phase === "departing") &&
+        panel !== "settings" &&
+        panel !== null)
         ? {}
         : { panel: s.panel === panel ? null : panel },
     ),
@@ -227,7 +250,11 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
   inspect: (index, itemId) =>
     set((s) =>
-      s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame
+      s.coconutGame ||
+      s.fishingGame ||
+      s.rodGame ||
+      s.huntingGame ||
+      s.ship.phase !== "wreck"
         ? {}
         : {
             panel: "dialogue",
@@ -243,6 +270,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (
       !s.ready ||
       !s.started ||
+      s.ship.phase !== "wreck" ||
       s.coconutGame !== null ||
       s.fishingGame !== null ||
       s.rodGame !== null ||
@@ -272,12 +300,117 @@ export const useGameStore = create<GameState>((set, get) => ({
     get().notify(`${s.items[itemId].name} added to your satchel`);
     return true;
   },
+  consumeWorld: (index, itemId) => {
+    const s = get(),
+      item = s.items[itemId];
+    if (
+      !s.ready ||
+      !s.started ||
+      s.ship.phase !== "wreck" ||
+      s.coconutGame ||
+      s.fishingGame ||
+      s.rodGame ||
+      s.huntingGame ||
+      !Number.isInteger(itemId) ||
+      !item ||
+      !worldFoodTarget(item, index, s)
+    )
+      return false;
+    const result = consumeWorldFood(s.survival, item, s.inventory);
+    if (!result) return false;
+    set({
+      survival: result.survival,
+      bodyWeight: gainBodyWeight(s.bodyWeight, result.nutrition),
+      collected: result.removed ? [...s.collected, index] : s.collected,
+      panel: null,
+      focus: null,
+    });
+    get().notify(
+      result.removed ? `${item.name} eaten here` : `${item.name} was poisonous`,
+    );
+    return true;
+  },
+  repairShip: (index) => {
+    const s = get();
+    if (
+      !s.ready ||
+      !s.started ||
+      s.saving ||
+      s.coconutGame ||
+      s.fishingGame ||
+      s.rodGame ||
+      s.huntingGame ||
+      !shipRepairTarget(index, s)
+    )
+      return false;
+    const result = reconstructShip(s.items, s.inventory, s.survival, s.ship);
+    if (!result) return false;
+    set({ ...result, y: s.y - SHIP_SHIFT_Y, panel: null, focus: null });
+    get().notify("The pirate ship is rebuilt. Your voyage home begins.");
+    return true;
+  },
+  advanceShip: (delta) => {
+    const s = get();
+    if (
+      !s.ready ||
+      !s.started ||
+      s.panel ||
+      s.survival.death ||
+      s.ship.phase !== "departing"
+    )
+      return;
+    const ship = advanceShip(s.ship, Math.max(0, Math.min(delta, 250)));
+    if (ship !== s.ship) set({ ship });
+  },
+  beginExpedition: () => {
+    const s = get();
+    if (
+      !s.ready ||
+      s.saving ||
+      (s.started && s.ship.phase !== "escaped") ||
+      s.coconutGame ||
+      s.fishingGame ||
+      s.rodGame ||
+      s.huntingGame
+    )
+      return false;
+    set({
+      started: true,
+      x: 136,
+      y: 2376,
+      elapsed: 0,
+      inventory: {},
+      collected: [],
+      inspected: [],
+      discovered: [],
+      survival: initialSurvival(),
+      bodyWeight: initialBodyWeight(),
+      shelter: 17,
+      furnishings: {},
+      clothing: initialClothing(),
+      ship: initialShip(),
+      wildlife: undefined,
+      coconutUses: 0,
+      coconutSerial: 0,
+      fishingSerial: 0,
+      rodSerial: 0,
+      huntingSerial: 0,
+      panel: null,
+      focus: null,
+      selected: null,
+      notification: null,
+      restoreRevision: s.restoreRevision + 1,
+      saveMessage: "New expedition · earlier save kept until you save again",
+    });
+    return true;
+  },
   craft: (id) => {
     const s = get(),
       item = s.items[id];
     if (
       !s.ready ||
       !s.started ||
+      s.ship.phase !== "wreck" ||
       !item ||
       s.coconutGame ||
       s.fishingGame ||
@@ -325,6 +458,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (
       !s.ready ||
       !s.started ||
+      s.ship.phase !== "wreck" ||
       s.coconutGame ||
       s.fishingGame ||
       s.rodGame ||
@@ -340,7 +474,11 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
   discard: (id) =>
     set((s) =>
-      s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame
+      s.coconutGame ||
+      s.fishingGame ||
+      s.rodGame ||
+      s.huntingGame ||
+      s.ship.phase !== "wreck"
         ? {}
         : {
             inventory: {
@@ -355,6 +493,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (
       !s.ready ||
       !s.started ||
+      s.ship.phase !== "wreck" ||
       s.coconutGame ||
       s.fishingGame ||
       s.rodGame ||
@@ -377,6 +516,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (
       !s.ready ||
       !s.started ||
+      s.ship.phase !== "wreck" ||
       s.coconutGame !== null ||
       s.fishingGame !== null ||
       s.rodGame !== null ||
@@ -418,6 +558,13 @@ export const useGameStore = create<GameState>((set, get) => ({
   writeSave: async (sleep) => {
     const before = get();
     if (
+      before.ship.phase === "departing" ||
+      (sleep && before.ship.phase !== "wreck")
+    ) {
+      before.notify("Finish the voyage before saving this expedition.");
+      return;
+    }
+    if (
       before.saving ||
       (sleep &&
         (!before.ready ||
@@ -458,6 +605,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         furnishings: s.furnishings,
         clothing: s.clothing,
         bodyWeight: s.bodyWeight,
+        ship: s.ship,
         ...(sleep ? { sleepStartedAt: Date.now() } : {}),
       };
       await SaveSystem.save(data);
@@ -499,6 +647,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           furnishings: saved.furnishings ?? {},
           clothing: saved.clothing ?? initialClothing(),
           bodyWeight: saved.bodyWeight ?? initialBodyWeight(),
+          ship: saved.ship ?? initialShip(),
           coconutGame: null,
           fishingGame: null,
           rodGame: null,
@@ -531,6 +680,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (
       !s.ready ||
       !s.started ||
+      s.ship.phase !== "wreck" ||
       s.coconutGame ||
       s.fishingGame ||
       s.rodGame ||
@@ -645,6 +795,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (
       !s.ready ||
       !s.started ||
+      s.ship.phase !== "wreck" ||
       s.coconutGame ||
       s.fishingGame ||
       s.rodGame ||
@@ -728,6 +879,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (
       !s.ready ||
       !s.started ||
+      s.ship.phase !== "wreck" ||
       s.coconutGame ||
       s.fishingGame ||
       s.rodGame ||
@@ -800,6 +952,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (
       !s.ready ||
       !s.started ||
+      s.ship.phase !== "wreck" ||
       s.coconutGame ||
       s.fishingGame ||
       s.rodGame ||

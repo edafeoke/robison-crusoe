@@ -59,6 +59,10 @@ Fifth milestone: Coconut challenge uses BS13 regions 2/17 (coconut/projectile) a
 The fixed original flag now renders its recovered upgrade: packed 393219 (BS6 frame 3) → Tent 393216 (frame 0) → Cabin 393217 (frame 1). D0 crop bounds/anchors, PNG transparency and original map placement stay unchanged. The workbench/map/inspection reflect the persistent tier. No replacement art or guessed sprite mapping is introduced. Animated source flag overlays remain unported; see SHELTERS.md.
 
 
+## Direct world-food metadata
+
+`tools/recover_world_food.py` writes `evidence/world-food-rules.json` and `src/game/data/worldFoodRules.ts`, retaining the 22 original static food/item/map IDs and source use-tool requirements. Existing item icons and world-object frames are reused intact; no new image bank, changed crop, relocated object or speculative consumption animation is added. See WORLD_FOOD.md.
+
 ## Body-weight status metadata
 
 `tools/recover_weight.py` writes `evidence/body-weight-rules.json` and `src/game/data/bodyWeightRules.ts` from the original nutrition routine and bar-width initialization. Its 240-pixel reference width is explicitly a browser choice. The condition view uses original BS10 frames 36/37/38 (Strength/Morale/Weight), without resizing or rearranging the preserved source sheet. See BODY_WEIGHT.md.
@@ -75,3 +79,7 @@ Barrel uses source 852041 (BS13 frame 41). Single bed (15), Rug (60) and Double 
 ## Clothing recovery
 
 `tools/recover_clothing.py` exports source `ab.j` directional packed frames, exact layer order, all eight bytecode hat-offset arrays and four source hunting protection checks to `evidence/clothing-rules.json` and `src/game/data/clothingRules.ts`. Every BS5 region is accounted for. Original sheet bytes/anchors/mirroring/transparency are unchanged. Objects export row 11 as matching `clothingSlot` metadata; actual slot identity is independently verified by category dispatch/rendering. See CLOTHING.md.
+
+## Ship reconstruction assets
+
+`shipRules.ts` preserves source wreck/repaired sprites BS6 frames 19/20 (393235/393236), animated flag frames 6/7 (393222/393223), original placement and separate original flag offsets. All use unchanged D0 anchors/mirroring and intact BS6 PNG. Large sail item54 has original sprite −1 and receives a neutral missing-art marker, without a fabricated source mapping. Original victory strings97/98 are loaded from recovered story text. Raft rendering remains deferred; see SHIP_RECONSTRUCTION.md.
