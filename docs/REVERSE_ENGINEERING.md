@@ -113,7 +113,7 @@ No audio files or Java ME media player references were found in this supplied va
 ## Fidelity limitations / next work
 
 - Original MIDlet not yet emulator-tested; static bytecode inspection cannot establish every runtime interaction.
-- Exact entity scheduling/emulator comparison, story triggers, weather, tide timing, non-sleep offline behavior, weight and original save formats remain unported. Tent/Cabin now upgrade the existing original flag in place, with persistent global recipe tiers; see SHELTERS.md. No free placement is inferred from those upgrade paths.
+- Exact entity scheduling/emulator comparison, story triggers, weather, tide timing, non-sleep offline behavior and original save formats remain unported. Nutrition-driven Weight is now ported; no mass-based carrying limit was found in the audited inventory paths (BODY_WEIGHT.md). Tent/Cabin now upgrade the existing original flag in place, with persistent global recipe tiers; see SHELTERS.md. No free placement is inferred from those upgrade paths.
 - Object icon references are exact; some original world entities use special multipart/animated rendering. The 16 traced animal profiles are animated; other special entities remain static until their specific rendering paths are ported.
 - Original map loader filters progress-dependent objects in runtime state. The source export always retains every byte; milestone shows recoverable static placements and does not implement all original filters.
 - Decoration variants were randomized at runtime by the original. The port selects a stable variant using cell ID; piece coordinates and variant choices are recovered, random seed is new.
@@ -133,6 +133,10 @@ Decoder validates all layer lengths and all 778 frame bounds against original im
 
 `a.G` routes category 3/5 furnishing creation to `ad.m`: a unique named house entry, creation effects from `ad.l`, materials removed through `ad.o`. Cabin remains an earlier upgrade branch. The four recovered entries are Single bed (15), Barrel (50), Rug (60), Double bed (85); three have sprite -1 and receive no invented mapping. `r.b(StringBuffer)` displays stored names/quantities; the traced house action menu offers inspection, not generic supply transfers. `a.m` Sleep sets the saved int flag and exits to title. Loading through `v.a(boolean)` calls `v.c(true)`, restoring 0/10/20/30/40/50 percent to all three reserves in whole-hour bands, without a house/bed multiplier in that path. Browser ports these explicit sleep bonuses with a transactionally consumed timestamp; ordinary saves keep paused offline reserves. Full sources, recipes, missing-art behavior, preserved fishing Rug loot and timing/claim adaptations: HOUSE_AND_SLEEP.md.
 
+
+## Nutrition-driven Weight and capacity audit
+
+The float `p.g:F` is the sixth original status bar, labelled Weight (text 75); `p.L:I` accumulates raw food Hunger values. `v.a(int)` subtracts 50 once and adds one native bar unit when the threshold is reached, preserving queued nutrition rather than looping over a large meal. `ad.g` calls it once per supported satchel meal, including literal −1 in the positive-tool branch; full Hunger does not prevent growth. Only `v`, `aa` and `t` reference the Weight float; no movement, pickup or crafting capacity gate was found. Source inventory quantity arrays reuse `g` with a different descriptor and are not weight data. The browser preserves raw counter/bar units with an explicitly fixed 240-pixel reference (max 64), displays original Strength/Morale/Weight icons, persists optional weight state and resets legacy saves to zero. No invented carrying restriction is imposed. Detailed arithmetic, original byte-save quirks, capacity findings and remaining direct-world use work: BODY_WEIGHT.md.
 
 ## World contacts, energy and rest interruption
 

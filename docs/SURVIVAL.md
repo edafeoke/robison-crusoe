@@ -1,6 +1,6 @@
 # Survival and item-use recovery
 
-This milestone implements the verified three-reserve survival loop, inventory consumption, activity costs and short rest. It retains the original food/tool effects and explicitly separates browser timing/mode choices from Java behavior. It does not implement a separate health meter, combat damage, weight, offline sleep, or the complete adventure.
+This milestone implements the verified three-reserve survival loop, inventory consumption, activity costs and short rest. It retains the original food/tool effects and explicitly separates browser timing/mode choices from Java behavior. Later milestones add animal energy loss, clothing protection, explicit offline sleep and nutrition-driven body weight (WORLD_HAZARDS.md, CLOTHING.md, HOUSE_AND_SLEEP.md and BODY_WEIGHT.md). No separate health meter or complete adventure is claimed.
 
 ## Verified fields and evidence
 
@@ -14,7 +14,7 @@ CFR produces duplicate names because the original class files overload fields by
 | `d:F` | Shared reserve maximum | `p.f()` initializes it from screen width; all percentage arithmetic divides by this value |
 | `e:F` | Strength | Index 3 / text 73 “Strength” |
 | `f:F` | Morale | Index 4 / text 74 “Morale” |
-| `g:F` | Weight bar | Index 5 / text 75 “Weight”; not ported in this milestone |
+| `g:F` | Weight bar | Index 5 / text 75 “Weight”; now ported separately in BODY_WEIGHT.md |
 
 `p.f()` initializes hunger/thirst/energy to the maximum. `v`'s new-game/reset path initializes strength/morale/weight to zero. The browser stores normalized percentages, matching the original percentage calculations without tying reserves to the physical width of a phone screen.
 
@@ -87,11 +87,11 @@ The browser uses a ten-second active countdown, restores energy at its completio
 - Panels, hidden documents, pre-start state and loss pause simulation. Each scene frame contributes at most 250 ms, preventing catch-up damage after browser suspension. Wildlife keeps moving during active rest. This is intentionally different from device wall-clock/offline behavior; no offline depletion is claimed.
 - Food effects and tool requirements appear beside the original description. Exploration mode keeps reserves full while still consuming supplies, and the UI says so.
 - On loss, the browser stops world advancement, focuses a loss dialog, offers loading the saved expedition or continuing in exploration mode, and **refuses to overwrite the earlier save with the collapsed state**. The exploration recovery option is new; original story loss/restart flow is not claimed complete.
-- IndexedDB's optional `survival` member stores all five implemented percentage attributes, mode, total minutes, partial minute milliseconds, remaining rest milliseconds, stone-use count, and loss cause. Old version-1 saves remain accepted. Validation rejects nonfinite/out-of-range values and malformed states.
+- IndexedDB's optional `survival` member stores the five reserve/strength/morale attributes; a separate optional `bodyWeight` field retains native Weight units and nutrition. The survival member also stores mode, total minutes, partial minute milliseconds, remaining rest milliseconds, stone-use count, and loss cause. Old version-1 saves remain accepted. Validation rejects nonfinite/out-of-range values and malformed states.
 
 ## Still deferred
 
-Animal contact damage is now independently audited and playable, including predator clothing protection, interrupted short rest and immediate shark energy loss. See WORLD_HAZARDS.md and CLOTHING.md. Weight's nutrition counter (`v.a(int)`, a bar increment after 50 nutrition units), direct world consumption, non-sleep offline arithmetic, device clock parity, weather/tide scheduling and original save compatibility need further implementation/comparison. All are distinct from the now-working reserve/food/rest loop. No Java ME emulator fidelity comparison is claimed.
+Animal contact damage is now independently audited and playable, including predator clothing protection, interrupted short rest and immediate shark energy loss. See WORLD_HAZARDS.md and CLOTHING.md. Nutrition-driven body weight is now ported separately, retaining the one-step-per-meal counter and exact tool/sentinel branches (BODY_WEIGHT.md). Direct world consumption, non-sleep offline arithmetic, device clock parity, weather/tide scheduling and original save compatibility need further implementation/comparison. All are distinct from the now-working reserve/food/rest loop. No Java ME emulator fidelity comparison is claimed.
 
 Automated and browser observations are recorded in VALIDATION.md. The tests cover exact CSV values, minute boundaries and rollover, rest/death ordering, food/tool consumption, poison, activity effects, save migration/validation, and loss recovery without inventory or save mutation.
 

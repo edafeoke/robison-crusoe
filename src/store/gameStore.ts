@@ -14,6 +14,12 @@ import {
 } from "../game/systems/ClothingSystem";
 import { isShelterUpgrade, type Shelter } from "../game/systems/ShelterSystem";
 import { SaveSystem, type SaveData } from "../game/systems/SaveSystem";
+import {
+  initialBodyWeight,
+  gainBodyWeight,
+  foodNutrition,
+  type BodyWeightState,
+} from "../game/systems/BodyWeightSystem";
 import type { WildlifeSnapshot } from "../game/entities/WildlifeState";
 import {
   initialSurvival,
@@ -96,6 +102,7 @@ interface GameState {
   shelter: Shelter;
   furnishings: Record<number, number>;
   clothing: ClothingState;
+  bodyWeight: BodyWeightState;
   worldObjects: readonly number[] | null;
   worldDecor: readonly number[] | null;
   worldTerrain: readonly number[] | null;
@@ -177,6 +184,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   shelter: 17,
   furnishings: {},
   clothing: initialClothing(),
+  bodyWeight: initialBodyWeight(),
   worldObjects: null,
   worldDecor: null,
   worldTerrain: null,
@@ -358,6 +366,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (!result) return false;
     set({
       ...result,
+      bodyWeight: gainBodyWeight(s.bodyWeight, foodNutrition(item)),
       ...(result.survival.death ? { panel: null, focus: null } : {}),
     });
     get().notify(`${item.name} consumed`);
@@ -448,6 +457,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         shelter: s.shelter,
         furnishings: s.furnishings,
         clothing: s.clothing,
+        bodyWeight: s.bodyWeight,
         ...(sleep ? { sleepStartedAt: Date.now() } : {}),
       };
       await SaveSystem.save(data);
@@ -488,6 +498,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           shelter: saved.shelter ?? 17,
           furnishings: saved.furnishings ?? {},
           clothing: saved.clothing ?? initialClothing(),
+          bodyWeight: saved.bodyWeight ?? initialBodyWeight(),
           coconutGame: null,
           fishingGame: null,
           rodGame: null,

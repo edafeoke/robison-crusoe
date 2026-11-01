@@ -40,6 +40,9 @@ export function ItemUseControls({ item }: { item: RecoveredItem }) {
       {!s.survival.enabled && (
         <small>Survival is paused. Eating still uses one item.</small>
       )}
+      <small>
+        Food also contributes to body weight, even with full reserves.
+      </small>
       {!(s.inventory[item.id] > 0) && <small>None left in your satchel.</small>}
       <button
         className={

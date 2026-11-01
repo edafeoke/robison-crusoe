@@ -1,0 +1,9 @@
+{
+  "source": "data.v.a(int), data.p.c, data.ad.g/j, data.aa stats, data.t save/load",
+  "nutritionThreshold": 50,
+  "barStep": 1,
+  "barWidthDivisor": 3,
+  "barWidthMargin": 16,
+  "labelText": 75,
+  "browserReferenceWidth": 240
+}

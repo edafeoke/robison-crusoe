@@ -7,6 +7,7 @@ import { validShelter, type Shelter } from "./ShelterSystem";
 import { validFurnishings } from "./HouseSystem";
 import { claimSleep } from "./SleepSystem";
 import { validClothing, type ClothingState } from "./ClothingSystem";
+import { validBodyWeight, type BodyWeightState } from "./BodyWeightSystem";
 export interface SaveData {
   version: 1;
   x: number;
@@ -24,6 +25,7 @@ export interface SaveData {
   furnishings?: Record<number, number>;
   sleepStartedAt?: number;
   clothing?: ClothingState;
+  bodyWeight?: BodyWeightState;
 }
 export function validSave(value: unknown): value is SaveData {
   const d = value as SaveData;
@@ -44,6 +46,7 @@ export function validSave(value: unknown): value is SaveData {
     (d.shelter === undefined || validShelter(d.shelter)) &&
     (d.furnishings === undefined || validFurnishings(d.furnishings)) &&
     (d.clothing === undefined || validClothing(d.clothing)) &&
+    (d.bodyWeight === undefined || validBodyWeight(d.bodyWeight)) &&
     (d.sleepStartedAt === undefined ||
       (Number.isSafeInteger(d.sleepStartedAt) &&
         d.sleepStartedAt >= 0 &&

@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useGameStore } from "../store/gameStore";
 import { useEffect, useRef } from "react";
+import { weightPercent } from "../game/systems/BodyWeightSystem";
 import {
   worldHazardRule,
   worldContactCost,
@@ -82,6 +83,14 @@ export function ConditionPanel() {
                 : "Find a safe place to rest."}
           </small>
         )}
+      <button
+        className="condition-attributes"
+        onClick={() => s.setPanel("settings")}
+        aria-label="View Robinson’s condition"
+      >
+        Strength {Math.floor(life.strength)} · Morale {Math.floor(life.morale)}{" "}
+        · Weight {Number(weightPercent(s.bodyWeight).toFixed(1))}%
+      </button>
     </div>
   );
 }
@@ -142,7 +151,6 @@ export function SurvivalSettings() {
         )}
       </div>
       <p className="muted survival-note">
-        Strength {Math.floor(life.strength)} · Morale {Math.floor(life.morale)}.
         Nearby predators drain energy and interrupt rest. Clothing reduces their
         attacks; sharks exhaust energy instantly. Turning survival off restores
         the three reserves for exploration.

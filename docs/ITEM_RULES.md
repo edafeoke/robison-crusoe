@@ -25,8 +25,8 @@ Other CSV rows retain their original strings in `rawFields`. Status rows 3–7 a
 - Log (11): Axe (5).
 - Giant log (93): Saw (78).
 - Bamboo (38): Machete (96).
-- Pineapple (27) has a knife use action, but TAKE is available before obtaining the knife. Using/eating it is not implemented by this milestone.
-- Animals are not added to inventory merely because the relevant bow/net exists; the original specialized interaction must be played. That remains deferred for animals. Coconut-bearing palms now have their verified throwing action; see COCONUT_CHALLENGE.md.
+- Pineapple (27) has a knife use action, but TAKE is available before obtaining the knife. Satchel eating now uses the original Knife requirement; direct world consumption remains separate.
+- Animals are not added to inventory merely because the relevant bow/net exists; the original specialized interaction must be played. Supported hunting and both fishing modes are now ported as specialized interactions. Coconut-bearing palms now have their verified throwing action; see COCONUT_CHALLENGE.md.
 - Structures and raft/boat/shelter progression have explicit special cases in `a.c(int)` and cannot be gathered as loose items.
 
 `ItemRules.ts` uses typed decoded fields instead of a guessed pickup whitelist. The store independently checks actual map ID, distance, duplicate collection, readiness and tool availability. UI requirements and state-changing actions use the same rules. Original byte layers remain immutable.
@@ -51,7 +51,7 @@ The UI now lists 20 supplies/equipment recipes, two camp upgrades four house fur
 
 Existing version-1 IndexedDB saves still load; previously acquired items are retained. New restrictions apply to subsequent actions. This avoids silently deleting progress from the simplified first milestone.
 
-The browser's interaction radius/pathfinding, labels and recipe filters are adaptations. Exact original facing-only interaction, timed action presentation, animal damage, minigames and story gating remain to port. The fourth milestone implements inventory food/poisoning and activity effects from rows 3–7; see SURVIVAL.md. The subsequent wildlife milestone ports the recovered animal behavior families; see WILDLIFE.md. No emulator comparison has been completed.
+The browser's interaction radius/pathfinding, labels and recipe filters are adaptations. Exact original facing-only interaction, timed action presentation, direct world consumption and story gating remain to port. Animal contacts and supported minigames are now ported separately. The fourth milestone implements inventory food/poisoning and activity effects from rows 3–7; see SURVIVAL.md. The subsequent wildlife milestone ports the recovered animal behavior families; see WILDLIFE.md. No emulator comparison has been completed.
 
 ## Net fishing completion
 

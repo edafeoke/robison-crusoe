@@ -2176,6 +2176,59 @@ i {
   line-height: 1.6;
   margin-top: 12px;
 }
+.condition-attributes {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #d4dcc12b;
+  color: #d6cda7;
+  font-size: 8px;
+  line-height: 1.6;
+  text-align: left;
+}
+.condition-attributes:hover {
+  color: #fff0be;
+}
+.character-status h3 {
+  margin-bottom: 16px;
+}
+.attribute-list {
+  display: grid;
+  gap: 14px;
+}
+.attribute-line {
+  display: grid;
+  grid-template-columns: 28px 70px 1fr 52px;
+  align-items: center;
+  gap: 10px;
+  color: #59654f;
+  font-size: 12px;
+}
+.attribute-line strong {
+  text-align: right;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.attribute-track {
+  height: 6px;
+  background: #dcdcca;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.attribute-track i {
+  display: block;
+  height: 100%;
+  background: #a28b55;
+  border-radius: inherit;
+  transition: width 0.25s ease;
+}
+.character-status > p {
+  margin: 16px 0 0;
+  color: #84907c;
+  font-size: 11px;
+  line-height: 1.8;
+}
 .rest-status {
   display: flex;
   align-items: center;

@@ -59,6 +59,10 @@ Fifth milestone: Coconut challenge uses BS13 regions 2/17 (coconut/projectile) a
 The fixed original flag now renders its recovered upgrade: packed 393219 (BS6 frame 3) → Tent 393216 (frame 0) → Cabin 393217 (frame 1). D0 crop bounds/anchors, PNG transparency and original map placement stay unchanged. The workbench/map/inspection reflect the persistent tier. No replacement art or guessed sprite mapping is introduced. Animated source flag overlays remain unported; see SHELTERS.md.
 
 
+## Body-weight status metadata
+
+`tools/recover_weight.py` writes `evidence/body-weight-rules.json` and `src/game/data/bodyWeightRules.ts` from the original nutrition routine and bar-width initialization. Its 240-pixel reference width is explicitly a browser choice. The condition view uses original BS10 frames 36/37/38 (Strength/Morale/Weight), without resizing or rearranging the preserved source sheet. See BODY_WEIGHT.md.
+
 ## World-contact hazard metadata
 
 `tools/recover_hazards.py` independently checks `data.d/i` contact branches and `g` constructor IDs, writing `evidence/world-hazard-rules.json` and `src/game/data/worldHazardRules.ts`. No new art, cropped sheet, speculative animal mapping or generic damage sprite is needed. Existing original wildlife and clothing frames remain unchanged; see WORLD_HAZARDS.md.

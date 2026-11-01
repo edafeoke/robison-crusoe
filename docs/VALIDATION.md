@@ -1,6 +1,35 @@
 # Validation record
 
-## Current milestone: recovered world-contact hazards
+## Current milestone: nutrition-driven Weight and carrying-capacity audit
+
+Date: 2026-11-01. **105 tests passed**, including eight new Weight checks. TypeScript and production build passed. Final classic entry: **index-CxM8jFtp.js**, 1,622.75 kB / 455.46 kB gzip. The existing 1,600 kB chunk advisory remains; no dependency added. Full decoding succeeds, and Weight/hazard/typed object metadata regenerate byte-for-byte. Original map/sprite integrity checks pass. Development fixtures are absent from dist. Detailed source findings and explicit browser choices: BODY_WEIGHT.md.
+
+### Source and automated assessment
+
+- The float Weight field `p.g:F` is read/written only by the recovered stat display, nutrition/reset and save classes. No weight-based movement or carrying-capacity gate was found in the inspected inventory/action paths. Quantity arrays sharing the name `g` are distinguished by their descriptors. No guessed mass or slot limit was imposed.
+- Exact single-if threshold 50, one native bar-unit step, queued large-meal remainder, maximum-bar behavior, negative and signed-int nutrition, full-reserve consumption and once-only tool nutrition. A fixed 240-wide browser reference yields max 64 native units; that width is an explicit presentation choice.
+- The extraction regression check caught an initial match against unrelated loading-screen width arithmetic; the final decoder anchors the exact reserve-initialization assignment. Descriptor provenance and all three original BS10 stat icons are checked.
+- Successful, unavailable, missing-tool, resting, pre-start, full-Hunger and fatal-poison transactions; exploration growth; crafting/discard/rest independence. Normal save and Sleep retain the accumulator; loading a legacy save resets it to zero rather than inferring past meals. Invalid/out-of-range bars and malformed counters rejected.
+- All previous survival, original assets/maps, movement, inventory/crafting, camp/house/clothing, sleep, wildlife, world contacts and minigame checks remain green.
+
+### Browser observations
+
+Isolated origin **4195** was used. The user's existing **4173** expedition was untouched.
+
+- Development-only `tests/browser/body-weight.html` labels its supplied **Mango×17, Wild goat×1, Pineapple×1, Coconut×1 and Stone×1**, starting Weight/nutrition zero and active survival. A separate visible button supplies a Knife. No manual gathering, hunting or tool creation is claimed for these supplies.
+- Selected Mango in the real satchel and used the actual **Eat mango** button 17 times. Hunger stayed **100**, all 17 items were consumed, Weight advanced **0 → 1/64** (**1.6%**), with nutrition remainder **1**. Last Mango use then became disabled.
+- Ate Wild goat through its normal button: raw nutrition **100** produced only **one** additional Weight unit, **2/64** (**3.1%**), with remainder **51**. Screenshot `evidence/body-weight-large-meal-fixture.jpg` retains the labelled setup and observed accumulator; no loop/modulo substitute is used.
+- Pineapple initially required Knife and its Eat button was disabled; the queued remainder stayed 51. Supplied the labelled Knife, then ate through the real control. Weight became **3/64** (**4.7%**), remainder **6**, and Knife remained owned. Its existing duplicated Energy calculation does not duplicate nutrition.
+- Ate Coconut using the kept Stone: Weight stayed **3/64**, remainder became **9**, stone-opening counter **1/6**, Stone retained. All food disappeared from the satchel; Knife and Stone remained one each.
+- Opened **View Robinson’s condition** from the HUD. Original Strength/Morale/Weight icons, accessible meters **0% / 0% / 4.7%**, and the body-weight/carrying distinction were visible. Saved through the normal IndexedDB button. Screenshot: `evidence/body-weight-condition-fixture.jpg`.
+- Loaded the production root on the same origin: Weight **4.7%**, full reserves, position **(8,148)** and the two kept tools restored, with no fixture controls. Stopped the preview server, cold-reloaded, chose Continue and reopened the condition view. The same Weight and inventory count restored offline. Complete raw-counter persistence/continued arithmetic is covered automatically; the production UI intentionally displays the bar rather than the raw accumulator.
+- Final production screenshot `evidence/body-weight-offline-restored.jpg` shows the restored condition view. Entry confirmed **index-CxM8jFtp.js**, exactly one canvas, captured warnings/errors empty. Retained the cached production tab, paused; owned dev/preview processes stopped. No viewport override or browser recovery was needed in this milestone.
+
+### Remaining limits
+
+Direct world consumption (`ad.j`) remains distinct from implemented satchel eating. Remaining special object actions, original boat/raft/story escape progression, weather/tides, non-sleep offline arithmetic, emulator comparison and RMS compatibility remain outstanding. Body-weight bar width and percentage UI are browser adaptations; original byte-save truncation is deliberately not reproduced. No unverified carrying restriction or weight-driven hazard is claimed.
+
+## Previous milestone: recovered world-contact hazards
 
 Date: 2026-11-01. **97 tests passed**, including eight new world-hazard checks. TypeScript and production build passed. Final classic entry: **index-B5pno_Wk.js**, 1,619.79 kB / 454.66 kB gzip. The existing 1,600 kB chunk advisory remains; no dependency added. Full decoding succeeds; hazard/clothing JSON/TypeScript and typed object metadata regenerate byte-for-byte. Original map and sprite integrity tests pass. QA fixtures are absent from dist. See WORLD_HAZARDS.md for verified source facts and explicit adaptations.
 

@@ -35,6 +35,7 @@ import { CoconutPalmDialogue } from "./CoconutGamePanel";
 import { ShelterDialogue } from "./ShelterPanel";
 import { HousePanel } from "./HousePanel";
 import { WardrobePanel } from "./WardrobePanel";
+import { CharacterStatus } from "./CharacterStatus";
 const titles: Record<
   Exclude<Panel, null>,
   { eyebrow: string; title: string; icon: typeof Backpack }
@@ -417,6 +418,9 @@ export function PauseMenu() {
             Return to the island before saving or loading.
           </p>
         )}
+      </div>
+      <div className="settings-section">
+        <CharacterStatus />
       </div>
       <div className="settings-section">
         <SurvivalSettings />
