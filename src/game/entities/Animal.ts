@@ -21,6 +21,15 @@ export class Animal {
     this.wake = scene.add.image(0, 0, "bank-9", 2).setOrigin(0);
     this.render();
   }
+  get id() {
+    return this.actor.id;
+  }
+  destroy() {
+    this.body.destroy();
+    this.shadow.destroy();
+    this.tailShadow.destroy();
+    this.wake.destroy();
+  }
   private region(
     image: Phaser.GameObjects.Image,
     key: number,

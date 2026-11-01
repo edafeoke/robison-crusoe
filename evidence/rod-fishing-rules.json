@@ -1,0 +1,82 @@
+{
+  "source": "data.x.a/b/c/g/h/j; data.a.c-f/c(int); data.v.b; javap data.p/x/v",
+  "width": 240,
+  "height": 320,
+  "tickMs": 90,
+  "terrain": 5,
+  "tool": 14,
+  "bait": 90,
+  "moveStep": 3,
+  "hookOffset": 20,
+  "historySlots": 5,
+  "fishStep": 1,
+  "escapeStep": 1,
+  "floatSprite": 851979,
+  "hookFrames": [
+    851980,
+    851981
+  ],
+  "toolSprite": 851976,
+  "fish": [
+    {
+      "item": 40,
+      "right": [
+        131103,
+        131104,
+        131105
+      ],
+      "left": [
+        131100,
+        131101,
+        131102
+      ],
+      "width": 16,
+      "height": 10
+    },
+    {
+      "item": 56,
+      "right": [
+        131109,
+        131110,
+        131111
+      ],
+      "left": [
+        131106,
+        131107,
+        131108
+      ],
+      "width": 16,
+      "height": 9
+    },
+    {
+      "item": 57,
+      "right": [
+        131097,
+        131098,
+        131099
+      ],
+      "left": [
+        131094,
+        131095,
+        131096
+      ],
+      "width": 16,
+      "height": 12
+    },
+    {
+      "item": 58,
+      "right": [
+        131171,
+        131172,
+        131173
+      ],
+      "left": [
+        131168,
+        131169,
+        131170
+      ],
+      "width": 20,
+      "height": 14
+    }
+  ]
+}

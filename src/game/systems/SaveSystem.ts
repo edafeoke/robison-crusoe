@@ -2,6 +2,7 @@ import {
   validWildlife,
   type WildlifeSnapshot,
 } from "../entities/WildlifeState";
+import { validSurvival, type SurvivalState } from "./SurvivalSystem";
 export interface SaveData {
   version: 1;
   x: number;
@@ -13,6 +14,8 @@ export interface SaveData {
   discovered: number[];
   enhancements: boolean;
   wildlife?: WildlifeSnapshot[];
+  survival?: SurvivalState;
+  coconutUses?: number;
 }
 export function validSave(value: unknown): value is SaveData {
   const d = value as SaveData;
@@ -29,6 +32,11 @@ export function validSave(value: unknown): value is SaveData {
     d.elapsed >= 0 &&
     typeof d.enhancements === "boolean" &&
     (d.wildlife === undefined || validWildlife(d.wildlife)) &&
+    (d.survival === undefined || validSurvival(d.survival)) &&
+    (d.coconutUses === undefined ||
+      (Number.isInteger(d.coconutUses) &&
+        d.coconutUses >= 0 &&
+        d.coconutUses <= 5)) &&
     !!d.inventory &&
     typeof d.inventory === "object" &&
     Object.entries(d.inventory).every(

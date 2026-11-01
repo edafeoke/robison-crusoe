@@ -277,6 +277,13 @@ export class WildlifeSystem {
     }
     return advanced;
   }
+  removeActor(id: number) {
+    const index = this.actors.findIndex((a) => a.id === id);
+    if (index < 0) return false;
+    this.release(this.actors[index]);
+    this.actors.splice(index, 1);
+    return true;
+  }
   removeStatic(index: number) {
     if (this.owners[index] === -1) this.objects[index] = 0;
   }

@@ -48,6 +48,11 @@ export function CraftingPanel() {
                   {categoryName(item.category).toUpperCase()} · RECOVERED RECIPE
                 </p>
                 <h3>{item.name}</h3>
+                {item.effects.energy < 0 && (
+                  <p className="craft-energy">
+                    Energy −{Math.abs(item.effects.energy)}
+                  </p>
+                )}
                 <p className="requirement-label">MATERIALS · USED UP</p>
                 <div className="ingredients">
                   {item.recipe.map((r) => (

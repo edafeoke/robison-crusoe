@@ -57,4 +57,11 @@ export interface RecoveredItem {
   craftingTools: { item: number; quantity: number }[];
   category: number;
   interaction: { pickupTool: number; useTool: number; huntingTool: number };
+  effects: {
+    hunger: number;
+    thirst: number;
+    morale: number;
+    energy: number;
+    strength: number;
+  };
 }

@@ -26,6 +26,12 @@ import { SpriteIcon } from "./SpriteIcon";
 import { IslandMap } from "./IslandMap";
 import { canPickup, pickupRule, categoryName } from "../game/systems/ItemRules";
 import { CraftingPanel } from "./CraftingPanel";
+import { ItemUseControls } from "./ItemUseControls";
+import { SurvivalSettings } from "./SurvivalPanel";
+import { HuntingControls } from "./HuntingPanel";
+import { RodFishingDialogue } from "./RodFishingPanel";
+import { NetFishingDialogue } from "./NetFishingPanel";
+import { CoconutPalmDialogue } from "./CoconutGamePanel";
 const titles: Record<
   Exclude<Panel, null>,
   { eyebrow: string; title: string; icon: typeof Backpack }
@@ -228,6 +234,7 @@ export function InventoryPanel() {
                 <p className="eyebrow">FROM THE ISLAND</p>
                 <h3>{item.name}</h3>
                 <p className="journal-prose">{item.description}</p>
+                <ItemUseControls item={item} />
                 <button
                   className="text-button danger"
                   onClick={() => s.discard(item.id)}
@@ -279,7 +286,7 @@ export function QuestJournal() {
       },
       {
         title: "Something worth keeping",
-        text: "Gather three loose resources.",
+        text: "Gather three island finds.",
         done: s.collected.length >= 3,
       },
       {
@@ -362,17 +369,34 @@ export function PauseMenu() {
           <button
             className="primary-button"
             onClick={s.save}
-            disabled={s.saving}
+            disabled={
+              s.saving ||
+              !!(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame)
+            }
           >
             <Save size={16} />
             {s.saving ? "Saving…" : "Save expedition"}
           </button>
-          <button className="secondary-button" onClick={s.load}>
+          <button
+            className="secondary-button"
+            onClick={s.load}
+            disabled={
+              !!(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame)
+            }
+          >
             <RotateCcw size={16} />
             Load saved expedition
           </button>
         </div>
         <small>{s.saveMessage}</small>
+        {(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame) && (
+          <p className="muted">
+            Return to the island before saving or loading.
+          </p>
+        )}
+      </div>
+      <div className="settings-section">
+        <SurvivalSettings />
       </div>
       <div className="settings-section">
         <div className="setting-row">
@@ -453,8 +477,10 @@ export function PauseMenu() {
           <br />
           Original game and art © Exkee. This exploration build preserves the
           original island and sprites. Wildlife roams, flees and takes flight.
-          Survival, hunting, minigames and story progression are still in
-          development. Needs and animal damage are paused.
+          Original reserve depletion, food effects and short rest are playable.
+          Coconut throwing, fishing and bow hunting are playable. Clothing,
+          construction, offline sleep and story progression are still in
+          development. World-contact animal damage remains paused.
         </p>
       </div>
     </>
@@ -462,6 +488,9 @@ export function PauseMenu() {
 }
 export function Dialogue() {
   const s = useGameStore();
+  if (s.focus?.kind === "rod-fishing") return <RodFishingDialogue />;
+  if (s.focus?.kind === "net-fishing") return <NetFishingDialogue />;
+  if (s.focus?.kind === "coconut-palm") return <CoconutPalmDialogue />;
   if (s.selected === null) return null;
   const item = s.items[s.selected],
     focus = s.focus,
@@ -495,6 +524,7 @@ export function Dialogue() {
           {canCollect ? <Check size={16} /> : <LockKeyhole size={16} />}
         </div>
       )}
+      <HuntingControls item={item} />
       <div className="discovery-actions">
         {canCollect && (
           <button
@@ -512,10 +542,17 @@ export function Dialogue() {
           Leave it here <ArrowUpRight size={16} />
         </button>
       </div>
+      {canCollect &&
+        item.interaction.useTool === -1 &&
+        item.effects.energy < 0 && (
+          <p className="muted">
+            Gathering uses {Math.abs(item.effects.energy)} energy.
+          </p>
+        )}
       {!canCollect && (
         <p className="muted">
           {rule.kind === "special" && rule.reason === "hunting"
-            ? "The original hunting and fishing interactions are still being reconstructed."
+            ? "Bow hunting is available for supported animals. Use a net in shallow water or a rod in deep water to fish."
             : rule.kind === "collect" && rule.tool !== null
               ? "Return with the right tool to gather this resource."
               : "You’ve recorded this discovery in your journal."}

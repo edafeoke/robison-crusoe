@@ -3,6 +3,10 @@ import Phaser from "phaser";
 import { BootScene } from "../game/scenes/BootScene";
 import { PreloadScene } from "../game/scenes/PreloadScene";
 import { IslandScene } from "../game/scenes/IslandScene";
+import { HuntingScene } from "../game/scenes/HuntingScene";
+import { RodFishingScene } from "../game/scenes/RodFishingScene";
+import { NetFishingScene } from "../game/scenes/NetFishingScene";
+import { CoconutScene } from "../game/scenes/CoconutScene";
 import { useGameStore } from "../store/gameStore";
 export function GameCanvas() {
   const container = useRef<HTMLDivElement>(null);
@@ -21,7 +25,15 @@ export function GameCanvas() {
         width: container.current.clientWidth,
         height: container.current.clientHeight,
       },
-      scene: [BootScene, PreloadScene, IslandScene],
+      scene: [
+        BootScene,
+        PreloadScene,
+        IslandScene,
+        CoconutScene,
+        NetFishingScene,
+        RodFishingScene,
+        HuntingScene,
+      ],
       audio: { noAudio: true },
       input: { keyboard: { target: window } },
       fps: { target: 60 },

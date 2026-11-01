@@ -25,7 +25,7 @@ Other CSV rows retain their original strings in `rawFields`. Their numeric statu
 - Giant log (93): Saw (78).
 - Bamboo (38): Machete (96).
 - Pineapple (27) has a knife use action, but TAKE is available before obtaining the knife. Using/eating it is not implemented by this milestone.
-- Animals are not added to inventory merely because the relevant bow/net exists; the original specialized interaction must be played. That remains deferred.
+- Animals are not added to inventory merely because the relevant bow/net exists; the original specialized interaction must be played. That remains deferred for animals. Coconut-bearing palms now have their verified throwing action; see COCONUT_CHALLENGE.md.
 - Structures and raft/boat/shelter progression have explicit special cases in `a.c(int)` and cannot be gathered as loose items.
 
 `ItemRules.ts` uses typed decoded fields instead of a guessed pickup whitelist. The store independently checks actual map ID, distance, duplicate collection, readiness and tool availability. UI requirements and state-changing actions use the same rules. Original byte layers remain immutable.
@@ -50,4 +50,16 @@ The UI now lists 20 recovered recipes whose result belongs to the original suppl
 
 Existing version-1 IndexedDB saves still load; previously acquired items are retained. New restrictions apply to subsequent actions. This avoids silently deleting progress from the simplified first milestone.
 
-The browser's interaction radius/pathfinding, labels and recipe filters are adaptations. Exact original facing-only interaction, timed action presentation, food/poisoning, animal damage, minigames and story gating remain to port. The subsequent wildlife milestone ports the recovered animal behavior families; see WILDLIFE.md. No emulator comparison has been completed.
+The browser's interaction radius/pathfinding, labels and recipe filters are adaptations. Exact original facing-only interaction, timed action presentation, animal damage, minigames and story gating remain to port. The fourth milestone implements inventory food/poisoning and activity effects from rows 3–7; see SURVIVAL.md. The subsequent wildlife milestone ports the recovered animal behavior families; see WILDLIFE.md. No emulator comparison has been completed.
+
+## Net fishing completion
+
+Terrain-4 inspection dispatches the original Net (83) and Potato bait (26) challenge. Completed rounds use one potato, keep Net, add strength/energy effects and award one original item on a win. This specialized interaction does not remove a loose fish from the Objects map. See NET_FISHING.md, including the original Rug reward branch. Rod fishing is now ported separately; supported bow hunting is now ported separately.
+
+## Rod fishing completion
+
+Terrain-5 inspection now dispatches Fishing rod (14) with Worms (90). Completed attempts use one worm, keep the rod, apply its strength/energy effects, and grant one actual fish species on a win. No loose object is removed from the map. See ROD_FISHING.md. Supported bow hunting is now ported; see HUNTING.md.
+
+## Hunting completion
+
+Animal tool 81 (Bow) requires Arrow 45. One Arrow supplies up to ten minigame shots and is consumed once at completion; Bow is kept. A win awards the hit animal item, adds 1 strength, costs 10 energy, and removes that actual wildlife actor. Failed dangerous hunts add source retaliation energy losses. See HUNTING.md for grouping, protection assumptions and source tenth-shot conflict handling.

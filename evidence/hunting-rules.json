@@ -1,0 +1,334 @@
+{
+  "source": "data.s.a/b/c/d/g/i/j/k, data.a.c/a(byte,int), javap data.s/p/v",
+  "width": 240,
+  "height": 320,
+  "tickMs": 90,
+  "tool": 81,
+  "ammunition": 45,
+  "maxShots": 10,
+  "maxTargets": 5,
+  "attackMs": 1500,
+  "attackEnergy": {
+    "42": 50,
+    "43": 50,
+    "48": 10,
+    "49": 20
+  },
+  "protectedAttackEnergy": {
+    "42": 25,
+    "43": 25,
+    "48": 5,
+    "49": 10
+  },
+  "bowSprite": 851990,
+  "arrowFrames": [
+    851993,
+    851995,
+    851991,
+    851996,
+    851994,
+    851992
+  ],
+  "profiles": [
+    {
+      "item": 4,
+      "right": [
+        131074,
+        131075
+      ],
+      "left": [
+        131072,
+        131073
+      ],
+      "idle": [
+        131076,
+        131077
+      ],
+      "width": 24,
+      "height": 20,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": false
+    },
+    {
+      "item": 41,
+      "right": [
+        131112,
+        131113
+      ],
+      "left": [
+        131112,
+        131113
+      ],
+      "idle": [
+        131112,
+        131113
+      ],
+      "width": 16,
+      "height": 15,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": false
+    },
+    {
+      "item": 42,
+      "right": [
+        131088,
+        131089
+      ],
+      "left": [
+        131086,
+        131087
+      ],
+      "idle": [
+        131088,
+        131089
+      ],
+      "width": 48,
+      "height": 14,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": true
+    },
+    {
+      "item": 43,
+      "right": [
+        131160,
+        131161
+      ],
+      "left": [
+        131158,
+        131159
+      ],
+      "idle": [
+        131160,
+        131161
+      ],
+      "width": 32,
+      "height": 24,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": true
+    },
+    {
+      "item": 44,
+      "right": [
+        131084,
+        131085
+      ],
+      "left": [
+        131082,
+        131083
+      ],
+      "idle": [
+        131084,
+        131085
+      ],
+      "width": 24,
+      "height": 18,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": false
+    },
+    {
+      "item": 46,
+      "right": [
+        131092,
+        131093
+      ],
+      "left": [
+        131090,
+        131091
+      ],
+      "idle": [
+        131092,
+        131093
+      ],
+      "width": 20,
+      "height": 12,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": false
+    },
+    {
+      "item": 47,
+      "right": [
+        131080,
+        131081
+      ],
+      "left": [
+        131078,
+        131079
+      ],
+      "idle": [
+        131080,
+        131080
+      ],
+      "width": 20,
+      "height": 16,
+      "speedY": 1,
+      "speedX": 1,
+      "dangerous": false
+    },
+    {
+      "item": 48,
+      "right": [
+        131126,
+        131127
+      ],
+      "left": [
+        131124,
+        131125
+      ],
+      "idle": [
+        131128,
+        131129
+      ],
+      "width": 24,
+      "height": 7,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": true
+    },
+    {
+      "item": 49,
+      "right": [
+        131120,
+        131121
+      ],
+      "left": [
+        131118,
+        131119
+      ],
+      "idle": [
+        131122,
+        131123
+      ],
+      "width": 28,
+      "height": 7,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": true
+    },
+    {
+      "item": 51,
+      "right": [
+        131180,
+        131181
+      ],
+      "left": [
+        131178,
+        131179
+      ],
+      "idle": [
+        131174,
+        131175
+      ],
+      "width": 19,
+      "height": 16,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": false
+    },
+    {
+      "item": 52,
+      "right": [
+        131148,
+        131149
+      ],
+      "left": [
+        131146,
+        131147
+      ],
+      "idle": [
+        131142,
+        131143
+      ],
+      "width": 19,
+      "height": 19,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": false
+    },
+    {
+      "item": 53,
+      "right": [
+        131156,
+        131157
+      ],
+      "left": [
+        131154,
+        131155
+      ],
+      "idle": [
+        131150,
+        131151
+      ],
+      "width": 24,
+      "height": 21,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": false
+    },
+    {
+      "item": 61,
+      "right": [
+        131116,
+        131117
+      ],
+      "left": [
+        131114,
+        131115
+      ],
+      "idle": [
+        131116,
+        131116
+      ],
+      "width": 32,
+      "height": 11,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": false
+    },
+    {
+      "item": 62,
+      "right": [
+        131192,
+        131193
+      ],
+      "left": [
+        131190,
+        131191
+      ],
+      "idle": [
+        131190,
+        131191
+      ],
+      "width": 20,
+      "height": 20,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": false
+    },
+    {
+      "item": 63,
+      "right": [
+        131188,
+        131189
+      ],
+      "left": [
+        131186,
+        131187
+      ],
+      "idle": [
+        131184,
+        131185
+      ],
+      "width": 20,
+      "height": 30,
+      "speedY": 2,
+      "speedX": 2,
+      "dangerous": false
+    }
+  ]
+}

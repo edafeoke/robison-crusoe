@@ -12,9 +12,7 @@ import {
   Save,
   ArrowUpRight,
   Check,
-  Droplets,
-  Utensils,
-  Zap,
+  Moon,
   Minus,
   Plus,
   Maximize2,
@@ -30,6 +28,11 @@ import { IslandMap } from "./components/IslandMap";
 import { useGameStore, type Panel } from "./store/gameStore";
 import { useAmbience } from "./hooks/useAmbience";
 import { SpriteIcon } from "./components/SpriteIcon";
+import { ConditionPanel, SurvivalLoss } from "./components/SurvivalPanel";
+import { HuntingPanel } from "./components/HuntingPanel";
+import { RodFishingPanel } from "./components/RodFishingPanel";
+import { NetFishingPanel } from "./components/NetFishingPanel";
+import { CoconutGamePanel } from "./components/CoconutGamePanel";
 const toolbar: {
   panel: Panel;
   name: string;
@@ -48,6 +51,21 @@ export default function App() {
     const keydown = (e: KeyboardEvent) => {
       if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
       const key = e.key.toLowerCase();
+      const state = useGameStore.getState();
+      if (state.survival.death) return;
+      if (
+        (state.coconutGame ||
+          state.fishingGame ||
+          state.rodGame ||
+          state.huntingGame) &&
+        key !== "escape"
+      )
+        return;
+      if (key === "r" && !state.panel) {
+        e.preventDefault();
+        state.beginRest();
+        return;
+      }
       if (key === "escape") {
         e.preventDefault();
         useGameStore.setState((t) => ({ panel: t.panel ? null : "settings" }));
@@ -67,7 +85,7 @@ export default function App() {
     window.addEventListener("keydown", keydown);
     return () => window.removeEventListener("keydown", keydown);
   }, []);
-  const minutes = 8 * 60 + Math.floor(s.elapsed / 3),
+  const minutes = 8 * 60 + s.survival.minutes,
     day = 1 + Math.floor(minutes / 1440),
     clock = `${String(Math.floor(minutes / 60) % 24).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
   const goals = [
@@ -114,7 +132,12 @@ export default function App() {
           <button
             className="icon-button"
             aria-label="Save expedition"
-            disabled={!s.ready || s.saving}
+            disabled={
+              !s.ready ||
+              s.saving ||
+              !!s.survival.death ||
+              !!(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame)
+            }
             onClick={s.save}
           >
             <Save size={19} />
@@ -145,8 +168,14 @@ export default function App() {
               </div>
             </div>
           </div>
-          <div className="game-shell">
+          <div
+            className={`game-shell ${s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame ? "has-minigame" : ""}`}
+          >
             <GameCanvas />
+            <CoconutGamePanel />
+            <NetFishingPanel />
+            <RodFishingPanel />
+            <HuntingPanel />
             <div className="canvas-vignette" />
             {s.enhancements && (
               <div
@@ -185,25 +214,7 @@ export default function App() {
               <span>N</span>
               <Compass size={45} strokeWidth={0.8} />
             </div>
-            <div className="condition-plaque">
-              <p>
-                YOUR CONDITION <span>NEEDS PAUSED</span>
-              </p>
-              {[
-                { icon: Utensils, name: "Hunger", color: "#d9b66e" },
-                { icon: Droplets, name: "Thirst", color: "#83bdc2" },
-                { icon: Zap, name: "Energy", color: "#aac094" },
-              ].map(({ icon: Icon, name, color }) => (
-                <div className="condition-line" key={name}>
-                  <Icon size={14} style={{ color }} />
-                  <span>{name}</span>
-                  <div className="condition-track">
-                    <i style={{ background: color }} />
-                  </div>
-                  <small>100</small>
-                </div>
-              ))}
-            </div>
+            <ConditionPanel />
             <div className="zoom-control">
               <button
                 aria-label="Zoom in"
@@ -279,7 +290,16 @@ export default function App() {
               >
                 <kbd>E</kbd>
                 <span>
-                  Examine <b>{s.items[s.focus.itemId]?.name}</b>
+                  Examine{" "}
+                  <b>
+                    {s.focus.kind === "coconut-palm"
+                      ? "Coconut palm"
+                      : s.focus.kind === "net-fishing"
+                        ? "Shallow water"
+                        : s.focus.kind === "rod-fishing"
+                          ? "Deep water"
+                          : s.items[s.focus.itemId]?.name}
+                  </b>
                 </span>
                 <ChevronRight size={17} />
               </button>
@@ -332,7 +352,15 @@ export default function App() {
               {toolbar.map(({ panel, name, key, icon: Icon }) => (
                 <button
                   key={name}
-                  disabled={!s.ready}
+                  disabled={
+                    !s.ready ||
+                    !!(
+                      s.coconutGame ||
+                      s.fishingGame ||
+                      s.rodGame ||
+                      s.huntingGame
+                    )
+                  }
                   className={s.panel === panel ? "active" : ""}
                   onClick={() => s.setPanel(panel)}
                 >
@@ -343,6 +371,25 @@ export default function App() {
               ))}
             </div>
             <div className="toolbar-right">
+              <button
+                className="icon-button"
+                aria-label="Rest a moment"
+                disabled={
+                  !s.ready ||
+                  !s.started ||
+                  !!(
+                    s.coconutGame ||
+                    s.fishingGame ||
+                    s.rodGame ||
+                    s.huntingGame
+                  ) ||
+                  !!s.survival.death ||
+                  s.survival.restRemainingMs !== null
+                }
+                onClick={s.beginRest}
+              >
+                <Moon size={19} />
+              </button>
               <button
                 className="icon-button"
                 aria-label={s.ambience ? "Mute ambience" : "Enable ambience"}
@@ -387,6 +434,9 @@ export default function App() {
             <button
               className="text-button"
               onClick={() => s.setPanel("journal")}
+              disabled={
+                !!(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame)
+              }
             >
               Open your journal <ArrowUpRight size={15} />
             </button>
@@ -416,6 +466,9 @@ export default function App() {
             className="mini-map-button"
             onClick={() => s.setPanel("map")}
             aria-label="Open island map"
+            disabled={
+              !!(s.coconutGame || s.fishingGame || s.rodGame || s.huntingGame)
+            }
           >
             <div className="mini-map-heading">
               <span>YOUR LITTLE CORNER</span>
@@ -453,6 +506,14 @@ export default function App() {
                 ))}
               <button
                 aria-label="Open satchel"
+                disabled={
+                  !!(
+                    s.coconutGame ||
+                    s.fishingGame ||
+                    s.rodGame ||
+                    s.huntingGame
+                  )
+                }
                 onClick={() => s.setPanel("inventory")}
               >
                 <ChevronRight size={17} />
@@ -476,6 +537,7 @@ export default function App() {
         </button>
       </footer>
       <PanelOverlay />
+      <SurvivalLoss />
     </div>
   );
 }

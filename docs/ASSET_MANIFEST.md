@@ -37,3 +37,19 @@ D0 also contains four localized banks in English, French, Italian, German, Spani
 No character, tile or tree was guessed from a contact sheet. Semantic identifications combine actual sprite references, recovered item names, renderer call sites and visual inspection. Any incomplete world rendering is documented in REVERSE_ENGINEERING.md.
 
 Second milestone: objects.json additionally exposes typed `interaction`, `craftingTools` and `category` fields, verified against the original CSV and consuming methods. Source files/IDs are unchanged. See ITEM_RULES.md.
+
+Fourth milestone: typed `effects` preserve CSV rows 3–7. Robinson rest uses the source BS9 regions 0/1 at the recovered 700 ms cadence. Original sheets remain unchanged; SURVIVAL.md documents consumption and reserve rules.
+
+Fifth milestone: Coconut challenge uses BS13 regions 2/17 (coconut/projectile) and BS7 regions 53/54/55 (leaf clusters), directly from n.java. Decor 18/variant 8 is h.i, the coconut-bearing palm. Display and interaction share a stable palm hash; see COCONUT_CHALLENGE.md. No sheet is edited.
+
+## Net fishing
+
+`src/game/data/netFishingRules.ts` lists five original three-frame left/right fish families (BS2), net 851984 (BS13 region 16) and tool 851986 (BS13 region 18). `tools/recover_fishing.py` extracts and verifies directional branches from x.c(int); original anchors/mirroring remain in atlas.json. No new raster files are generated or substituted. See NET_FISHING.md.
+
+## Rod fishing
+
+`src/game/data/rodFishingRules.ts` lists all four fish frame families/hitboxes extracted from x.c(). Source float/rod-tip 851979 and bait/hook frames 851980/851981 are BS13 regions 11–13; tool icon 851976 is BS13 region 8. BS2 fish frames and exact D0 anchors remain unchanged. The white segmented rod/line is drawn with recovered coordinates; a hook focus marker is a browser visibility enhancement. See ROD_FISHING.md.
+
+## Bow hunting
+
+`src/game/data/huntingRules.ts` preserves all 15 s.k frame pairs, hitboxes, speeds and danger flags. Six arrow regions `[851993,851995,851991,851996,851994,851992]` come from javap constructor array extraction; bow is 851990. Turtle/iguana repeated idle frames are retained. No shark profile is guessed, and no original sheet is altered. See HUNTING.md.

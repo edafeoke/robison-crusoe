@@ -76,11 +76,22 @@ export class Player {
     this.move(dx, dy, dt);
     if (!this.walking) this.path = [];
   }
+  rest(elapsedMs: number) {
+    this.walking = false;
+    const frame = Math.floor(elapsedMs / 700) % 2,
+      f = this.atlas.sheets[9].frames[frame];
+    this.sprite
+      .setTexture("bank-9", frame)
+      .setPosition(this.x - f.anchorX, this.y + 8 - f.anchorY)
+      .setFlipX(f.flipX)
+      .setDepth(this.y + 0.4);
+    this.shadow.setPosition(this.x, this.y + 5).setDepth(this.y - 0.1);
+  }
   render() {
     const frame = assetManifest.player.sequences[this.facing][this.frame],
       f = this.atlas.sheets[3].frames[frame];
     this.sprite
-      .setFrame(frame)
+      .setTexture("bank-3", frame)
       .setPosition(this.x - f.anchorX, this.y + 8 - f.anchorY)
       .setFlipX(f.flipX)
       .setDepth(this.y + 0.4);

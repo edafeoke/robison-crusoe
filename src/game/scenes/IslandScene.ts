@@ -3,12 +3,13 @@ import { validateMap, type IslandMap } from "../maps/MapDecoder";
 import { MapRenderer } from "../maps/MapRenderer";
 import { CollisionSystem } from "../systems/CollisionSystem";
 import { findPath } from "../systems/MovementSystem";
-import { nearestObject } from "../systems/InteractionSystem";
+import { nearestInteraction } from "../systems/InteractionSystem";
 import { AnimationSystem } from "../systems/AnimationSystem";
 import { Player } from "../entities/Player";
 import { Animal } from "../entities/Animal";
 import type { WildlifeManifest } from "../entities/WildlifeState";
 import { WildlifeSystem } from "../systems/WildlifeSystem";
+import { advanceSurvival } from "../systems/SurvivalSystem";
 import { useGameStore } from "../../store/gameStore";
 export class IslandScene extends Phaser.Scene {
   player!: Player;
@@ -101,7 +102,17 @@ export class IslandScene extends Phaser.Scene {
     ]);
     this.input.keyboard!.on("keydown-E", () => {
       const s = useGameStore.getState();
-      if (!s.panel && s.focus) s.inspect(s.focus.index, s.focus.itemId);
+      if (
+        !s.panel &&
+        !s.coconutGame &&
+        !s.fishingGame &&
+        !s.rodGame &&
+        !s.huntingGame &&
+        !s.survival.death &&
+        s.survival.restRemainingMs === null &&
+        s.focus
+      )
+        s.inspect(s.focus.index, s.focus.itemId);
     });
     this.marker = this.add.graphics().setDepth(4000);
     this.ring = this.add
@@ -113,11 +124,22 @@ export class IslandScene extends Phaser.Scene {
       const s = useGameStore.getState();
       // Phaser also receives window mouse events from React's overlaid controls.
       // Menu/save/zoom clicks must not issue a world movement command.
-      if (s.panel || !s.started || p.event.target !== this.game.canvas) return;
+      if (
+        s.panel ||
+        s.coconutGame ||
+        s.fishingGame ||
+        s.rodGame ||
+        s.huntingGame ||
+        !s.started ||
+        s.survival.death ||
+        s.survival.restRemainingMs !== null ||
+        p.event.target !== this.game.canvas
+      )
+        return;
       const world = p.positionToCamera(
         this.cameras.main,
       ) as Phaser.Math.Vector2;
-      const object = nearestObject(
+      const object = nearestInteraction(
         this.map,
         world.x,
         world.y,
@@ -129,6 +151,7 @@ export class IslandScene extends Phaser.Scene {
         object &&
         Math.hypot(object.x - this.player.x, object.y - this.player.y) < 44
       ) {
+        object.actorId = this.wildlife.actorAt(object.index)?.id;
         useGameStore.setState({ focus: object });
         s.inspect(object.index, object.itemId);
         return;
@@ -156,6 +179,50 @@ export class IslandScene extends Phaser.Scene {
       this.marker.alpha = 1;
     });
     this.unsubscribe = useGameStore.subscribe((s, prev) => {
+      if (!prev.coconutGame && s.coconutGame) {
+        this.cameras.main.setVisible(false);
+        this.scene.launch("Coconut");
+        this.scene.bringToTop("Coconut");
+        this.player.path = [];
+        this.input.keyboard?.resetKeys();
+      }
+      if (prev.coconutGame && !s.coconutGame) {
+        this.cameras.main.setVisible(true);
+        this.scene.stop("Coconut");
+      }
+      if (!prev.fishingGame && s.fishingGame) {
+        this.cameras.main.setVisible(false);
+        this.scene.launch("NetFishing");
+        this.scene.bringToTop("NetFishing");
+        this.player.path = [];
+        this.input.keyboard?.resetKeys();
+      }
+      if (prev.fishingGame && !s.fishingGame) {
+        this.cameras.main.setVisible(true);
+        this.scene.stop("NetFishing");
+      }
+      if (!prev.rodGame && s.rodGame) {
+        this.cameras.main.setVisible(false);
+        this.scene.launch("RodFishing");
+        this.scene.bringToTop("RodFishing");
+        this.player.path = [];
+        this.input.keyboard?.resetKeys();
+      }
+      if (prev.rodGame && !s.rodGame) {
+        this.cameras.main.setVisible(true);
+        this.scene.stop("RodFishing");
+      }
+      if (!prev.huntingGame && s.huntingGame) {
+        this.cameras.main.setVisible(false);
+        this.scene.launch("Hunting");
+        this.scene.bringToTop("Hunting");
+        this.player.path = [];
+        this.input.keyboard?.resetKeys();
+      }
+      if (prev.huntingGame && !s.huntingGame) {
+        this.cameras.main.setVisible(true);
+        this.scene.stop("Hunting");
+      }
       if (s.zoom !== prev.zoom) this.cameras.main.setZoom(s.zoom);
       if (s.collected !== prev.collected) {
         // Loading restores removed objects too; rebuild safely only when the collection shrinks or differs.
@@ -166,6 +233,14 @@ export class IslandScene extends Phaser.Scene {
         for (const i of s.collected) {
           this.removed.add(i);
           this.world.remove(i);
+          if (this.wildlife.removeActor(i))
+            this.animals = this.animals.filter((a) => {
+              if (a.id === i) {
+                a.destroy();
+                return false;
+              }
+              return true;
+            });
           this.wildlife.removeStatic(i);
         }
       }
@@ -173,7 +248,11 @@ export class IslandScene extends Phaser.Scene {
         this.scene.restart();
         return;
       }
-      if (s.panel !== prev.panel) {
+      if (
+        s.panel !== prev.panel ||
+        s.survival.restRemainingMs !== prev.survival.restRemainingMs ||
+        s.survival.death !== prev.survival.death
+      ) {
         this.player.path = [];
         if (s.panel) this.input.keyboard?.resetKeys();
       }
@@ -188,23 +267,58 @@ export class IslandScene extends Phaser.Scene {
       x: spawn.x,
       y: spawn.y,
       worldObjects: this.wildlife.objects,
+      worldDecor: this.map.layers.Decor,
+      worldTerrain: this.map.layers.FULL,
       captureWildlife: () => this.wildlife.snapshot(),
     });
+    if (state.huntingGame) {
+      this.cameras.main.setVisible(false);
+      this.scene.launch("Hunting");
+      this.scene.bringToTop("Hunting");
+    }
+    if (state.rodGame) {
+      this.cameras.main.setVisible(false);
+      this.scene.launch("RodFishing");
+      this.scene.bringToTop("RodFishing");
+    }
+    if (state.fishingGame) {
+      this.cameras.main.setVisible(false);
+      this.scene.launch("NetFishing");
+      this.scene.bringToTop("NetFishing");
+    }
+    if (state.coconutGame) {
+      this.cameras.main.setVisible(false);
+      this.scene.launch("Coconut");
+      this.scene.bringToTop("Coconut");
+    }
   }
   update(_time: number, delta: number) {
     if (!this.player) return;
     const s = useGameStore.getState();
-    if (s.panel || !s.started) {
-      this.player.move(0, 0, 0);
+    if (
+      s.panel ||
+      s.coconutGame ||
+      s.fishingGame ||
+      s.rodGame ||
+      s.huntingGame ||
+      !s.started ||
+      s.survival.death ||
+      document.hidden
+    ) {
+      if (s.survival.restRemainingMs === null) this.player.move(0, 0, 0);
       return;
     }
+    delta = Math.max(0, Math.min(delta, 250));
     const dx =
         Number(this.keys.D.isDown || this.keys.RIGHT.isDown) -
         Number(this.keys.A.isDown || this.keys.LEFT.isDown),
       dy =
         Number(this.keys.S.isDown || this.keys.DOWN.isDown) -
         Number(this.keys.W.isDown || this.keys.UP.isDown);
-    if (dx || dy) {
+    if (s.survival.restRemainingMs !== null) {
+      this.player.path = [];
+      this.player.rest(10000 - s.survival.restRemainingMs);
+    } else if (dx || dy) {
       this.player.path = [];
       this.player.move(dx, dy, delta / 1000);
     } else this.player.updatePath(delta / 1000);
@@ -213,6 +327,13 @@ export class IslandScene extends Phaser.Scene {
     this.syncTime += delta;
     if (this.syncTime > 100) {
       const elapsed = s.elapsed + this.syncTime / 1000;
+      const survival = advanceSurvival(s.survival, this.syncTime);
+      if (
+        s.survival.restRemainingMs !== null &&
+        survival.restRemainingMs === null &&
+        !survival.death
+      )
+        s.notify("Rested · Energy restored by up to 30 points");
       this.syncTime = 0;
       const tx = Math.floor(this.player.x / 16),
         ty = Math.floor(this.player.y / 16);
@@ -223,16 +344,20 @@ export class IslandScene extends Phaser.Scene {
           if (ax >= 0 && ay >= 0 && ax < 180 && ay < 180)
             this.discovered.add(ax + ay * 180);
         }
-      const focus = nearestObject(
-        this.map,
-        this.player.x,
-        this.player.y,
-        this.removed,
-        42,
-        this.wildlife.objects,
-      );
+      const focus =
+        survival.restRemainingMs !== null || survival.death
+          ? null
+          : nearestInteraction(
+              this.map,
+              this.player.x,
+              this.player.y,
+              this.removed,
+              42,
+              this.wildlife.objects,
+            );
       if (focus) {
         const animal = this.wildlife.actorAt(focus.index);
+        if (animal) focus.actorId = animal.id;
         if (animal)
           focus.behavior =
             animal.reaction === "flee"
@@ -249,6 +374,7 @@ export class IslandScene extends Phaser.Scene {
         x: this.player.x,
         y: this.player.y,
         elapsed,
+        survival,
         focus,
         discovered: [...this.discovered],
       });

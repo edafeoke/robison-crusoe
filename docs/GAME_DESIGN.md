@@ -1,6 +1,6 @@
 # Reconstruction design and milestone boundary
 
-The goal is faithful reconstruction of Exkee's Java ME adventure. The current build extends the **first playable exploration milestone** with recovered item rules, wildlife behavior and offline reload support. The complete survival adventure is a later sequence of audited implementations, not a claimed completed feature.
+The goal is faithful reconstruction of Exkee's Java ME adventure. The current build extends the **first playable exploration milestone** with recovered bow hunting, rod fishing, net fishing, coconut throwing, survival/item-use rules, wildlife behavior and offline reload support. The complete survival adventure is a later sequence of audited implementations, not a claimed completed feature.
 
 ## Presentation
 
@@ -9,21 +9,26 @@ Preserve original pixel art and world layout. Use crisp nearest-neighbor scaling
 ## Playable scope
 
 - All five immutable original layers decoded; original terrain/rock/border art, composite foliage, static recoverable objects.
-- 326 original animals across 16 source-verified profiles: wandering/rest, prey fleeing, predator pursuit, bird flight/landing, water-constrained sharks, exact directional frames/shadows/wakes. Animal damage and hunting remain paused.
+- 326 original animals across 16 source-verified profiles: wandering/rest, prey fleeing, predator pursuit, bird flight/landing, water-constrained sharks, exact directional frames/shadows/wakes. World-contact animal damage remains paused; supported animals can be hunted through the recovered bow mode.
 - Robinson idle/walk frames, WASD/arrows, click pathfinding, camera follow, zoom, boundaries and recovered walking collision.
 - Nearby object inspection using recovered names/descriptions, collection gated by recovered tools, original inventory categories, quantities/discard.
 - 20 supplies/equipment recipes using exact material and reusable-tool requirements; construction placement and clothing paths deferred.
+- Original hunger/thirst/energy depletion, food consumption and use-tool effects, short rest with recovered sprites, collection/creation activity effects, collapse/load/exploration recovery. Strength/morale effects are retained; weight and world-contact animal damage are deferred.
+- Coconut-bearing palm interaction and original two-hit throwing game, source projectile tables, five-down/ten-throw rules, exact reward and persisted completion wear.
+- Shallow-water net fishing from terrain 4: original fish/net frames, timed casts, potato gate, exact rewards/activity effects and shared save support.
+- Deep-water rod fishing: four original fish, source hook lag/sway, strict hooking, outward/downward pull and reeling; worm gate, actual fish reward and completion effects.
+- Bow hunting with 15 recovered profiles, apex-only arrows, source movement/retaliation, exact ammunition/reward/activity effects, and persistent removal of the actual caught wildlife actor.
 - Original text reader, island overview with player position, exploration journal and settings.
 - IndexedDB save/restore of position, explored/inspected/collected cells, inventory, elapsed play, options and complete wildlife snapshots; earlier saves remain supported.
 - Local static build, no external fonts/services/backend. A self-contained production script and versioned asset cache support offline reload; verified with the local preview server stopped.
 
 ## Explicit browser enhancements
 
-Mouse pathfinding, responsive panels, zoom, exploration checklist, fog/exploration reporting, synthesized ambient surf, session-based clock and optional visual dusk lighting. These are not claimed recovered mechanics. Journal checklist is an exploration guide, not the original mission trigger graph. Clock begins at 08:00 and advances during unpaused play only; it is not the original real-time survival calculation.
+Mouse pathfinding, responsive panels, zoom, exploration checklist, fog/exploration reporting, synthesized ambient surf, clock starting at 08:00 with the recovered real-minute rate and optional visual dusk lighting. These are not claimed recovered mechanics. Journal checklist is an exploration guide, not the original mission trigger graph. Clock begins at 08:00 and advances during unpaused play only; it does not mirror the phone device clock or apply offline survival changes.
 
 Animal randomness, continuous movement, view gating and snapshot format are documented browser adaptations in WILDLIFE.md.
 
-Needs and animal damage remain visibly paused during this milestone. Hunger, thirst and energy are recovered concepts; exact depletion mapping/timing and item effects must be audited before enabling. No unverified health meter, thirst collectible or arbitrary food recipe is substituted.
+Survival is enabled for new expeditions; earlier saves keep exploration mode with full reserves until enabled. SURVIVAL.md documents source-backed timing, food/tool effects, rest, poison and activity costs. Menus/hidden tabs pause needs and offline depletion is deferred. World-contact animal damage remains paused. Hunting retaliation currently uses the unprotected source branch; clothing protection is unported. No unverified health meter, thirst collectible or arbitrary food recipe is substituted.
 
 ## Deferred original systems, in dependency order
 
@@ -31,8 +36,8 @@ Needs and animal damage remain visibly paused during this milestone. Hunger, thi
 2. Compare the ported wildlife state families against the emulator; port exact original runtime object filters, remaining special entity rendering, and hazards after reserve/clothing recovery.
 3. Audit CSV row semantics and inventory categories; tool interactions, item consumption, outfit composition and capacity/weight rules.
 4. Port construction placement and workstation restrictions from actual call paths; shelter/storage and rest.
-5. Recreate coconut throwing, shallow/deep fishing and hunting minigames with original parameters.
-6. Port original time/date reserve depletion and food/poisoning, sleep/save behavior, weather and changing tides.
+5. Compare the ported coconut challenge with an emulator; compare net/rod fishing and bow hunting, including source tenth-shot behavior and outfit protection.
+6. Compare the ported reserve depletion, food/poisoning and short rest against an emulator; port offline sleep/save, weight, weather and changing tides.
 7. Recover and implement exact story/repair/escape triggers, original save serialization and compatibility where feasible.
 8. Profile world updates, compare fidelity, complete accessibility and optional remaster art/audio with licensed sources.
 

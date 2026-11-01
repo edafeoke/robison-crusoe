@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import type { AtlasManifest, RecoveredItem } from "../assets/assetManifest";
 import type { IslandMap } from "./MapDecoder";
+import { decorVariantIndex } from "./DecorVariants";
 // Animated BS11 shoreline borders are drawn separately using the recovered data.c cycle.
 const ANIMATED_BORDERS = new Set([5, 6, 7, 17, 18, 19, 20, 21, 22]);
 export function drawRegion(
@@ -144,7 +145,7 @@ export class MapRenderer {
         makeRegion(scene, atlas, atlas.decor[d], x, y, y);
         const variants = atlas.variants[d];
         if (variants) {
-          const variant = variants[(i * 17 + d) % variants.length];
+          const variant = variants[decorVariantIndex(i, d, variants.length)];
           for (const [n, c] of atlas.composites[variant].entries())
             makeRegion(
               scene,
