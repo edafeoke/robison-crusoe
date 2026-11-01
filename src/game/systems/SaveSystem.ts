@@ -1,3 +1,7 @@
+import {
+  validResourceHistory,
+  type ResourceHistory,
+} from "./ResourceHistorySystem";
 import { validRaft, type RaftState } from "./RaftSystem";
 import {
   validWildlife,
@@ -30,6 +34,7 @@ export interface SaveData {
   bodyWeight?: BodyWeightState;
   ship?: ShipState;
   raft?: RaftState;
+  resources?: ResourceHistory;
 }
 export function validSave(value: unknown): value is SaveData {
   const d = value as SaveData;
@@ -51,6 +56,7 @@ export function validSave(value: unknown): value is SaveData {
     (d.furnishings === undefined || validFurnishings(d.furnishings)) &&
     (d.clothing === undefined || validClothing(d.clothing)) &&
     (d.bodyWeight === undefined || validBodyWeight(d.bodyWeight)) &&
+    (d.resources === undefined || validResourceHistory(d.resources)) &&
     (d.raft === undefined ||
       (validRaft(d.raft) &&
         (d.raft.phase !== "aboard" || !d.ship || d.ship.phase === "wreck"))) &&

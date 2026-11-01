@@ -8,7 +8,7 @@ Audited 2026-11-01 against the supplied JAR, CFR output and JVM disassembly. Thi
 
 | Result | Consumed materials | Required equipment, kept |
 | --- | --- | --- |
-| Large sail (54) | Sail (12) ×4, Fabric (118) ×1, Cotton thread (116) ×1 | Scissors (86) ×1, Needle (97) ×1 |
+| Large sail (54) | Sail (12) ×4, Fabric (118) ×1, Cotton thread (116) ×1 | Needle (86) ×1, Scissors (97) ×1 |
 | Pirate ship (19) | Large sail (54) ×1, Giant log (93) ×3, Nail (13) ×8, Rope (91) ×5, Stick (36) ×6, Moss (39) ×5 | Saw (78), Hammer (77), Compass (80), Map (23), Sextant (22), Anchor (79), one each |
 
 Large sail is a supply recipe with no camp prerequisite, −10 Energy and no original sprite (`−1`). The browser now permits this otherwise valid recipe and uses the existing neutral missing-art marker. Fabric/thread retain their own recovered recipe prerequisites. Nothing is fabricated as sail artwork. Ship repair has zero Energy/Morale/Strength effects and does not put a portable ship in inventory. `ad.o()` consumes materials and retains equipment.

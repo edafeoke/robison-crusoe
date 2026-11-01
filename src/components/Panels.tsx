@@ -349,9 +349,9 @@ export function QuestJournal() {
       <div className="field-note">
         <Compass size={20} />
         <p>
-          This checklist guides exploration. Rebuild the pirate ship for the
-          voyage home; raft travel and the complete island route are still being
-          reconstructed.
+          Rebuild the pirate ship for the voyage home. Supplies can return with
+          later tides: gather elsewhere while a depleted spot recovers. Carried
+          tools and larger quarried materials follow different rules.
         </p>
       </div>
       <details className="original-notes">

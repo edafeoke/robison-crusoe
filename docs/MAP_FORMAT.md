@@ -59,3 +59,7 @@ Original Objects85 at (94,94), index17014, stays immutable in source data. Repai
 ## Tide overlay
 
 FULL4→0,5→4,6→5 and nine Borders substitutions apply at low tide; high tide restores copies of the original layers. Objects/Decor/Rocks and raw bytes are never rewritten. Live walking/raft collisions and both fishing-shore interactions use the same phase map as Phaser terrain/shore rendering. Static charts keep the original coastline and are labelled accordingly. Source provenance hashes remain associated with the raw map, not the remapped arrays. See TIDES.md and evidence/tide-access-audit.json.
+
+## Static supply renewal
+
+Original non-mobile source indices identify resource histories in the browser. The raw Objects array stays immutable. At refresh, an eligible removed cell leaves the runtime removal set and regains its original map ID, sprite and collision blocker. The20/70 histories and carried-unique filter determine eligibility; occupied cells defer. This differs explicitly from source randomization/short-ID movement. See RESOURCE_RENEWAL.md.

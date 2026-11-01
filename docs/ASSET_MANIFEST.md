@@ -91,3 +91,7 @@ Barrel uses source 852041 (BS13 frame 41). Single bed (15), Rug (60) and Double 
 ## Tide artwork
 
 No new artwork or guessed tile IDs. `tideRules.ts` retains source FULL/Borders remaps. Phaser chooses the original BS1 terrain regions and updates BS11 shoreline sequences with their original400ms cycle; `shoreSequences.ts` holds the existing pure frame table. Both tide textures are cached lazily; raw sprite banks and D0 anchors remain intact. See TIDES.md.
+
+## Renewed supplies
+
+`resourceHistoryRules.ts` contains source history capacities and map-ID filters, not new artwork. Returning supplies reuse their exact original item sprite, anchor and original source cell. Raw Objects and all PNGs remain intact. The material audit retains one raw Sail placement; repeat acquisition is source-backed renewal, not an extra map object. See RESOURCE_RENEWAL.md.

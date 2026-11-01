@@ -68,3 +68,7 @@ Animal tool 81 (Bow) requires Arrow 45. One Arrow supplies up to ten minigame sh
 ## Raft completion
 
 Broken raft84 at original (94,94) now has its dedicated repair interaction. Exact six consumed material groups and kept Saw/Hammer, −30 Energy/+10 Morale, non-portable runtime95, boarding/swamp traversal/landing and transport saves are ported. It remains separate from the43 workbench recipes. See RAFT_TRAVERSAL.md for source art, single-tile transitions and explicit adaptations; dynamic tides and the full tool/material route remain pending.
+
+## Supply renewal and progression
+
+TAKE still awards one item and exact activity effects. Original recipes need more Sails/Nails/Vines than the raw static stock supplies once. Resource histories now allow eligible source cells to return at tide refresh, using exact20/70 buffer capacities and carried-unique IDs. No extra items are granted and no recipe quantities changed. Direct world USE does not record TAKE history. See RESOURCE_RENEWAL.md.

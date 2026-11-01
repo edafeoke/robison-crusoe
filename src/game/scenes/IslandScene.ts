@@ -1,4 +1,9 @@
 import {
+  migrateResourceHistory,
+  refreshResources,
+  crossedResourceReset,
+} from "../systems/ResourceHistorySystem";
+import {
   tidalMap,
   tideAt,
   tideRescue,
@@ -35,6 +40,7 @@ export class IslandScene extends Phaser.Scene {
   ring!: Phaser.GameObjects.Ellipse;
   private syncTime = 0;
   private survivalTime = 0;
+  private refreshingResources = false;
   private removed = new Set<number>();
   private unsubscribe?: () => void;
   private discovered = new Set<number>();
@@ -53,6 +59,14 @@ export class IslandScene extends Phaser.Scene {
     const state = useGameStore.getState();
     this.tide = tideAt(state.elapsed);
     this.map = tidalMap(this.sourceMap, this.tide);
+    const resources =
+      state.resources ??
+      migrateResourceHistory(
+        this.sourceMap.layers.Objects,
+        state.items,
+        state.collected,
+      );
+    this.refreshingResources = false;
     this.removed = new Set(state.collected);
     this.discovered = new Set(state.discovered);
     const manifest = this.cache.json.get("wildlife") as
@@ -305,7 +319,10 @@ export class IslandScene extends Phaser.Scene {
         this.player.setOutfit(s.clothing.equipped);
       if (s.collected !== prev.collected) {
         // Loading restores removed objects too; rebuild safely only when the collection shrinks or differs.
-        if (prev.collected.some((i) => !s.collected.includes(i))) {
+        if (
+          !this.refreshingResources &&
+          prev.collected.some((i) => !s.collected.includes(i))
+        ) {
           this.scene.restart();
           return;
         }
@@ -353,6 +370,7 @@ export class IslandScene extends Phaser.Scene {
     });
     useGameStore.setState({
       ready: true,
+      resources,
       x: spawn.x,
       y: spawn.y,
       worldMap: this.map,
@@ -471,6 +489,14 @@ export class IslandScene extends Phaser.Scene {
     if (attacks.length) s.notify(attacks.join(" · "));
     if (this.syncTime > 100) {
       const elapsed = s.elapsed + this.syncTime / 1000;
+      let collected = s.collected,
+        resources =
+          s.resources ??
+          migrateResourceHistory(
+            this.sourceMap.layers.Objects,
+            s.items,
+            collected,
+          );
       const phase = tideAt(elapsed);
       if (phase !== this.tide) {
         this.tide = phase;
@@ -480,6 +506,37 @@ export class IslandScene extends Phaser.Scene {
         this.world.updateTide(this.map, phase);
         this.shores.setMap(this.map);
         this.player.path = [];
+        const playerCells = new Set(
+          [
+            [-3, -2],
+            [3, -2],
+            [-3, 2],
+            [3, 2],
+          ].map(([dx, dy]) => cellOf(this.player.x + dx, this.player.y + dy)),
+        );
+        const refreshed = refreshResources(
+          this.sourceMap.layers.Objects,
+          s.items,
+          collected,
+          resources,
+          s.inventory,
+          (index) =>
+            playerCells.has(index) || this.wildlife.objects[index] !== 0,
+          crossedResourceReset(s.elapsed, elapsed),
+        );
+        collected = [...refreshed.collected];
+        resources = refreshed.resources;
+        for (const index of refreshed.revived) {
+          if (
+            this.wildlife.restoreStatic(
+              index,
+              this.sourceMap.layers.Objects[index],
+            )
+          ) {
+            this.removed.delete(index);
+            this.world.restoreResource(index);
+          }
+        }
         const rescued =
           s.raft.phase !== "aboard" && s.ship.phase === "wreck"
             ? tideRescue(
@@ -552,7 +609,10 @@ export class IslandScene extends Phaser.Scene {
       }
       this.ring.setVisible(!!focus);
       if (focus) this.ring.setPosition(focus.x, focus.y + 2);
+      this.refreshingResources = true;
       useGameStore.setState({
+        collected,
+        resources,
         x: this.player.x,
         y: this.player.y,
         elapsed,
@@ -566,6 +626,7 @@ export class IslandScene extends Phaser.Scene {
         focus,
         discovered: [...this.discovered],
       });
+      this.refreshingResources = false;
     } else if (attacks.length)
       useGameStore.setState({
         survival,

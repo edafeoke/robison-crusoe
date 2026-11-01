@@ -1,4 +1,10 @@
 import {
+  initialResourceHistory,
+  rememberPickup,
+  migrateResourceHistory,
+  type ResourceHistory,
+} from "../game/systems/ResourceHistorySystem";
+import {
   initialRaft,
   raftTarget,
   repairRaft,
@@ -145,6 +151,7 @@ interface GameState {
   wildlife?: WildlifeSnapshot[];
   captureWildlife?: () => WildlifeSnapshot[];
   collected: number[];
+  resources: ResourceHistory | undefined;
   inspected: number[];
   discovered: number[];
   panel: Panel;
@@ -235,6 +242,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   coconutUses: 0,
   coconutSerial: 0,
   collected: [],
+  resources: initialResourceHistory(),
   inspected: [],
   discovered: [],
   panel: null,
@@ -313,6 +321,16 @@ export const useGameStore = create<GameState>((set, get) => ({
       survival: activityEffect(s.survival, item, "collect"),
       inventory: { ...s.inventory, [itemId]: (s.inventory[itemId] ?? 0) + 1 },
       collected: [...s.collected, index],
+      resources: rememberPickup(
+        s.resources ??
+          migrateResourceHistory(
+            s.worldMap?.layers.Objects,
+            s.items,
+            s.collected,
+          ),
+        item,
+        index,
+      ),
       panel: null,
       focus: null,
     });
@@ -451,6 +469,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       elapsed: 0,
       inventory: {},
       collected: [],
+      resources: initialResourceHistory(),
       inspected: [],
       discovered: [],
       survival: initialSurvival(),
@@ -666,6 +685,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         elapsed: s.elapsed,
         inventory: s.inventory,
         collected: s.collected,
+        resources: s.resources,
         inspected: s.inspected,
         discovered: s.discovered,
         enhancements: s.enhancements,
@@ -714,6 +734,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         set({
           ...saved,
           wildlife: saved.wildlife,
+          resources: saved.resources,
           coconutUses: saved.coconutUses ?? 0,
           shelter: saved.shelter ?? 17,
           furnishings: saved.furnishings ?? {},

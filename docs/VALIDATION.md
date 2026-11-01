@@ -1,6 +1,38 @@
 # Validation record
 
-## Current milestone: original tides and tool access
+## Current milestone: supply renewal and construction feasibility
+
+Date: 2026-11-01. **157 tests passed**, including11 new resource-history checks. TypeScript and production build pass. Final classic entry **index-Djbz682B.js**, 1,655.35kB /465.40kB gzip; existing1,600kB advisory remains. No dependency added. Full decoding succeeds and all typed rule files/object metadata regenerate byte-for-byte. Original map/PNG/atlas integrity tests remain green. Fixtures are absent from dist. Source evidence, precise scope and adaptations: RESOURCE_RENEWAL.md.
+
+### Progression finding and automated coverage
+
+- The exact construction dependency plan needs Sail5/raw1, Nail17/raw13, Vine39/raw32. Permanent static pickup deletion therefore blocked progress. Original quantities and recipes remain unchanged.
+- Extracted original20/70 bounded histories,49 carried-unique map IDs,22 mobile exclusions and04:00 recent-only reset. FIFO rollover and source-cell identity adaptation are explicit; source short IDs/random placement/reload-on-resume are not claimed reproduced.
+- Correct renewal after the twentieth further pickup, not the nineteenth; carried/discarded unique tools, longer mined-material history, direct-world USE versus TAKE, daily reset, occupied-cell deferral, optional save validation, legacy migration, actual store collection and new-expedition reset covered.
+- Static renewal preserves wildlife identity/snapshots and refuses occupied cells. A quantity model obtains five Sails from the one original placement through four twenty-pickup cycles using real raw Branch indices. This is not a route/survival playthrough.
+- The material audit uses exact nested recipes and reusable tools and records all construction quantities. It is a lower-bound inventory plan, not a claim of full acquisition or optimized travel.
+
+### Browser observations
+
+Isolated origin **4200** was used. Existing expeditions, including4173, were untouched. `tests/browser/resources.html` labels its repositioning and prepared clock boundary. It supplies **no items, completed pickups or history**. Actual Gather controls perform every collection. No manual island journey is claimed.
+
+- Started with empty inventory/history. Visited original Sail at(20,159) and used actual Gather sail: Sail1, recent1, source cell13→0, Energy100→97. Saved normally. After a fixture-label clarification caused HMR reload, actual Continue restored Sail1/recent1 and the absent source cell; loading did not renew it.
+- An initial nineteen-food attempt was left running after the last collection; a nearby wild animal later exhausted Energy. The earlier Sail checkpoint remained intact. No death state overwrote it. Repeated from that actual checkpoint with immediate pauses and source/current hazard avoidance in the repositioning fixture. No production hazards were disabled or weakened.
+- Gathered **nineteen** actual original foods:2 Mussels, Sea snail, White mushroom, Oyster, Mussel, Sea urchin, Mussel,3 Sea snails, Egg, Coconut, Sea urchin, Clam, Pineapple, Egg, Spiral, Pineapple. These were gathered, not eaten or granted. Result: Sail1, recent20/20 with Sail still present,20 active removed cells, Energy97.
+- Prepared the next tide while Robinson stood at the safe original start cell; resumed the real two-second boundary. Low tide changed terrain normally, reserves became90/86/93, and Sail remained absent (source cell0) because it was still recent. Screenshot `evidence/resource-history-nineteen-keeps-sail.jpg`.
+- Gathered one further original Sea urchin using its real button. Recent length stayed20, Sail recent became **no**, but its cell stayed0 until a refresh; removed count21. No instant regeneration on history rollover.
+- Prepared/resumed the following boundary. High tide restored **map13 at the original Sail cell**, removed count21→20, Sail inventory still1, Energy89. Original Sail interaction became available again. `evidence/resource-sail-returned.jpg`.
+- Actual Gather sail then produced **Sail2**, put that source index back in recent history, removed the cell again, and charged3 Energy: **Hunger80/Thirst72/Energy86**, recent20, active removals21. Saved with the normal IndexedDB UI. `evidence/resource-second-sail-collected.jpg` records the labelled result. Satchel total22 consists of20 collected foods plus2 Sails.
+- Production root restored **08:12 / High tide**, position(19,158),80/72/86 and22 inventory units. Actual satchel showed **Sail×2**. No fixture controls in production; assets reported cached. Owned preview was then stopped for final offline restoration.
+- With the server stopped, opened a fresh cached4200 tab and used actual Continue. The same08:12/high tide checkpoint restored **80/72/86**, position(19,158) and22 inventory units. Actual satchel still showed **Sail×2**, not another free pickup. `evidence/resource-offline-sail-inventory.jpg` records this final offline result.
+- Final DOM confirmed **index-Djbz682B.js**, exactly **one canvas**, captured warnings/errors empty. No fixture controls in production, no viewport override. Retained cached verification tab, paused in the satchel. Owned dev/preview processes stopped.
+- The fixture initially called its generic edible-food selector “fruit”; a real Sea urchin interaction exposed that misleading label. Corrected it to “food”, saved/reloaded the first genuine Sail checkpoint, and repeated the final history-boundary sequence. No source food names, quantities or completed history were replaced to make the test pass.
+
+### Remaining limits
+
+The full survival/crafting/raft/escape playthrough remains unverified. This delivery fixes the discovered permanent-depletion blocker and verifies the necessary renewal mechanics. Original global unique/clothing filtering, nearby random placement/source-ID movement, all source object/decor interactions, emulator comparison, original RMS import, weather and non-sleep offline losses remain pending. Wildlife and special removals retain their existing stable browser behavior. Canonical placement, occupied-cell deferral, conservative legacy migration and paused-clock daily reset are documented adaptations.
+
+## Previous milestone: original tides and tool access
 
 Date: 2026-11-01. **146 tests passed**, including10 new tide checks. TypeScript and final production build passed. Classic entry **index-BspkYOdI.js**, 1,652.65kB /464.39kB gzip. Existing1,600kB advisory remains; no dependency added. Full decoding succeeds; every typed rule file and object metadata regenerate byte-for-byte, including tide facts. Original maps/PNGs/atlas integrity tests remain green. Fixtures are absent from dist. Detailed evidence and explicit clock/object/wildlife adaptations: TIDES.md.
 

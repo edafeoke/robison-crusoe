@@ -116,3 +116,6 @@ recover_raft()
 
 from recover_tides import recover as recover_tides
 recover_tides()
+
+from recover_resource_history import recover as recover_resource_history
+recover_resource_history()

@@ -1,0 +1,244 @@
+{
+  "scope": "One Tent/Cabin/Raft/Ship plan, exact consumed recipes and max reusable tools; crafted tool if absent from raw map. No food costs, travel, hazards, randomized placement or full playthrough simulated.",
+  "goals": [
+    9,
+    10,
+    94,
+    19
+  ],
+  "materials": [
+    {
+      "id": 8,
+      "name": "Branch",
+      "quantity": 23,
+      "rawStock": 150,
+      "shortfall": 0
+    },
+    {
+      "id": 12,
+      "name": "Sail",
+      "quantity": 5,
+      "rawStock": 1,
+      "shortfall": 4
+    },
+    {
+      "id": 11,
+      "name": "Log",
+      "quantity": 29,
+      "rawStock": 82,
+      "shortfall": 0
+    },
+    {
+      "id": 3,
+      "name": "Stone",
+      "quantity": 1,
+      "rawStock": 54,
+      "shortfall": 0
+    },
+    {
+      "id": 6,
+      "name": "Vine",
+      "quantity": 39,
+      "rawStock": 32,
+      "shortfall": 7
+    },
+    {
+      "id": 93,
+      "name": "Giant log",
+      "quantity": 5,
+      "rawStock": 9,
+      "shortfall": 0
+    },
+    {
+      "id": 13,
+      "name": "Nail",
+      "quantity": 17,
+      "rawStock": 13,
+      "shortfall": 4
+    },
+    {
+      "id": 39,
+      "name": "Moss",
+      "quantity": 12,
+      "rawStock": 54,
+      "shortfall": 0
+    },
+    {
+      "id": 21,
+      "name": "Rock",
+      "quantity": 2,
+      "rawStock": 27,
+      "shortfall": 0
+    },
+    {
+      "id": 35,
+      "name": "Tree root",
+      "quantity": 3,
+      "rawStock": 28,
+      "shortfall": 0
+    },
+    {
+      "id": 98,
+      "name": "Cotton",
+      "quantity": 4,
+      "rawStock": 51,
+      "shortfall": 0
+    },
+    {
+      "id": 70,
+      "name": "Sea snail",
+      "quantity": 2,
+      "rawStock": 6,
+      "shortfall": 0
+    },
+    {
+      "id": 65,
+      "name": "Whelk",
+      "quantity": 4,
+      "rawStock": 18,
+      "shortfall": 0
+    }
+  ],
+  "tools": [
+    {
+      "id": 76,
+      "name": "Knife",
+      "quantity": 1,
+      "rawStock": 1
+    },
+    {
+      "id": 5,
+      "name": "Axe",
+      "quantity": 1,
+      "rawStock": 0
+    },
+    {
+      "id": 78,
+      "name": "Saw",
+      "quantity": 1,
+      "rawStock": 1
+    },
+    {
+      "id": 92,
+      "name": "Gunpowder",
+      "quantity": 1,
+      "rawStock": 1
+    },
+    {
+      "id": 77,
+      "name": "Hammer",
+      "quantity": 1,
+      "rawStock": 1
+    },
+    {
+      "id": 89,
+      "name": "Plane",
+      "quantity": 1,
+      "rawStock": 1
+    },
+    {
+      "id": 117,
+      "name": "Weaving machine",
+      "quantity": 1,
+      "rawStock": 0
+    },
+    {
+      "id": 86,
+      "name": "Needle",
+      "quantity": 1,
+      "rawStock": 1
+    },
+    {
+      "id": 97,
+      "name": "Scissors",
+      "quantity": 1,
+      "rawStock": 1
+    },
+    {
+      "id": 80,
+      "name": "Compass",
+      "quantity": 1,
+      "rawStock": 1
+    },
+    {
+      "id": 23,
+      "name": "Map",
+      "quantity": 1,
+      "rawStock": 1
+    },
+    {
+      "id": 22,
+      "name": "Sextant",
+      "quantity": 1,
+      "rawStock": 1
+    },
+    {
+      "id": 79,
+      "name": "Anchor",
+      "quantity": 1,
+      "rawStock": 1
+    }
+  ],
+  "crafts": [
+    {
+      "id": 9,
+      "name": "Tent",
+      "quantity": 1
+    },
+    {
+      "id": 10,
+      "name": "Cabin",
+      "quantity": 1
+    },
+    {
+      "id": 36,
+      "name": "Stick",
+      "quantity": 20
+    },
+    {
+      "id": 5,
+      "name": "Axe",
+      "quantity": 1
+    },
+    {
+      "id": 91,
+      "name": "Rope",
+      "quantity": 19
+    },
+    {
+      "id": 94,
+      "name": "Raft",
+      "quantity": 1
+    },
+    {
+      "id": 37,
+      "name": "Plank",
+      "quantity": 9
+    },
+    {
+      "id": 19,
+      "name": "Pirate ship",
+      "quantity": 1
+    },
+    {
+      "id": 54,
+      "name": "Large sail",
+      "quantity": 1
+    },
+    {
+      "id": 118,
+      "name": "Fabric",
+      "quantity": 1
+    },
+    {
+      "id": 116,
+      "name": "Cotton thread",
+      "quantity": 2
+    },
+    {
+      "id": 117,
+      "name": "Weaving machine",
+      "quantity": 1
+    }
+  ]
+}

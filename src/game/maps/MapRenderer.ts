@@ -278,6 +278,23 @@ export class MapRenderer {
     if (image) this.objectSprites.set(R.index, image);
     this.addShipFlags(ship);
   }
+  restoreResource(index: number) {
+    if (this.objectSprites.has(index)) return;
+    const id = this.map.layers.Objects[index],
+      item = this.items[id - 1];
+    if (!item) return;
+    const x = (index % 180) * 16 + 8,
+      y = Math.floor(index / 180) * 16 + 8;
+    const image = makeRegion(
+      this.scene,
+      this.atlas,
+      item.sprite,
+      x,
+      y,
+      y + 0.5,
+    );
+    if (image) this.objectSprites.set(index, image);
+  }
   remove(index: number) {
     this.objectSprites.get(index)?.destroy();
     this.objectSprites.delete(index);

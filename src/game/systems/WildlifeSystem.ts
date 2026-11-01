@@ -330,6 +330,11 @@ export class WildlifeSystem {
     this.actors.splice(index, 1);
     return true;
   }
+  restoreStatic(index: number, mapId: number) {
+    if (this.objects[index] !== 0 || this.owners[index] !== -1) return false;
+    this.objects[index] = mapId;
+    return true;
+  }
   removeStatic(index: number) {
     if (this.owners[index] === -1) this.objects[index] = 0;
   }

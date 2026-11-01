@@ -50,3 +50,7 @@ Next is verification of the complete tide/tool/crafting/raft/escape route with r
 ## Validation
 
 146 tests pass (10 tide checks), TypeScript/build pass, and the final production checkpoint restores Low tide and the collected Saw entirely offline. Browser checks cover blocked high-water movement, the real falling-tide crossing, original Saw pickup, rising-water rescue and save restoration. Tests and route audit separately verify combined post-repair raft access. Detailed preconditions, observed values and timing limits are in VALIDATION.md. No full start-to-escape playthrough is claimed.
+
+## Subsequent supply-history audit
+
+Tide-time static supply renewal is now ported separately in RESOURCE_RENEWAL.md. This corrects the earlier browser assumption that every resource removal persists forever; exact20/70 buffers allow enough Sail/Nail/Vine for the construction plan. The original random nearby placement and complete global filter remain unported; the browser restores eligible canonical source cells.
