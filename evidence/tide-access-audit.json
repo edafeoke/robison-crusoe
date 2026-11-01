@@ -1,0 +1,318 @@
+{
+  "scope": "Fixed phases, Objects ignored, original Decor/Rocks retained. Foot-only checks start at spawn. withRaft assumes the original raft has already been repaired and uses only its connected swamp component and adjacent shores; no boat carrying over land. No decor clearing, source object reshuffle or material acquisition simulation.",
+  "phases": [
+    {
+      "phase": "high",
+      "cells": 13251,
+      "checks": [
+        {
+          "mapId": 19,
+          "index": 5552,
+          "x": 152,
+          "y": 30,
+          "reachableIgnoringObjects": false
+        },
+        {
+          "mapId": 85,
+          "index": 17014,
+          "x": 94,
+          "y": 94,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 79,
+          "index": 29570,
+          "x": 50,
+          "y": 164,
+          "reachableIgnoringObjects": false
+        },
+        {
+          "mapId": 78,
+          "index": 17804,
+          "x": 164,
+          "y": 98,
+          "reachableIgnoringObjects": false
+        },
+        {
+          "mapId": 81,
+          "index": 7499,
+          "x": 119,
+          "y": 41,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 24,
+          "index": 8705,
+          "x": 65,
+          "y": 48,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 23,
+          "index": 13845,
+          "x": 165,
+          "y": 76,
+          "reachableIgnoringObjects": false
+        },
+        {
+          "mapId": 80,
+          "index": 4246,
+          "x": 106,
+          "y": 23,
+          "reachableIgnoringObjects": true
+        }
+      ],
+      "raftCells": 2274,
+      "withRaftFootCells": 14633,
+      "withRaftChecks": [
+        {
+          "mapId": 19,
+          "index": 5552,
+          "x": 152,
+          "y": 30,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 85,
+          "index": 17014,
+          "x": 94,
+          "y": 94,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 79,
+          "index": 29570,
+          "x": 50,
+          "y": 164,
+          "reachableIgnoringObjects": false
+        },
+        {
+          "mapId": 78,
+          "index": 17804,
+          "x": 164,
+          "y": 98,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 81,
+          "index": 7499,
+          "x": 119,
+          "y": 41,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 24,
+          "index": 8705,
+          "x": 65,
+          "y": 48,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 23,
+          "index": 13845,
+          "x": 165,
+          "y": 76,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 80,
+          "index": 4246,
+          "x": 106,
+          "y": 23,
+          "reachableIgnoringObjects": true
+        }
+      ]
+    },
+    {
+      "phase": "low",
+      "cells": 17813,
+      "checks": [
+        {
+          "mapId": 19,
+          "index": 5552,
+          "x": 152,
+          "y": 30,
+          "reachableIgnoringObjects": false
+        },
+        {
+          "mapId": 85,
+          "index": 17014,
+          "x": 94,
+          "y": 94,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 79,
+          "index": 29570,
+          "x": 50,
+          "y": 164,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 78,
+          "index": 17804,
+          "x": 164,
+          "y": 98,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 81,
+          "index": 7499,
+          "x": 119,
+          "y": 41,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 24,
+          "index": 8705,
+          "x": 65,
+          "y": 48,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 23,
+          "index": 13845,
+          "x": 165,
+          "y": 76,
+          "reachableIgnoringObjects": false
+        },
+        {
+          "mapId": 80,
+          "index": 4246,
+          "x": 106,
+          "y": 23,
+          "reachableIgnoringObjects": true
+        }
+      ],
+      "raftCells": 2274,
+      "withRaftFootCells": 19120,
+      "withRaftChecks": [
+        {
+          "mapId": 19,
+          "index": 5552,
+          "x": 152,
+          "y": 30,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 85,
+          "index": 17014,
+          "x": 94,
+          "y": 94,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 79,
+          "index": 29570,
+          "x": 50,
+          "y": 164,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 78,
+          "index": 17804,
+          "x": 164,
+          "y": 98,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 81,
+          "index": 7499,
+          "x": 119,
+          "y": 41,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 24,
+          "index": 8705,
+          "x": 65,
+          "y": 48,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 23,
+          "index": 13845,
+          "x": 165,
+          "y": 76,
+          "reachableIgnoringObjects": true
+        },
+        {
+          "mapId": 80,
+          "index": 4246,
+          "x": 106,
+          "y": 23,
+          "reachableIgnoringObjects": true
+        }
+      ]
+    }
+  ],
+  "rawSawRoute": [
+    26648,
+    26649,
+    26650,
+    26651,
+    26652,
+    26653,
+    26654,
+    26655,
+    26656,
+    26836,
+    26837,
+    26838,
+    26839,
+    26840,
+    26841,
+    26842,
+    26843,
+    26844,
+    26845,
+    26846,
+    26847,
+    26848,
+    26849,
+    26850,
+    27030,
+    27031,
+    27032,
+    27212,
+    27213,
+    27214,
+    27215,
+    27216,
+    27217,
+    27397,
+    27398,
+    27399,
+    27579,
+    27759,
+    27939,
+    28119,
+    28299,
+    28479,
+    28480,
+    28660,
+    28840,
+    29020,
+    29200,
+    29201,
+    29381,
+    29561,
+    29741,
+    29921,
+    30101,
+    30281,
+    30461,
+    30462,
+    30463,
+    30464,
+    30465,
+    30466,
+    30467,
+    30468,
+    30469,
+    30470,
+    30290,
+    30110,
+    29930
+  ]
+}

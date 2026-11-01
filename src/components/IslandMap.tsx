@@ -1,7 +1,9 @@
+import { tideAt } from "../game/systems/TideSystem";
 import { useGameStore } from "../store/gameStore";
 export function IslandMap({ large = false }: { large?: boolean }) {
   const x = useGameStore((s) => s.x),
     y = useGameStore((s) => s.y),
+    elapsed = useGameStore((s) => s.elapsed),
     shelter = useGameStore((s) => s.shelter),
     items = useGameStore((s) => s.items),
     camp = useGameStore((s) => s.worldObjects?.indexOf(18) ?? -1);
@@ -35,6 +37,10 @@ export function IslandMap({ large = false }: { large?: boolean }) {
       {large && (
         <>
           <span className="map-ocean">THE UNKNOWN SEA</span>
+          <span className="map-tide-note">
+            {tideAt(elapsed) === "low" ? "Low tide" : "High tide"} · Chart
+            records the original coastline
+          </span>
           <div className="map-scale">
             ──────
             <br /> 30 tiles

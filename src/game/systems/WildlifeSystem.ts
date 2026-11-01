@@ -1,3 +1,4 @@
+import { sharkTideDestination } from "./TideSystem";
 import type { IslandMap } from "../maps/MapDecoder";
 import { CollisionSystem } from "./CollisionSystem";
 import {
@@ -28,6 +29,7 @@ export class WildlifeSystem {
     removed = new Set<number>(),
     saved?: WildlifeSnapshot[],
     staticObjects?: readonly number[],
+    reconcileTides = false,
   ) {
     this.objects = staticObjects
       ? [...staticObjects]
@@ -80,7 +82,7 @@ export class WildlifeSystem {
           if (
             occupied.has(i) ||
             this.objects[i] !== 0 ||
-            (i !== a.id && !this.terrainAllows(a, s.x, s.y))
+            (i !== a.id && !reconcileTides && !this.terrainAllows(a, s.x, s.y))
           )
             return false;
           occupied.add(i);
@@ -90,6 +92,40 @@ export class WildlifeSystem {
       if (valid) for (const a of this.actors) Object.assign(a, byId.get(a.id));
     }
     for (const a of this.actors) this.occupy(a);
+  }
+  applyTide(map: IslandMap, player: Point) {
+    this.map = map;
+    this.land.map = map;
+    for (const a of this.actors) {
+      const terrain = map.layers.FULL[cell(a)];
+      if (a.profile.family === "shark" && terrain < 5) {
+        this.release(a);
+        const point = sharkTideDestination(map, this.objects, a.x, a.y, player);
+        if (point) {
+          a.x = point.x;
+          a.y = point.y;
+          a.contactMs = 0;
+        }
+        this.occupy(a);
+      } else if (
+        a.profile.sourceClass === "l" &&
+        (terrain === 5 || terrain === 6)
+      ) {
+        const x = (a.id % 180) * 16 + 8,
+          y = Math.floor(a.id / 180) * 16 + 8;
+        if (
+          this.terrainAllows(a, x, y) &&
+          (this.objects[a.id] === 0 || this.owners[a.id] === a.id) &&
+          a.id !== cell(player)
+        ) {
+          this.release(a);
+          a.x = x;
+          a.y = y;
+          a.contactMs = 0;
+          this.occupy(a);
+        }
+      }
+    }
   }
   private random(a: WildlifeActor, limit: number): number {
     // Repeatable browser PRNG, not a claim to reproduce java.util.Random's stream.

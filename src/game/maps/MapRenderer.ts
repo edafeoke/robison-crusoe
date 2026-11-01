@@ -1,3 +1,4 @@
+import type { TidePhase } from "../systems/TideSystem";
 import { raftRules as RR } from "../data/raftRules";
 import { initialRaft, type RaftState } from "../systems/RaftSystem";
 import Phaser from "phaser";
@@ -74,6 +75,7 @@ export function makeRegion(
     .setDepth(depth);
 }
 export class MapRenderer {
+  private ground: Phaser.GameObjects.Image[] = [];
   objectSprites = new Map<number, Phaser.GameObjects.Image>();
   private shipFlags: {
     image: Phaser.GameObjects.Image;
@@ -86,6 +88,7 @@ export class MapRenderer {
     private map: IslandMap,
     private atlas: AtlasManifest,
     private items: RecoveredItem[],
+    private groundVariant: TidePhase = "high",
   ) {
     scene.time.addEvent({
       delay: R.flagMs,
@@ -110,65 +113,7 @@ export class MapRenderer {
     raft: RaftState = initialRaft(),
   ) {
     const { scene, map, atlas } = this;
-    for (let cy = 0; cy < 6; cy++)
-      for (let cx = 0; cx < 6; cx++) {
-        const key = `ground-${cx}-${cy}`;
-        if (scene.textures.exists(key)) {
-          scene.add
-            .image(cx * 480, cy * 480, key)
-            .setOrigin(0)
-            .setDepth(-100);
-          continue;
-        }
-        const texture = scene.textures.createCanvas(key, 480, 480);
-        if (!texture) throw new Error("Unable to allocate terrain texture");
-        const ctx = texture.context;
-        ctx.imageSmoothingEnabled = false;
-        for (let y = 0; y < 30; y++)
-          for (let x = 0; x < 30; x++) {
-            const i = cx * 30 + x + (cy * 30 + y) * 180;
-            drawRegion(
-              ctx,
-              scene,
-              atlas,
-              65536 + map.layers.FULL[i],
-              x * 16,
-              y * 16,
-            );
-          }
-        // Border circles extend outside a tile: include neighbors so chunk boundaries are seamless.
-        for (let y = -2; y < 32; y++)
-          for (let x = -2; x < 32; x++) {
-            const tx = cx * 30 + x,
-              ty = cy * 30 + y;
-            if (tx < 0 || ty < 0 || tx >= 180 || ty >= 180) continue;
-            const i = tx + ty * 180,
-              r = map.layers.Rocks[i];
-            if (r > 0 && r < 50)
-              drawRegion(ctx, scene, atlas, 262144 + r - 1, x * 16, y * 16);
-          }
-        for (let y = -2; y < 32; y++)
-          for (let x = -2; x < 32; x++) {
-            const tx = cx * 30 + x,
-              ty = cy * 30 + y;
-            if (tx < 0 || ty < 0 || tx >= 180 || ty >= 180) continue;
-            const b = map.layers.Borders[tx + ty * 180];
-            if (b && !ANIMATED_BORDERS.has(b))
-              drawRegion(
-                ctx,
-                scene,
-                atlas,
-                atlas.borders[b - 1],
-                x * 16 + 8,
-                y * 16 + 8,
-              );
-          }
-        texture.refresh();
-        scene.add
-          .image(cx * 480, cy * 480, texture.key)
-          .setOrigin(0)
-          .setDepth(-100);
-      }
+    this.renderGround();
     for (let i = 0; i < 32400; i++) {
       const x = (i % 180) * 16 + 8,
         y = Math.floor(i / 180) * 16 + 8,
@@ -230,6 +175,79 @@ export class MapRenderer {
       if (image)
         this.shipFlags.push({ image, x: x + offset.dx, y: y + offset.dy });
     }
+  }
+  updateTide(map: IslandMap, phase: TidePhase) {
+    this.ground.forEach((image) => image.destroy());
+    this.ground = [];
+    this.map = map;
+    this.groundVariant = phase;
+    this.renderGround();
+  }
+  private renderGround() {
+    const { scene, map, atlas } = this;
+    for (let cy = 0; cy < 6; cy++)
+      for (let cx = 0; cx < 6; cx++) {
+        const key = `ground-${this.groundVariant}-${cx}-${cy}`;
+        if (scene.textures.exists(key)) {
+          this.ground.push(
+            scene.add
+              .image(cx * 480, cy * 480, key)
+              .setOrigin(0)
+              .setDepth(-100),
+          );
+          continue;
+        }
+        const texture = scene.textures.createCanvas(key, 480, 480);
+        if (!texture) throw new Error("Unable to allocate terrain texture");
+        const ctx = texture.context;
+        ctx.imageSmoothingEnabled = false;
+        for (let y = 0; y < 30; y++)
+          for (let x = 0; x < 30; x++) {
+            const i = cx * 30 + x + (cy * 30 + y) * 180;
+            drawRegion(
+              ctx,
+              scene,
+              atlas,
+              65536 + map.layers.FULL[i],
+              x * 16,
+              y * 16,
+            );
+          }
+        // Border circles extend outside a tile: include neighbors so chunk boundaries are seamless.
+        for (let y = -2; y < 32; y++)
+          for (let x = -2; x < 32; x++) {
+            const tx = cx * 30 + x,
+              ty = cy * 30 + y;
+            if (tx < 0 || ty < 0 || tx >= 180 || ty >= 180) continue;
+            const i = tx + ty * 180,
+              r = map.layers.Rocks[i];
+            if (r > 0 && r < 50)
+              drawRegion(ctx, scene, atlas, 262144 + r - 1, x * 16, y * 16);
+          }
+        for (let y = -2; y < 32; y++)
+          for (let x = -2; x < 32; x++) {
+            const tx = cx * 30 + x,
+              ty = cy * 30 + y;
+            if (tx < 0 || ty < 0 || tx >= 180 || ty >= 180) continue;
+            const b = map.layers.Borders[tx + ty * 180];
+            if (b && !ANIMATED_BORDERS.has(b))
+              drawRegion(
+                ctx,
+                scene,
+                atlas,
+                atlas.borders[b - 1],
+                x * 16 + 8,
+                y * 16 + 8,
+              );
+          }
+        texture.refresh();
+        this.ground.push(
+          scene.add
+            .image(cx * 480, cy * 480, texture.key)
+            .setOrigin(0)
+            .setDepth(-100),
+        );
+      }
   }
   updateRaft(raft: RaftState, previous?: RaftState) {
     this.remove(RR.index);

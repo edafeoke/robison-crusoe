@@ -1,6 +1,38 @@
 # Validation record
 
-## Current milestone: mangrove raft traversal
+## Current milestone: original tides and tool access
+
+Date: 2026-11-01. **146 tests passed**, including10 new tide checks. TypeScript and final production build passed. Classic entry **index-BspkYOdI.js**, 1,652.65kB /464.39kB gzip. Existing1,600kB advisory remains; no dependency added. Full decoding succeeds; every typed rule file and object metadata regenerate byte-for-byte, including tide facts. Original maps/PNGs/atlas integrity tests remain green. Fixtures are absent from dist. Detailed evidence and explicit clock/object/wildlife adaptations: TIDES.md.
+
+### Source and automated coverage
+
+- Source six-minute high/low bands and hour boundaries; exact3 terrain and9 border substitutions, no cascading, immutable source data and high-tide restoration. All referenced shore artwork resolves through original D0/BS11.
+- Shared collision/pathfinding predicate on exposed flats, original blockers and unchanged swamp-only raft terrain. Existing fishing interactions receive the runtime phase map.
+- Source fourteen-ring recovery, axial preference, zero-rock/decor/object shore constraints, strict southeast exception, bounded no-shore failure; exact shark NW/SE search and exclusions.
+- Wildlife identity/count/occupancy preservation, stranded shark recovery and passive home reset without discarding the saved population. Saved elapsed determines phase without another timer/schema; legacy values and new-expedition high tide remain valid.
+- Fixed-phase route diagnostics:13251 high-tide versus17813 low-tide cells with Objects optimistically ignored. Saw/Hammer become reachable under those assumptions; shipwreck/Sextant do not. A separately recorded67-cell low-tide route respects actual raw Objects and reaches interaction distance of the source Saw. Every route node and cardinal adjacency is validated.
+- The shore frame table was moved into a pure module so source-frame checks do not import Phaser's browser-only runtime into Node. No test-only browser globals were introduced.
+
+### Browser observations
+
+Isolated origin **4199** was used; existing user expedition **4173** untouched. `tests/browser/tides.html` labels Robinson's passage position and a clock two seconds before a boundary. It supplies **no items** and relocates **no world object**. No manual journey from spawn is claimed.
+
+- Prepared high tide at(41,169), elapsed358.0s. Source gate(42,169) FULL5 active5; source border17 at(41,169) active17. Real Right500ms remained on(41,169), elapsed358.5s. Menus paused the clock. `evidence/tide-high-passage.jpg` records the actual high-water view at358.8s.
+- Resumed through360.1s: Low tide appeared, FULL5→4 and border17→5, Energy100→96, Hunger90/Thirst86 at the real minute boundary. The shoreline and collision changed together.
+- Actual Right2200ms crossed to(49,169); Right250ms then W850ms approached(50,166). Log was the nearest E object and required an Axe. Selected the actual source Saw directly with a world mouse click rather than bypassing tool rules or removing the log. Original Saw remained at(50,164); no tool was supplied. `evidence/tide-saw-discovery.jpg`.
+- Real Gather saw produced **Saw×1, Energy88, Strength1**, Hunger90/Thirst86. Saved normally at elapsed399.2s. `evidence/tide-low-saw-recovered.jpg` records restored low-tide progress with the original pickup retained.
+- Prepared rising tide at(44,169), elapsed718.0s, on original FULL5 temporarily exposed as4. After resuming through720.1s, original FULL5/border17 restored and source recovery moved Robinson to **(41,169)**. Energy96, active high tide. `evidence/tide-rising-recovery.jpg` records this return. The previous Saw checkpoint was kept.
+- Normal Load restored the low-tide checkpoint at(50,166), Saw×1 and90/86/88. This also exercised both cached phase textures and source-object removal persistence through a later high-tide test.
+- Production root restored **08:06 / Low tide**, position(50,166),90/86/88 and Strength1. Actual satchel listed **Saw×1**. No fixture controls in production; assets reported cached. Owned preview was then stopped for final offline checks.
+- A first cold-load Continue locator timed out; a fresh read showed an active high-tide play session, so that state was left intact. Opened a separate tab at the same4199 origin with the server still stopped. The actual title Continue restored **08:06 / Low tide, (50,166),90/86/88, Strength1**, and the actual satchel again listed **Saw×1**. No saved checkpoint was overwritten during this final check.
+- Continued offline play reached the next minute, showing **08:07,80/72/84**, consistent with ongoing needs; `evidence/tide-offline-restored.jpg` records that later world state. `evidence/tide-offline-satchel.jpg` records the retained Saw. Final verification tab is paused; its checkpoint still contains the earlier90/86/88 pickup.
+- Final DOM confirmed **index-BspkYOdI.js**, exactly **one canvas**, and captured warnings/errors empty. No fixture controls in production, no viewport override. Owned dev/preview processes stopped; retained cached verification tab and preserved the other live session.
+
+### Remaining limits
+
+Original tide-time Objects reload/unique filtering/random placement is still unported. Browser resource/animal identities persist, and the paused expedition clock replaces phone epoch minutes. No original emulator comparison, weather, non-sleep offline depletion or RMS compatibility is claimed. Shipwreck and Sextant are outside the foot-only audit, but the additional connected-raft audit reaches both under optimistic post-repair assumptions (2274 swamp cells;14633 high/19120 low foot cells). Full acquisition, crafting and escape still need a real combined-route playthrough; source object/decor behavior remains a fidelity investigation. Only the labelled crossing-to-Saw segment was manually played.
+
+## Previous milestone: mangrove raft traversal
 
 Date: 2026-11-01. **136 tests passed**, including 11 new raft checks. TypeScript and production build passed. Final classic entry **index-DB2NBnfB.js**, 1,648.74 kB / 463.07 kB gzip; existing 1,600 kB advisory remains. No dependency added. Full decoding succeeds; every typed rules file and object metadata regenerate byte-for-byte, including new raft facts. Original maps/PNGs and atlas integrity checks remain green; development fixtures are absent from dist. Source findings, preliminary audit correction and explicit adaptations: RAFT_TRAVERSAL.md.
 

@@ -44,3 +44,7 @@ This does not implement weather/tide remapping, remaining resource/decor mutatio
 ## Validation record
 
 136 automated checks pass (11 new raft tests), TypeScript and final production build pass, and the final version was restored offline from an afloat IndexedDB checkpoint. Browser QA covers actual repair, wardrobe equipment, keyboard/WASD paddling, mouse travel, blocked landing, moved-dock reload/reboarding, final landing facing and afloat offline continuation. Original user port4173 was untouched; isolated4198 was used. See VALIDATION.md and `evidence/raft-offline-restored.jpg` for detailed preconditions and observed values.
+
+## Subsequent tide milestone
+
+Tides, source shoreline remaps and flood recovery are now ported (TIDES.md). Low tide opens access to the original Saw and Hammer; shipwreck and Sextant remain outside the audited fixed-phase walking component. The earlier route limitations above describe their original milestone. Full tool/material acquisition and source object placement/decor changes still need investigation.

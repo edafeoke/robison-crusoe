@@ -1,3 +1,4 @@
+import { tideAt, tideChangesIn } from "./game/systems/TideSystem";
 import { RaftStatus } from "./components/RaftDialogue";
 import { useEffect } from "react";
 import {
@@ -173,7 +174,12 @@ export default function App() {
               <div>
                 <strong>Day {String(day).padStart(2, "0")}</strong>
                 <small>
-                  {clock} <i /> Clear skies
+                  {clock} <i /> Clear skies <i />{" "}
+                  <span
+                    title={`Tide changes in ${Math.ceil(tideChangesIn(s.elapsed) / 60)} minutes`}
+                  >
+                    {tideAt(s.elapsed) === "low" ? "Low tide" : "High tide"}
+                  </span>
                 </small>
               </div>
             </div>

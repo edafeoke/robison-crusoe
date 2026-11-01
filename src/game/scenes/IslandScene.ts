@@ -1,3 +1,9 @@
+import {
+  tidalMap,
+  tideAt,
+  tideRescue,
+  type TidePhase,
+} from "../systems/TideSystem";
 import { raftObjects, cellOf, cellPoint } from "../systems/RaftSystem";
 import Phaser from "phaser";
 import { validateMap, type IslandMap } from "../maps/MapDecoder";
@@ -20,6 +26,9 @@ export class IslandScene extends Phaser.Scene {
   player!: Player;
   world!: MapRenderer;
   map!: IslandMap;
+  private sourceMap!: IslandMap;
+  private tide!: TidePhase;
+  private shores!: AnimationSystem;
   collision!: CollisionSystem;
   keys!: Record<string, Phaser.Input.Keyboard.Key>;
   marker!: Phaser.GameObjects.Graphics;
@@ -36,12 +45,14 @@ export class IslandScene extends Phaser.Scene {
   }
   create() {
     try {
-      this.map = validateMap(this.cache.json.get("island"));
+      this.sourceMap = validateMap(this.cache.json.get("island"));
     } catch (error) {
       useGameStore.setState({ error: (error as Error).message });
       return;
     }
     const state = useGameStore.getState();
+    this.tide = tideAt(state.elapsed);
+    this.map = tidalMap(this.sourceMap, this.tide);
     this.removed = new Set(state.collected);
     this.discovered = new Set(state.discovered);
     const manifest = this.cache.json.get("wildlife") as
@@ -70,14 +81,22 @@ export class IslandScene extends Phaser.Scene {
         this.map.layers.Objects.map((v, i) => (this.removed.has(i) ? 0 : v)),
         state.raft,
       ),
+      true,
     );
+    this.wildlife.applyTide(this.map, { x: state.x, y: state.y });
     this.collision = new CollisionSystem(
       this.map,
       this.removed,
       this.wildlife.objects,
     );
     this.collision.mode = state.raft.phase === "aboard" ? "raft" : "walk";
-    this.world = new MapRenderer(this, this.map, state.atlas!, state.items);
+    this.world = new MapRenderer(
+      this,
+      this.map,
+      state.atlas!,
+      state.items,
+      this.tide,
+    );
     this.world.render(
       this.removed,
       this.wildlife.managed,
@@ -88,11 +107,16 @@ export class IslandScene extends Phaser.Scene {
     this.animals = this.wildlife.actors.map(
       (a) => new Animal(this, state.atlas!, a, this.wildlife),
     );
-    new AnimationSystem(this, this.map, state.atlas!);
+    this.shores = new AnimationSystem(this, this.map, state.atlas!);
+    const rescue =
+      state.raft.phase !== "aboard" && state.ship.phase === "wreck"
+        ? tideRescue(this.map, this.wildlife.objects, state.x, state.y)
+        : null;
     const spawn =
-      state.ship.phase !== "wreck" || this.collision.canStand(state.x, state.y)
+      rescue ??
+      (state.ship.phase !== "wreck" || this.collision.canStand(state.x, state.y)
         ? { x: state.x, y: state.y }
-        : this.collision.nearest(state.x, state.y)!;
+        : this.collision.nearest(state.x, state.y)!);
     this.player = new Player(
       this,
       state.atlas!,
@@ -447,6 +471,38 @@ export class IslandScene extends Phaser.Scene {
     if (attacks.length) s.notify(attacks.join(" · "));
     if (this.syncTime > 100) {
       const elapsed = s.elapsed + this.syncTime / 1000;
+      const phase = tideAt(elapsed);
+      if (phase !== this.tide) {
+        this.tide = phase;
+        this.map = tidalMap(this.sourceMap, phase);
+        this.collision.map = this.map;
+        this.wildlife.applyTide(this.map, this.player);
+        this.world.updateTide(this.map, phase);
+        this.shores.setMap(this.map);
+        this.player.path = [];
+        const rescued =
+          s.raft.phase !== "aboard" && s.ship.phase === "wreck"
+            ? tideRescue(
+                this.map,
+                this.wildlife.objects,
+                this.player.x,
+                this.player.y,
+              )
+            : null;
+        if (rescued) {
+          this.player.x = rescued.x;
+          this.player.y = rescued.y;
+          this.player.move(0, 0, 0);
+        }
+        for (const animal of this.animals) animal.render();
+        s.notify(
+          phase === "low"
+            ? "Low tide · the shore has receded"
+            : rescued
+              ? "High tide · returned to the shallow shore"
+              : "High tide · water covers the tidal flats",
+        );
+      }
       flushSurvival();
       if (rested && !attacks.length)
         s.notify("Rested · Energy restored by up to 30 points");
@@ -500,6 +556,8 @@ export class IslandScene extends Phaser.Scene {
         x: this.player.x,
         y: this.player.y,
         elapsed,
+        worldMap: this.map,
+        worldTerrain: this.map.layers.FULL,
         survival,
         ...(s.raft.phase === "aboard" &&
         this.player.getRaftFacing() !== s.raft.facing

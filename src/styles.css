@@ -2987,3 +2987,4 @@ i {
 .raft-status small { font-size: 10px; opacity: .75; }
 .raft-status button { border: 1px solid #b7b99b; padding: 8px 12px; white-space: nowrap; font-size: 11px; }
 .raft-discovery > .primary-button { width: 100%; margin: 18px 0; }
+.map-tide-note { position: absolute; bottom: 12px; left: 12px; padding: 6px 9px; background: #ede6cce8; color: #344b3b; font: 11px Georgia, serif; }

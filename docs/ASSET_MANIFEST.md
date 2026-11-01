@@ -87,3 +87,7 @@ Barrel uses source 852041 (BS13 frame 41). Single bed (15), Rug (60) and Double 
 ## Raft rendering
 
 `raftRules.ts` exports the exact ordered BS6 frame8–18 branches, seated BS3 body frames10/11/15/16 and source shirt/hat branches. Original D0 anchors/mirrors remain unchanged. Pants/shoes are hidden aboard as in `ab.k`; vertical paddling retains horizontal orientation. Broken raft uses BS6 frame16. Source seven-phase stroke/pose grouping is retained with browser distance timing. See RAFT_TRAVERSAL.md.
+
+## Tide artwork
+
+No new artwork or guessed tile IDs. `tideRules.ts` retains source FULL/Borders remaps. Phaser chooses the original BS1 terrain regions and updates BS11 shoreline sequences with their original400ms cycle; `shoreSequences.ts` holds the existing pure frame table. Both tide textures are cached lazily; raw sprite banks and D0 anchors remain intact. See TIDES.md.

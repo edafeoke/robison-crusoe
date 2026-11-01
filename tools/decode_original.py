@@ -113,3 +113,6 @@ if __name__=='__main__':main()
 
 from recover_raft import recover as recover_raft
 recover_raft()
+
+from recover_tides import recover as recover_tides
+recover_tides()

@@ -22,7 +22,7 @@ The world is 2880×2880 pixels. Terrain and rock anchors are top-left. Borders/d
 - FULL IDs 5,6,12,13,14 block walking in `g.a(int,int)`.
 - Any nonzero Decor or Objects cell blocks in `g.c` / `g.d`.
 - Rocks passable: 0,10,11,12,18,20,22,23,24,30,31,32,38,41,42,43,44,45,46,47, or ≥50, from `g.e`.
-- Raft terrain predicate `g.b(int,int)` permits FULL 12,13,14 only (the integer terrain identity table, not the byte camp-requirement table). Boarding/travel/disembarking are now ported with this predicate; dynamic tides remain pending.
+- Raft terrain predicate `g.b(int,int)` permits FULL 12,13,14 only (the integer terrain identity table, not the byte camp-requirement table). Boarding/travel/disembarking are now ported with this predicate; dynamic tides are now ported separately (TIDES.md).
 - Port uses a small foot box and axis-separated movement; pathfinder shares the same grid. Removed pickups clear the runtime object blocker without changing raw layers. The wildlife milestone maintains a separate object/ownership grid for moving animals. Ground animals occupy their current cell; flight releases occupancy and landing reserves a free cell. Player collision, pathfinding and inspection use this runtime layer, including animals that move onto a previously collected resource cell. Original Objects IDs and all source layer bytes remain intact. See WILDLIFE.md.
 
 ## JSON export
@@ -55,3 +55,7 @@ Original Objects ID 19 at (152,30), index 5552, stays unchanged through repair. 
 ## Raft runtime overlay
 
 Original Objects85 at (94,94), index17014, stays immutable in source data. Repair produces runtime95 there; boarding removes it; landing places95 at the prior water cell. The one raft overlay is restored after pickup tombstones and before wildlife occupancy. A raft docked on an earlier removed resource cell remains visible/blocking through future pickups and saves. Raft travel substitutes FULL12/13/14 for the walking terrain rule, while retaining object/decor/rock blockers. Shore priority is left/right/up/down; browser additionally applies the missing source rock check. See RAFT_TRAVERSAL.md.
+
+## Tide overlay
+
+FULL4→0,5→4,6→5 and nine Borders substitutions apply at low tide; high tide restores copies of the original layers. Objects/Decor/Rocks and raw bytes are never rewritten. Live walking/raft collisions and both fishing-shore interactions use the same phase map as Phaser terrain/shore rendering. Static charts keep the original coastline and are labelled accordingly. Source provenance hashes remain associated with the raw map, not the remapped arrays. See TIDES.md and evidence/tide-access-audit.json.
