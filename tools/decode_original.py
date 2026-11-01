@@ -110,3 +110,6 @@ def main():
     recover_ship()
     print(f'Exported {len(inventory)} archive entries, {sum(counts)} exact sprite regions, 5 lossless layers, {len(composites)} composites, 120 objects, 5 languages.')
 if __name__=='__main__':main()
+
+from recover_raft import recover as recover_raft
+recover_raft()

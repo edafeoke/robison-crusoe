@@ -40,4 +40,4 @@ The subsequent house/sleep milestone traces the actual furnishings list and impl
 
 ## Later milestone status
 
-The recipe counts above describe this camp-upgrade milestone. The current workbench supports 43 recipes including Large sail, furnishings and garments. Pirate ship reconstruction/escape is a separate world action; raft/tide traversal and a verified complete island route remain pending. See SHIP_RECONSTRUCTION.md, BODY_WEIGHT.md, CLOTHING.md and WORLD_HAZARDS.md for later audits.
+The recipe counts above describe this camp-upgrade milestone. The current workbench supports 43 recipes including Large sail, furnishings and garments. Pirate ship reconstruction/escape is a separate world action; raft traversal is now ported separately, while changing tides and a verified complete island route remain pending. See SHIP_RECONSTRUCTION.md, BODY_WEIGHT.md, CLOTHING.md and WORLD_HAZARDS.md for later audits.

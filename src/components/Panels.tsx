@@ -1,3 +1,4 @@
+import { RaftDialogue } from "./RaftDialogue";
 import { useEffect, useRef, useState } from "react";
 import {
   X,
@@ -520,6 +521,12 @@ export function PauseMenu() {
 }
 export function Dialogue() {
   const s = useGameStore();
+  if (
+    s.focus?.kind === "raft" ||
+    (s.focus?.itemId === 84 && s.selected === 84) ||
+    (s.focus?.itemId === 94 && s.selected === 94)
+  )
+    return <RaftDialogue />;
   if (s.focus?.kind === "rod-fishing") return <RodFishingDialogue />;
   if (s.focus?.kind === "net-fishing") return <NetFishingDialogue />;
   if (s.focus?.kind === "coconut-palm") return <CoconutPalmDialogue />;

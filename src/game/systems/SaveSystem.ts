@@ -1,3 +1,4 @@
+import { validRaft, type RaftState } from "./RaftSystem";
 import {
   validWildlife,
   type WildlifeSnapshot,
@@ -28,6 +29,7 @@ export interface SaveData {
   clothing?: ClothingState;
   bodyWeight?: BodyWeightState;
   ship?: ShipState;
+  raft?: RaftState;
 }
 export function validSave(value: unknown): value is SaveData {
   const d = value as SaveData;
@@ -49,6 +51,9 @@ export function validSave(value: unknown): value is SaveData {
     (d.furnishings === undefined || validFurnishings(d.furnishings)) &&
     (d.clothing === undefined || validClothing(d.clothing)) &&
     (d.bodyWeight === undefined || validBodyWeight(d.bodyWeight)) &&
+    (d.raft === undefined ||
+      (validRaft(d.raft) &&
+        (d.raft.phase !== "aboard" || !d.ship || d.ship.phase === "wreck"))) &&
     (d.ship === undefined ||
       (validShip(d.ship) &&
         (d.ship.phase === "wreck" || !d.survival?.death))) &&

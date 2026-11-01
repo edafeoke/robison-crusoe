@@ -22,7 +22,7 @@ The world is 2880×2880 pixels. Terrain and rock anchors are top-left. Borders/d
 - FULL IDs 5,6,12,13,14 block walking in `g.a(int,int)`.
 - Any nonzero Decor or Objects cell blocks in `g.c` / `g.d`.
 - Rocks passable: 0,10,11,12,18,20,22,23,24,30,31,32,38,41,42,43,44,45,46,47, or ≥50, from `g.e`.
-- Raft terrain predicate `g.b(int,int)` permits FULL 12,13,14 only (the integer terrain identity table, not the byte camp-requirement table). Boarding/travel/disembarking and dynamic tides are not implemented.
+- Raft terrain predicate `g.b(int,int)` permits FULL 12,13,14 only (the integer terrain identity table, not the byte camp-requirement table). Boarding/travel/disembarking are now ported with this predicate; dynamic tides remain pending.
 - Port uses a small foot box and axis-separated movement; pathfinder shares the same grid. Removed pickups clear the runtime object blocker without changing raw layers. The wildlife milestone maintains a separate object/ownership grid for moving animals. Ground animals occupy their current cell; flight releases occupancy and landing reserves a free cell. Player collision, pathfinding and inspection use this runtime layer, including animals that move onto a previously collected resource cell. Original Objects IDs and all source layer bytes remain intact. See WILDLIFE.md.
 
 ## JSON export
@@ -50,4 +50,8 @@ Objects map ID 18 occurs at original grid (24,129), index 23244. Source `a.G` up
 
 ## Ship reconstruction overlay and access audit
 
-Original Objects ID 19 at (152,30), index 5552, stays unchanged through repair. Only the ship sprite/flag overlay changes from BS6 frame 19 to frame 20, with original anchors. It remains a blocker. The source moves Robinson north two tiles; it does not move the map object. `evidence/ship-access-audit.json` diagnoses the current fixed-terrain walking component with all Objects ignored: the wreck and some required tools remain outside it. This does not model original tides/raft/decor updates. No map edits or unrestricted water walking conceal that unfinished traversal. See SHIP_RECONSTRUCTION.md.
+Original Objects ID 19 at (152,30), index 5552, stays unchanged through repair. Only the ship sprite/flag overlay changes from BS6 frame 19 to frame 20, with original anchors. It remains a blocker. The source moves Robinson north two tiles; it does not move the map object. `evidence/ship-access-audit.json` diagnoses the current fixed-terrain walking component with all Objects ignored: the wreck and some required tools remain outside it. This earlier diagnostic does not model original tides/raft/decor updates; raft traversal is now ported separately. No map edits or unrestricted water walking conceal that unfinished traversal. See SHIP_RECONSTRUCTION.md.
+
+## Raft runtime overlay
+
+Original Objects85 at (94,94), index17014, stays immutable in source data. Repair produces runtime95 there; boarding removes it; landing places95 at the prior water cell. The one raft overlay is restored after pickup tombstones and before wildlife occupancy. A raft docked on an earlier removed resource cell remains visible/blocking through future pickups and saves. Raft travel substitutes FULL12/13/14 for the walking terrain rule, while retaining object/decor/rock blockers. Shore priority is left/right/up/down; browser additionally applies the missing source rock check. See RAFT_TRAVERSAL.md.

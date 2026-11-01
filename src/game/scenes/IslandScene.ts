@@ -1,3 +1,4 @@
+import { raftObjects, cellOf, cellPoint } from "../systems/RaftSystem";
 import Phaser from "phaser";
 import { validateMap, type IslandMap } from "../maps/MapDecoder";
 import { MapRenderer } from "../maps/MapRenderer";
@@ -65,18 +66,24 @@ export class IslandScene extends Phaser.Scene {
       manifest,
       this.removed,
       state.wildlife,
+      raftObjects(
+        this.map.layers.Objects.map((v, i) => (this.removed.has(i) ? 0 : v)),
+        state.raft,
+      ),
     );
     this.collision = new CollisionSystem(
       this.map,
       this.removed,
       this.wildlife.objects,
     );
+    this.collision.mode = state.raft.phase === "aboard" ? "raft" : "walk";
     this.world = new MapRenderer(this, this.map, state.atlas!, state.items);
     this.world.render(
       this.removed,
       this.wildlife.managed,
       state.shelter,
       state.ship,
+      state.raft,
     );
     this.animals = this.wildlife.actors.map(
       (a) => new Animal(this, state.atlas!, a, this.wildlife),
@@ -93,8 +100,11 @@ export class IslandScene extends Phaser.Scene {
       spawn.x,
       spawn.y,
     );
+    this.player.setRaft(state.raft);
     this.player.setOutfit(state.clothing.equipped);
-    this.player.shadow.setVisible(state.ship.phase === "wreck");
+    this.player.shadow.setVisible(
+      state.ship.phase === "wreck" && state.raft.phase !== "aboard",
+    );
     this.cameras.main
       .setBounds(0, 0, 2880, 2880)
       .setZoom(state.zoom)
@@ -155,14 +165,17 @@ export class IslandScene extends Phaser.Scene {
       const world = p.positionToCamera(
         this.cameras.main,
       ) as Phaser.Math.Vector2;
-      const object = nearestInteraction(
-        this.map,
-        world.x,
-        world.y,
-        this.removed,
-        13,
-        this.wildlife.objects,
-      );
+      const object =
+        s.raft.phase === "aboard"
+          ? null
+          : nearestInteraction(
+              this.map,
+              world.x,
+              world.y,
+              this.removed,
+              13,
+              this.wildlife.objects,
+            );
       if (
         object &&
         Math.hypot(object.x - this.player.x, object.y - this.player.y) < 44
@@ -239,6 +252,29 @@ export class IslandScene extends Phaser.Scene {
         this.cameras.main.setVisible(true);
         this.scene.stop("Hunting");
       }
+      if (s.raft !== prev.raft) {
+        const transitioned =
+          s.raft.phase !== prev.raft.phase || s.raft.index !== prev.raft.index;
+        if (transitioned) {
+          const objects = raftObjects(this.wildlife.objects, s.raft);
+          objects.forEach(
+            (value, index) => (this.wildlife.objects[index] = value),
+          );
+          this.world.updateRaft(s.raft, prev.raft);
+          if (prev.raft.phase === "aboard" && s.raft.phase === "moored") {
+            const dx = Math.floor(s.x / 16) - Math.floor(prev.x / 16),
+              dy = Math.floor(s.y / 16) - Math.floor(prev.y / 16);
+            this.player.facing =
+              dx < 0 ? "left" : dx > 0 ? "right" : dy < 0 ? "up" : "down";
+          }
+          this.player.x = s.x;
+          this.player.y = s.y;
+          this.player.path = [];
+          this.input.keyboard?.resetKeys();
+        }
+        this.collision.mode = s.raft.phase === "aboard" ? "raft" : "walk";
+        this.player.setRaft(s.raft);
+      }
       if (s.zoom !== prev.zoom) this.cameras.main.setZoom(s.zoom);
       if (s.shelter !== prev.shelter) this.world.updateShelter(s.shelter);
       if (s.clothing !== prev.clothing)
@@ -251,6 +287,7 @@ export class IslandScene extends Phaser.Scene {
         }
         for (const i of s.collected) {
           this.removed.add(i);
+          if (s.raft.phase === "moored" && s.raft.index === i) continue;
           this.world.remove(i);
           if (this.wildlife.removeActor(i))
             this.animals = this.animals.filter((a) => {
@@ -294,6 +331,7 @@ export class IslandScene extends Phaser.Scene {
       ready: true,
       x: spawn.x,
       y: spawn.y,
+      worldMap: this.map,
       worldObjects: this.wildlife.objects,
       worldDecor: this.map.layers.Decor,
       worldTerrain: this.map.layers.FULL,
@@ -427,14 +465,22 @@ export class IslandScene extends Phaser.Scene {
         survival.death ||
         s.ship.phase !== "wreck"
           ? null
-          : nearestInteraction(
-              this.map,
-              this.player.x,
-              this.player.y,
-              this.removed,
-              42,
-              this.wildlife.objects,
-            );
+          : s.raft.phase === "aboard"
+            ? {
+                index: cellOf(this.player.x, this.player.y),
+                itemId: 94,
+                ...cellPoint(cellOf(this.player.x, this.player.y)),
+                distance: 0,
+                kind: "raft" as const,
+              }
+            : nearestInteraction(
+                this.map,
+                this.player.x,
+                this.player.y,
+                this.removed,
+                42,
+                this.wildlife.objects,
+              );
       if (focus) {
         const animal = this.wildlife.actorAt(focus.index);
         if (animal) focus.actorId = animal.id;
@@ -455,6 +501,10 @@ export class IslandScene extends Phaser.Scene {
         y: this.player.y,
         elapsed,
         survival,
+        ...(s.raft.phase === "aboard" &&
+        this.player.getRaftFacing() !== s.raft.facing
+          ? { raft: { ...s.raft, facing: this.player.getRaftFacing()! } }
+          : {}),
         focus,
         discovered: [...this.discovered],
       });

@@ -1,3 +1,14 @@
+import {
+  initialRaft,
+  raftTarget,
+  repairRaft,
+  boardingPoint,
+  landingPoint,
+  cellOf,
+  type RaftState,
+} from "../game/systems/RaftSystem";
+import { CollisionSystem } from "../game/systems/CollisionSystem";
+import type { IslandMap } from "../game/maps/MapDecoder";
 import { create } from "zustand";
 import type {
   AtlasManifest,
@@ -96,7 +107,7 @@ export interface FocusObject {
   distance: number;
   behavior?: string;
   actorId?: number;
-  kind?: "coconut-palm" | "net-fishing" | "rod-fishing";
+  kind?: "coconut-palm" | "net-fishing" | "rod-fishing" | "raft";
 }
 interface GameState {
   offlineReady: boolean;
@@ -116,6 +127,8 @@ interface GameState {
   clothing: ClothingState;
   bodyWeight: BodyWeightState;
   ship: ShipState;
+  raft: RaftState;
+  worldMap: IslandMap | null;
   worldObjects: readonly number[] | null;
   worldDecor: readonly number[] | null;
   worldTerrain: readonly number[] | null;
@@ -155,6 +168,9 @@ interface GameState {
   consume: (id: number) => boolean;
   consumeWorld: (index: number, itemId: number) => boolean;
   repairShip: (index: number) => boolean;
+  repairRaft: (index: number) => boolean;
+  boardRaft: (index: number) => boolean;
+  landRaft: () => boolean;
   advanceShip: (delta: number) => void;
   beginExpedition: () => boolean;
   beginRest: () => void;
@@ -203,6 +219,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   clothing: initialClothing(),
   bodyWeight: initialBodyWeight(),
   ship: initialShip(),
+  raft: initialRaft(),
+  worldMap: null,
   worldObjects: null,
   worldDecor: null,
   worldTerrain: null,
@@ -271,6 +289,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       !s.ready ||
       !s.started ||
       s.ship.phase !== "wreck" ||
+      s.raft.phase === "aboard" ||
       s.coconutGame !== null ||
       s.fishingGame !== null ||
       s.rodGame !== null ||
@@ -307,6 +326,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       !s.ready ||
       !s.started ||
       s.ship.phase !== "wreck" ||
+      s.raft.phase === "aboard" ||
       s.coconutGame ||
       s.fishingGame ||
       s.rodGame ||
@@ -340,6 +360,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       s.fishingGame ||
       s.rodGame ||
       s.huntingGame ||
+      s.raft.phase === "aboard" ||
       !shipRepairTarget(index, s)
     )
       return false;
@@ -347,6 +368,55 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (!result) return false;
     set({ ...result, y: s.y - SHIP_SHIFT_Y, panel: null, focus: null });
     get().notify("The pirate ship is rebuilt. Your voyage home begins.");
+    return true;
+  },
+  repairRaft: (index) => {
+    const s = get();
+    if (!canUseRaft(s) || !raftTarget(index, s.x, s.y, s.worldObjects, s.raft))
+      return false;
+    const result = repairRaft(s.items, s.inventory, s.survival, s.raft);
+    if (!result) return false;
+    set({ ...result, panel: null, focus: null });
+    get().notify("Raft repaired · ready for the mangrove swamps");
+    return true;
+  },
+  boardRaft: (index) => {
+    const s = get();
+    if (!canUseRaft(s) || index !== s.raft.index) return false;
+    const point = boardingPoint(
+      s.raft,
+      s.x,
+      s.y,
+      new CollisionSystem(s.worldMap!, new Set(s.collected), s.worldObjects!),
+    );
+    if (!point) return false;
+    set({
+      ...point,
+      raft: { ...s.raft, phase: "aboard", index: null },
+      panel: null,
+      focus: null,
+    });
+    get().notify("Aboard the raft · paddle through the mangrove swamps");
+    return true;
+  },
+  landRaft: () => {
+    const s = get();
+    if (!canUseRaft(s)) return false;
+    const point = landingPoint(
+      s.raft,
+      s.x,
+      s.y,
+      new CollisionSystem(s.worldMap!, new Set(s.collected), s.worldObjects!),
+    );
+    if (!point) return false;
+    set({
+      x: point.x,
+      y: point.y,
+      raft: { ...s.raft, phase: "moored", index: cellOf(s.x, s.y) },
+      panel: null,
+      focus: null,
+    });
+    get().notify("Back on shore · the raft stays beside you");
     return true;
   },
   advanceShip: (delta) => {
@@ -389,6 +459,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       furnishings: {},
       clothing: initialClothing(),
       ship: initialShip(),
+      raft: initialRaft(),
       wildlife: undefined,
       coconutUses: 0,
       coconutSerial: 0,
@@ -606,6 +677,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         clothing: s.clothing,
         bodyWeight: s.bodyWeight,
         ship: s.ship,
+        raft: s.raft,
         ...(sleep ? { sleepStartedAt: Date.now() } : {}),
       };
       await SaveSystem.save(data);
@@ -648,6 +720,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           clothing: saved.clothing ?? initialClothing(),
           bodyWeight: saved.bodyWeight ?? initialBodyWeight(),
           ship: saved.ship ?? initialShip(),
+          raft: saved.raft ?? initialRaft(),
           coconutGame: null,
           fishingGame: null,
           rodGame: null,
@@ -681,6 +754,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       !s.ready ||
       !s.started ||
       s.ship.phase !== "wreck" ||
+      s.raft.phase === "aboard" ||
       s.coconutGame ||
       s.fishingGame ||
       s.rodGame ||
@@ -796,6 +870,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       !s.ready ||
       !s.started ||
       s.ship.phase !== "wreck" ||
+      s.raft.phase === "aboard" ||
       s.coconutGame ||
       s.fishingGame ||
       s.rodGame ||
@@ -880,6 +955,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       !s.ready ||
       !s.started ||
       s.ship.phase !== "wreck" ||
+      s.raft.phase === "aboard" ||
       s.coconutGame ||
       s.fishingGame ||
       s.rodGame ||
@@ -953,6 +1029,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       !s.ready ||
       !s.started ||
       s.ship.phase !== "wreck" ||
+      s.raft.phase === "aboard" ||
       s.coconutGame ||
       s.fishingGame ||
       s.rodGame ||
@@ -1038,3 +1115,20 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
   leaveCoconut: () => set({ coconutGame: null, panel: null, focus: null }),
 }));
+
+function canUseRaft(s: GameState) {
+  return (
+    s.ready &&
+    s.started &&
+    !s.saving &&
+    !!s.worldMap &&
+    !!s.worldObjects &&
+    s.ship.phase === "wreck" &&
+    !s.coconutGame &&
+    !s.fishingGame &&
+    !s.rodGame &&
+    !s.huntingGame &&
+    !s.survival.death &&
+    s.survival.restRemainingMs === null
+  );
+}

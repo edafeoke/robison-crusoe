@@ -1,15 +1,17 @@
+import { raftRules } from "../data/raftRules";
 import {
   MAP_SIZE,
   TILE_SIZE,
   tileIndex,
   type IslandMap,
 } from "../maps/MapDecoder";
-// Recovered from data.g.a(int,int), c, d and e. Walking mode only; sailing is deferred.
+// Recovered walking/raft predicates from data.g.a/b(int,int), c, d and e.
 const BLOCKED_TERRAIN = new Set([5, 6, 12, 13, 14]);
 const PASSABLE_ROCKS = new Set([
   0, 10, 11, 12, 18, 20, 22, 23, 24, 30, 31, 32, 38, 41, 42, 43, 44, 45, 46, 47,
 ]);
 export class CollisionSystem {
+  mode: "walk" | "raft" = "walk";
   constructor(
     public map: IslandMap,
     public removed: Set<number> = new Set(),
@@ -18,12 +20,20 @@ export class CollisionSystem {
   rockPassable(value: number): boolean {
     return PASSABLE_ROCKS.has(value) || value >= 50;
   }
+  walkableOnFoot(tx: number, ty: number): boolean {
+    return this.passable(tx, ty, "walk");
+  }
   walkable(tx: number, ty: number): boolean {
+    return this.passable(tx, ty, this.mode);
+  }
+  private passable(tx: number, ty: number, mode: "walk" | "raft"): boolean {
     if (tx < 0 || ty < 0 || tx >= MAP_SIZE || ty >= MAP_SIZE) return false;
     const i = tileIndex(tx, ty),
       l = this.map.layers;
     return (
-      !BLOCKED_TERRAIN.has(l.FULL[i]) &&
+      (mode === "raft"
+        ? (raftRules.waterTerrain as readonly number[]).includes(l.FULL[i])
+        : !BLOCKED_TERRAIN.has(l.FULL[i])) &&
       this.rockPassable(l.Rocks[i]) &&
       l.Decor[i] === 0 &&
       (this.objects

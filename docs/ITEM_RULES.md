@@ -64,3 +64,7 @@ Terrain-5 inspection now dispatches Fishing rod (14) with Worms (90). Completed 
 ## Hunting completion
 
 Animal tool 81 (Bow) requires Arrow 45. One Arrow supplies up to ten minigame shots and is consumed once at completion; Bow is kept. A win awards the hit animal item, adds 1 strength, costs 10 energy, and removes that actual wildlife actor. Failed dangerous hunts add source retaliation energy losses. See HUNTING.md for grouping, protection assumptions and source tenth-shot conflict handling.
+
+## Raft completion
+
+Broken raft84 at original (94,94) now has its dedicated repair interaction. Exact six consumed material groups and kept Saw/Hammer, −30 Energy/+10 Morale, non-portable runtime95, boarding/swamp traversal/landing and transport saves are ported. It remains separate from the43 workbench recipes. See RAFT_TRAVERSAL.md for source art, single-tile transitions and explicit adaptations; dynamic tides and the full tool/material route remain pending.

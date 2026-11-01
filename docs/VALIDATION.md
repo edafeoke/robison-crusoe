@@ -1,6 +1,38 @@
 # Validation record
 
-## Current milestone: Pirate ship reconstruction and escape
+## Current milestone: mangrove raft traversal
+
+Date: 2026-11-01. **136 tests passed**, including 11 new raft checks. TypeScript and production build passed. Final classic entry **index-DB2NBnfB.js**, 1,648.74 kB / 463.07 kB gzip; existing 1,600 kB advisory remains. No dependency added. Full decoding succeeds; every typed rules file and object metadata regenerate byte-for-byte, including new raft facts. Original maps/PNGs and atlas integrity checks remain green; development fixtures are absent from dist. Source findings, preliminary audit correction and explicit adaptations: RAFT_TRAVERSAL.md.
+
+### Source and automated coverage
+
+- Original raft at (94,94), map85/index17014; repaired map95 and exact six material/two kept-tool recipe; −30 Energy/+10 Morale, no portable output, once-only settlement, missing tools/materials and fatal/resting/collapsed cases.
+- JVM-confirmed single-tile boarding/landing (the Java argument4 is unused), FULL12/13/14 restriction, original rock/decor/live-object blockers and unchanged foot collision. Browser mouse A* shares the active predicate and cannot route onto land/ocean aboard.
+- Original left/right fixed layer order, all seated body/shirt/hat frames resolving through D0, seven stroke phases, constructor hat offsets and hidden pants/shoes. Vertical paddling retains horizontal orientation.
+- Left/right/up/down shore priority, occupied docks, no-shore failure, boundaries and the documented extra landing rock check. Original source repeats terrain rather than checking rocks; the browser avoids stuck shore landings.
+- Immutable map plus moved-dock/aboard runtime overlays, including formerly collected cells; phase/index/orientation save validation, optional legacy migration, afloat and moved-dock checkpoints. World interactions independently reject afloat gathering/food/minigame/ship requests; inventory use, rest, menus and saves remain separate.
+- One initial raft test failed because its occupied-cell assertion used the original raft point instead of the synthetic test point. Corrected the test coordinate; the full136-test run passed. No production collision bypass was introduced to make that test pass.
+
+### Browser observations
+
+Isolated origin **4198** was used; the existing user expedition on **4173** was untouched. `tests/browser/raft.html` labels its preconditions: Robinson beside actual unchanged broken raft(94,94), exact repair materials plus Saw/Hammer supplied, T-shirt/Hat supplied to wardrobe, survival active. No tool acquisition, garment crafting or full-island journey is claimed.
+
+- Actual original Broken raft dialogue lists all six material quantities and two kept tools. Real Repair changed Energy100→70, Morale0→10, runtime original cell85→95 and satchel30→2 (Saw/Hammer only). Screenshot `evidence/raft-repair-requirements.jpg`.
+- Equipped the supplied T-shirt and Hat using the actual wardrobe controls; both checked as worn. Used the real nearby E interaction to board: (94,93)→(94,94), original runtime raft cell95→0, left-facing seated/paddle/outfit art and mangrove toolbar appeared.
+- Held Up600ms toward land: remained in water cell(94,94), pixel(1512,1509), with no implicit landing. Right1000ms reached(97,94), pixel(1563,1509), facingright. W500ms reached(97,92), pixel(1563,1483), retainingright-facing raft art. The time-based browser speed is not asserted to match the phone loop.
+- Clicked visible clear water at screen(405,540). Real mouse path arrived at(95,92), pixel(1528,1480), facingleft. Needs advanced to Hunger90/Thirst86/Energy66 during play, while Morale stayed10; raft confers no survival immunity.
+- Actual Land on shore moved to(94,92) and left the raft at **(95,92), index16655**, with original raft cell still0. Saved and reloaded through normal UI: moved dock and reserves restored; nearby E again offered Board the raft.
+- Reboarded and held Right750ms to(98,92), pixel(1581,1480), facingright. Real Find a landing reported no clear shore and disabled Land on shore. Screenshot `evidence/raft-no-landing.jpg`. Normal Save succeeded aboard, preserving position, orientation, tools, worn clothing and needs (`evidence/raft-afloat-save.jpg`).
+- Production restored the afloat checkpoint with90/86/66, Morale10, two tools and the seated original outfit/raft. `evidence/raft-paddling-production.jpg` shows the restored rendering. Duplicate generic E/help overlays aboard were removed in favor of the dedicated mangrove controls; keyboard E still opens landing.
+- After the final landing-facing correction, verified **index-DB2NBnfB.js** in the actual DOM. Real A1100ms returned to(95,92); actual Land on shore put Robinson on(94,92), facing toward shore, and left the raft behind. `evidence/raft-landing-production.jpg` records the standing character and moored raft. This did not overwrite the earlier afloat checkpoint.
+- Stopped the final preview server, cold-reloaded **index-DB2NBnfB.js** and used actual Continue. Afloat position(98,92),90/86/66, Morale10, two tools and seated outfit/raft restored offline. `evidence/raft-offline-restored.jpg` records the final build; final DOM inspection showed exactly **one canvas** and captured warnings/errors empty. Final tab is paused. No fixture controls in production, no viewport override. Owned dev/preview processes stopped.
+- A background Satchel click while the discovery modal was open closed the backdrop rather than opening inventory. A fresh state read exposed that; opened the real satchel from the unblocked world and continued through wardrobe. Initial HMR changes were followed by a fresh source-stable preparation/save cycle. Cached production update was reloaded until the DOM confirmed the final hash before final testing. No result is inferred from an unavailable or obscured control.
+
+### Remaining limits
+
+No legitimate start-to-repair or full escape journey is claimed. Saw is needed for raft repair yet lies outside the earlier optimistic walking component. Dynamic tides, remaining decor/resource updates and the tool/material acquisition route must still be implemented/audited. Original RMS compatibility, emulator comparison, half-tile phone movement/interstitial timing and non-sleep offline losses remain pending. Raft travel is restricted to the original swamp terrain; general ocean sailing is not enabled.
+
+## Previous milestone: Pirate ship reconstruction and escape
 
 Date: 2026-11-01. **125 tests passed**, including 11 new ship checks. TypeScript and production build passed. Final classic entry: **index-Dhcqv5Qb.js**, 1,637.28 kB / 458.80 kB gzip. Existing 1,600 kB chunk advisory remains; no dependency added. Full decoding succeeds; all typed rule files and object metadata regenerate byte-for-byte. Map/sprite integrity tests remain green. No development fixture files in dist. Source findings and explicit adaptations: SHIP_RECONSTRUCTION.md.
 

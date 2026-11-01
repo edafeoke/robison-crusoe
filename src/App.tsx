@@ -1,3 +1,4 @@
+import { RaftStatus } from "./components/RaftDialogue";
 import { useEffect } from "react";
 import {
   Anchor,
@@ -186,6 +187,7 @@ export default function App() {
             <RodFishingPanel />
             <HuntingPanel />
             <DepartureStatus />
+            <RaftStatus />
             <div className="canvas-vignette" />
             {s.enhancements && (
               <div
@@ -293,7 +295,7 @@ export default function App() {
                 </div>
               </div>
             )}
-            {s.focus && s.started && !s.panel && (
+            {s.focus && s.focus.kind !== "raft" && s.started && !s.panel && (
               <button
                 className="interaction-prompt"
                 onClick={() => s.inspect(s.focus!.index, s.focus!.itemId)}
@@ -316,28 +318,31 @@ export default function App() {
                 <ChevronRight size={17} />
               </button>
             )}
-            {s.help && s.started && s.ship.phase === "wreck" && (
-              <div className="control-note">
-                <span>
-                  <kbd>W</kbd>
+            {s.help &&
+              s.started &&
+              s.ship.phase === "wreck" &&
+              s.raft.phase !== "aboard" && (
+                <div className="control-note">
                   <span>
-                    <kbd>A</kbd>
-                    <kbd>S</kbd>
-                    <kbd>D</kbd>
+                    <kbd>W</kbd>
+                    <span>
+                      <kbd>A</kbd>
+                      <kbd>S</kbd>
+                      <kbd>D</kbd>
+                    </span>
                   </span>
-                </span>
-                <p>
-                  Make your own way.
-                  <small>WASD / arrows to move · click to walk</small>
-                </p>
-                <button
-                  aria-label="Dismiss movement help"
-                  onClick={() => useGameStore.setState({ help: false })}
-                >
-                  <X size={14} />
-                </button>
-              </div>
-            )}
+                  <p>
+                    Make your own way.
+                    <small>WASD / arrows to move · click to walk</small>
+                  </p>
+                  <button
+                    aria-label="Dismiss movement help"
+                    onClick={() => useGameStore.setState({ help: false })}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              )}
             {s.notification && (
               <div className="toast" role="status">
                 <Check size={17} />

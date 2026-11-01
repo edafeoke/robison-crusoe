@@ -1,3 +1,5 @@
+import { raftRules as RR } from "../data/raftRules";
+import { initialRaft, type RaftState } from "../systems/RaftSystem";
 import Phaser from "phaser";
 import type { AtlasManifest, RecoveredItem } from "../assets/assetManifest";
 import type { IslandMap } from "./MapDecoder";
@@ -105,6 +107,7 @@ export class MapRenderer {
     managed = new Set<number>(),
     shelter: Shelter = 17,
     ship: ShipState = initialShip(),
+    raft: RaftState = initialRaft(),
   ) {
     const { scene, map, atlas } = this;
     for (let cy = 0; cy < 6; cy++)
@@ -187,6 +190,7 @@ export class MapRenderer {
         }
       }
       const obj = map.layers.Objects[i];
+      if (obj === RR.brokenMapId || obj === RR.mapId) continue;
       if (obj && !removed.has(i) && !managed.has(i)) {
         const sprite = makeRegion(
           scene,
@@ -204,6 +208,7 @@ export class MapRenderer {
       }
     }
     this.addShipFlags(ship);
+    this.updateRaft(raft);
   }
   private addShipFlags(ship: ShipState) {
     this.shipFlags.forEach((f) => f.image.destroy());
@@ -225,6 +230,20 @@ export class MapRenderer {
       if (image)
         this.shipFlags.push({ image, x: x + offset.dx, y: y + offset.dy });
     }
+  }
+  updateRaft(raft: RaftState, previous?: RaftState) {
+    this.remove(RR.index);
+    if (previous?.index !== null && previous?.index !== undefined)
+      this.remove(previous.index);
+    if (raft.phase === "aboard" || raft.index === null) return;
+    const x = (raft.index % 180) * 16 + 8,
+      y = Math.floor(raft.index / 180) * 16 + 8;
+    const key =
+      raft.phase === "broken"
+        ? this.items[RR.brokenItem].sprite
+        : RR.layers[raft.facing][0][0];
+    const image = makeRegion(this.scene, this.atlas, key, x, y, y + 0.5);
+    if (image) this.objectSprites.set(raft.index, image);
   }
   updateShip(ship: ShipState) {
     this.remove(R.index);

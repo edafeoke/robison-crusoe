@@ -27,8 +27,11 @@ export class WildlifeSystem {
     public manifest: WildlifeManifest,
     removed = new Set<number>(),
     saved?: WildlifeSnapshot[],
+    staticObjects?: readonly number[],
   ) {
-    this.objects = map.layers.Objects.map((v, i) => (removed.has(i) ? 0 : v));
+    this.objects = staticObjects
+      ? [...staticObjects]
+      : map.layers.Objects.map((v, i) => (removed.has(i) ? 0 : v));
     const profiles = new Map(manifest.species.map((p) => [p.mapId, p]));
     for (let id = 0; id < 32400; id++) {
       const profile = profiles.get(map.layers.Objects[id]);

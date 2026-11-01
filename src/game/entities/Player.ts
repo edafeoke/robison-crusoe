@@ -1,3 +1,5 @@
+import { raftLayers, type RaftState } from "../systems/RaftSystem";
+import { raftRules } from "../data/raftRules";
 import Phaser from "phaser";
 import type { AtlasManifest } from "../assets/assetManifest";
 import { assetManifest } from "../assets/assetManifest";
@@ -18,6 +20,9 @@ export class Player {
   path: Point[] = [];
   private clothes: Phaser.GameObjects.Image[];
   private outfit: Outfit = emptyOutfit();
+  private raft: RaftState | null = null;
+  private raftImages: Phaser.GameObjects.Image[];
+  private strokeDistance = 0;
   constructor(
     private scene: Phaser.Scene,
     public atlas: AtlasManifest,
@@ -30,7 +35,17 @@ export class Player {
     this.clothes = Array.from({ length: 4 }, () =>
       scene.add.image(x, y, "bank-5", 0).setOrigin(0).setVisible(false),
     );
+    this.raftImages = Array.from({ length: 7 }, () =>
+      scene.add.image(x, y, "bank-6", 8).setOrigin(0).setVisible(false),
+    );
     this.render();
+  }
+  setRaft(raft: RaftState) {
+    this.raft = raft.phase === "aboard" ? { ...raft } : null;
+    this.render();
+  }
+  getRaftFacing() {
+    return this.raft?.facing;
   }
   move(dx: number, dy: number, dt: number) {
     this.walking = false;
@@ -38,6 +53,11 @@ export class Player {
       this.frame = 0;
       this.render();
       return;
+    }
+    if (this.raft) {
+      if (Math.abs(dx) > Math.abs(dy)) dy = 0;
+      else dx = 0;
+      if (dx) this.raft.facing = dx > 0 ? "right" : "left";
     }
     const len = Math.hypot(dx, dy);
     dx /= len;
@@ -53,6 +73,8 @@ export class Player {
     const step = 64 * Math.min(dt, 0.05),
       nx = this.x + dx * step,
       ny = this.y + dy * step;
+    const oldX = this.x,
+      oldY = this.y;
     if (this.collision.canStand(nx, this.y)) {
       this.walking ||= Math.abs(nx - this.x) > 0.001;
       this.x = nx;
@@ -61,6 +83,8 @@ export class Player {
       this.walking ||= Math.abs(ny - this.y) > 0.001;
       this.y = ny;
     }
+    if (this.raft)
+      this.strokeDistance += Math.hypot(this.x - oldX, this.y - oldY);
     if (this.walking) {
       this.animationTime += dt * 1000;
       this.frame =
@@ -77,6 +101,7 @@ export class Player {
     const dx = target.x - this.x,
       dy = target.y - this.y;
     if (Math.hypot(dx, dy) < 2) {
+      if (this.raft) this.strokeDistance += Math.hypot(dx, dy);
       this.x = target.x;
       this.y = target.y;
       this.path.shift();
@@ -87,6 +112,11 @@ export class Player {
     if (!this.walking) this.path = [];
   }
   rest(elapsedMs: number) {
+    if (this.raft) {
+      this.walking = false;
+      this.render();
+      return;
+    }
     this.clothes.forEach((image) => image.setVisible(false));
     this.walking = false;
     const frame = Math.floor(elapsedMs / 700) % 2,
@@ -99,6 +129,41 @@ export class Player {
     this.shadow.setPosition(this.x, this.y + 5).setDepth(this.y - 0.1);
   }
   render() {
+    if (this.raft) {
+      this.sprite.setVisible(false);
+      this.clothes.forEach((image) => image.setVisible(false));
+      this.shadow
+        .setVisible(false)
+        .setPosition(this.x, this.y + 5)
+        .setDepth(this.y - 0.1);
+      const layers = raftLayers(
+        this.raft.facing,
+        Math.floor(this.strokeDistance / raftRules.sourcePixelsPerStroke),
+        this.outfit,
+      );
+      this.raftImages.forEach((image, i) => {
+        const layer = layers[i],
+          f =
+            layer &&
+            this.atlas.sheets[layer.sprite >>> 16]?.frames[
+              layer.sprite & 65535
+            ];
+        image.setVisible(!!f);
+        if (f)
+          image
+            .setTexture(`bank-${layer.sprite >>> 16}`, layer.sprite & 65535)
+            .setPosition(
+              this.x + layer.dx - f.anchorX,
+              this.y + 8 + layer.dy - f.anchorY,
+            )
+            .setFlipX(f.flipX)
+            .setDepth(this.y + 0.4 + i * 0.001);
+      });
+      return;
+    }
+    this.raftImages.forEach((image) => image.setVisible(false));
+    this.sprite.setVisible(true);
+    this.shadow.setVisible(true);
     const frame = assetManifest.player.sequences[this.facing][this.frame],
       f = this.atlas.sheets[3].frames[frame];
     this.sprite

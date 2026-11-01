@@ -2964,3 +2964,26 @@ i {
   color: #345443;
   font-size: 11px;
 }
+
+.raft-status {
+  position: absolute;
+  z-index: 8;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 17px;
+  border: 1px solid #8e9e77;
+  background: #233e32ee;
+  color: #f0e6c6;
+  box-shadow: 0 8px 28px #12251b33;
+  max-width: calc(100% - 28px);
+  width: max-content;
+}
+.raft-status span { display: grid; gap: 4px; }
+.raft-status strong { font: 17px Georgia, serif; font-weight: normal; }
+.raft-status small { font-size: 10px; opacity: .75; }
+.raft-status button { border: 1px solid #b7b99b; padding: 8px 12px; white-space: nowrap; font-size: 11px; }
+.raft-discovery > .primary-button { width: 100%; margin: 18px 0; }
