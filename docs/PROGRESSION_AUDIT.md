@@ -35,3 +35,7 @@ Raw animals are static blockers in this diagnostic; actual gameplay moves them a
 ## Validation
 
 164 automated tests pass, including five new raft/predator continuation tests and two acquisition-audit tests. TypeScript and production build pass. Real-browser observations, prepared-fixture preconditions and offline restoration are recorded in VALIDATION.md. The fixture explicitly supplies a repaired raft and repositions Robinson; it does not claim that browser QA acquired its ingredients or traversed the acquisition model.
+
+## Follow-up: ordered survival run
+
+ORDERED_EXPEDITION.md now records an ordered, active-survival integration run from an empty satchel through actual raft traversal and Sextant recovery. Unlike this earlier closure model it advances travel, needs, wildlife, tides and renewal in order. Its renderer/frame-cadence scope and remaining final ship/escape route are explicit.

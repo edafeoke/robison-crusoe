@@ -4,7 +4,7 @@ import Phaser from "phaser";
 import type { AtlasManifest } from "../assets/assetManifest";
 import { assetManifest } from "../assets/assetManifest";
 import { CollisionSystem } from "../systems/CollisionSystem";
-import type { Point } from "../systems/MovementSystem";
+import { moveWithCollision, type Point } from "../systems/MovementSystem";
 import {
   clothingLayers,
   emptyOutfit,
@@ -70,19 +70,13 @@ export class Player {
         : dy > 0
           ? "down"
           : "up";
-    const step = 64 * Math.min(dt, 0.05),
-      nx = this.x + dx * step,
-      ny = this.y + dy * step;
     const oldX = this.x,
       oldY = this.y;
-    if (this.collision.canStand(nx, this.y)) {
-      this.walking ||= Math.abs(nx - this.x) > 0.001;
-      this.x = nx;
-    }
-    if (this.collision.canStand(this.x, ny)) {
-      this.walking ||= Math.abs(ny - this.y) > 0.001;
-      this.y = ny;
-    }
+    const next = moveWithCollision(this.collision, this, dx, dy, dt);
+    this.x = next.x;
+    this.y = next.y;
+    this.walking =
+      Math.abs(this.x - oldX) > 0.001 || Math.abs(this.y - oldY) > 0.001;
     if (this.raft)
       this.strokeDistance += Math.hypot(this.x - oldX, this.y - oldY);
     if (this.walking) {

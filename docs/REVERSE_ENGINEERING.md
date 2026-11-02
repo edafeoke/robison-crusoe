@@ -2,6 +2,10 @@
 
 Investigation date: 2026-10-30. Scope of this iteration: recover the original archive and deliver the first playable exploration milestone. This is not yet a complete port.
 
+## Ordered integration and browser movement recovery (2026-11-02)
+
+An ordered headless run now starts empty and earns Tent, three protective garments, essential tools, raft repair, Cabin and Sextant through actual paddling/landing while advancing production survival, wildlife/contact, tides and renewal. It stops at Sextant recovery after32:20.7 active simulated time,95/91/100 reserves; it does not certify ship acquisition/escape or exact Phaser/phone frame cadence. The process exposed a click-turn edge beside live animals, now resolved by recentering new paths and sharing the existing browser collision-step arithmetic with the driver. No source layer, asset or damage rule changed. See ORDERED_EXPEDITION.md for complete scope and evidence.
+
 ## Acquisition/raft integration audit (2026-11-02)
 
 Confirmed both data.d p.T guards against ad.u/v boarding/landing and JVM offsets4/2290. Corrected scene mode propagation for timed contacts and predator retargeting; preserved existing movement/exposure and afloat save reaction continuation. Sharks have no exemption. A new fixed-low-tide acquisition closure keeps actual Objects blockers, acquires loose tools and exact Tent/raft prerequisites from empty inventory, then links wreck/Sextant via validated landing edges. This is spatial/tool feasibility, not a full survival playthrough. See PROGRESSION_AUDIT.md for evidence and limits.

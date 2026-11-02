@@ -3,6 +3,30 @@ export interface Point {
   x: number;
   y: number;
 }
+/** Existing browser movement: normalized 64px/s, capped at 50ms, independent axis collision. */
+export function moveWithCollision(
+  collision: CollisionSystem,
+  point: Point,
+  dx: number,
+  dy: number,
+  seconds: number,
+): Point {
+  const length = Math.hypot(dx, dy);
+  if (
+    !length ||
+    !Number.isFinite(length) ||
+    !Number.isFinite(seconds) ||
+    seconds <= 0
+  )
+    return { x: point.x, y: point.y };
+  const step = 64 * Math.min(seconds, 0.05);
+  const next = { x: point.x, y: point.y },
+    nx = point.x + (dx / length) * step,
+    ny = point.y + (dy / length) * step;
+  if (collision.canStand(nx, next.y)) next.x = nx;
+  if (collision.canStand(next.x, ny)) next.y = ny;
+  return next;
+}
 // Browser enhancement: bounded A* on the recovered collision grid, four directions, no corner cutting.
 export function findPath(
   collision: CollisionSystem,
@@ -40,6 +64,14 @@ export function findPath(
         });
         n = came.get(n)!;
       }
+      // A live animal can enter the neighboring tile under an off-centre foot box.
+      // Recenter before the first turn instead of repeatedly aiming into that edge.
+      const center = { x: sx * 16 + 8, y: sy * 16 + 8 };
+      if (
+        Math.hypot(start.x - center.x, start.y - center.y) > 2 &&
+        collision.canStand(center.x, center.y)
+      )
+        path.unshift(center);
       return path;
     }
     closed.add(current);

@@ -1,6 +1,35 @@
 # Validation record
 
-## Current milestone: acquisition audit and raft/predator integration
+## Current milestone: ordered Sextant expedition and click-turn recovery
+
+Date: 2026-11-02. **168 tests pass**, including three movement checks and one ordered fresh-start survival integration test. Full suite duration approximately121 seconds. TypeScript and production build pass. Classic entry **index-hlErOG1w.js**,1,655.90kB /465.61kB gzip. Existing1,600kB advisory remains; no dependency added. Original map/PNG/atlas integrity checks pass. Source facts and precise headless/browser boundaries: ORDERED_EXPEDITION.md.
+
+### Code and automated coverage
+
+- Shared normalized64px/s browser movement with50ms cap, independent axis checks, raft terrain restrictions and coordinate-only results. New click paths first recenter an off-centre foot box before turning; centred/cardinal paths and blocked targets retain their behavior.
+- Original grid reproduction at(43,117), live neighboring Red ibis64, Robinson(702.4,1880), goal(43,116): the old first direction cannot clear the foot edge. The revised route reaches the goal without removing the bird or changing any original layer.
+- Ordered driver begins through normal Begin expedition with empty inventory, full enabled needs, original actor placements and no supplied tools/materials/history. Real store collection, crafting, food, outfit, repair, boarding and landing actions settle the transactions. Production collision/movement, needs, wildlife/contact, tides/recovery and resource histories advance in order.
+- Earned Tent, Fire, Saw, Machete, Loincloth/Straw shoes/Hat, Plane, food reserve, Gunpowder, Hammer, exact nested raft materials, repaired raft, Cabin and Sextant. At32:20.7: **95/91/100**, Strength12, Morale33, Weight12.5%, Sextant×1 and Map×1, Cabin, raft moored at(163,81), Robinson(163,77), ship still a wreck.63,364px movement across38,814 model ticks;168 pickups,32 crafts,93 world meals,18 satchel meals, five tides, five rests and53 actual contacts. No timed contact during the recorded paddle interval. Map remains immutable.
+- Pilot full-escape strategies failed through poor food/tide planning, wildlife and return-route decisions. Driver defects were corrected rather than weakening production rules. A model movement result initially spread unrelated state fields; it now returns only x/y, protected by regression coverage. Structure prerequisite IDs are distinguished from camp tiers; meal planning reserves recipe ingredients; blocked motion advances the world. None of the failed longer attempts certifies completion.
+
+### Browser observations
+
+Isolated origin **4202** used; user expedition4173 and previous4201 checkpoint untouched.
+
+- `tests/browser/movement.html` explicitly repositions Robinson beside a real original bird without moving that bird or changing source layers. Prepared **(430.4,248)** beside original Seagull2727/map53 at(27,15), goal(424,232). Actual production path was **(424,248) → (424,232)**. Real Phaser follower arrived at(26,14), pixel(424.0,232.1), Energy100, and auto-paused. `evidence/movement-edge-recovered.jpg`.
+- Actual Arrow Right120ms subsequently moved to tile(27,14). Real canvas click at the marked tile returned to(26,14). Paused and saved normally. No collision override or actor relocation was used. The prepared follower control supplies a path through the production finder; the subsequent canvas click is separately identified as native mouse input.
+- `tests/browser/expedition.html` validates the successful headless report, writes its earned version-one checkpoint to the isolated IndexedDB save, and uses normal Load. It supplies no additional items/history and does not claim a manual browser journey. Restored **08:32 / Low tide,95/91/100,(163,77),51 satchel units, Cabin, three owned garments**, Strength12/Morale33/Weight12.5. The actual satchel showed **Sextant×1** and its recovered description: “I'll need that when I'm sailing a boat.” `evidence/ordered-sextant-restored-fixture.jpg`.
+
+
+- Production root4202 confirmed **index-hlErOG1w.js**, exactly **one canvas**, assets cached and no development controls. Normal Continue restored the earned32-minute checkpoint. During the first observation the world remained live near Boa/Alligator and Robinson later collapsed; the saved checkpoint was preserved. Loaded that checkpoint through the actual loss control and immediately opened the satchel after the welcome message: **95/91/100** and all earned items restored. No exploration override, inventory grant or weakened hazard was used.
+- Stopped the owned preview server and opened a fresh cached4202 tab. Normal Continue followed by opening the satchel restored **08:32 / Low tide,(163,77),95/91/100,51 units, Cabin and three garments**. Actual Equipment → Sextant showed **Sextant×1** and its original observation. `evidence/ordered-sextant-offline-restored.jpg` records the final paused result. The checkpoint remains the earned headless endpoint; production verification did not overwrite it.
+- Final DOM confirmed the same **index-hlErOG1w.js**, **one canvas**, captured warnings/errors empty. Final retained tab is paused in the satchel; owned dev/preview processes stopped. No viewport override. Offline support remains verified in the in-app browser, not every browser family.
+
+### Remaining limits
+
+The complete new-game-to-ship/escape route remains unverified. The bounded ordered regression ends at Sextant recovery; longer attempts did not complete. It uses50ms samples, a fixed500×300 wildlife view and a test-driver strategy, rather than reproducing actual Phaser cadence, camera/exploration discovery or a manual browser journey. Source weather/RMS/non-sleep offline losses, global object filtering/random placement and emulator comparison remain outstanding. The click recentering is a browser improvement, not a recovered phone mechanic.
+
+## Previous milestone: acquisition audit and raft/predator integration
 
 Date: 2026-11-02. **164 tests pass**, including five new raft-contact/continuation tests and two acquisition-audit tests. TypeScript and final production build pass. Classic entry **index-CWnaCNHf.js**, 1,655.65kB /465.48kB gzip. Existing1,600kB advisory remains. No dependency added. Full decoding succeeds; all typed rule files and object metadata regenerate byte-identically. Original map/PNG/atlas integrity checks pass. No fixtures in dist. Source evidence, exact model scope and adaptations: PROGRESSION_AUDIT.md.
 
