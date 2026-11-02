@@ -65,7 +65,7 @@ test("nearby prey flees, predators pursue and passive wildlife continues resting
     const { system, actor } = world(mapId);
     actor.phase = "rest";
     actor.duration = 5000;
-    system.update(90, { x: actor.x - 32, y: actor.y });
+    system.update(90, { x: actor.x - 32, y: actor.y }, false);
     assert.equal(Math.sign(actor.x - 1608), direction);
     assert.equal(
       actor.reaction,
@@ -76,24 +76,25 @@ test("nearby prey flees, predators pursue and passive wildlife continues resting
 test("birds release ground occupancy in flight and cannot land on blocked cells or Robinson", () => {
   const { system, actor, map } = world(53);
   const home = actor.id;
-  system.update(90, { x: actor.x - 32, y: actor.y });
+  system.update(90, { x: actor.x - 32, y: actor.y }, false);
   assert.equal(actor.phase, "fly");
   assert.equal(system.objects[home], 0);
   assert.equal(map.layers.Objects[home], 53);
   assert.ok([131148, 131149].includes(system.sprite(actor)));
   actor.duration = 0;
   actor.remainingX = actor.remainingY = 0;
-  system.update(90, { x: actor.x, y: actor.y });
+  system.update(90, { x: actor.x, y: actor.y }, false);
   assert.equal(
     actor.phase,
     "fly",
     "cannot land on Robinson even when the ground cell is empty",
   );
   system.objects.fill(99);
-  for (let i = 0; i < 180; i++) system.update(90, far);
+  for (let i = 0; i < 180; i++) system.update(90, far, false);
   assert.equal(actor.phase, "fly");
   system.objects.fill(0);
-  for (let i = 0; i < 180 && actor.phase === "fly"; i++) system.update(90, far);
+  for (let i = 0; i < 180 && actor.phase === "fly"; i++)
+    system.update(90, far, false);
   assert.notEqual(actor.phase, "fly");
   assert.equal(
     system.objects[Math.floor(actor.x / 16) + Math.floor(actor.y / 16) * 180],
@@ -111,7 +112,7 @@ test("runtime occupancy follows wildlife without ghost blocks, overwriting stati
     new Set([old + 1]),
     system.objects,
   );
-  for (let i = 0; i < 20; i++) system.update(90, far);
+  for (let i = 0; i < 20; i++) system.update(90, far, false);
   assert.equal(system.objects[old], 0);
   assert.equal(system.objects[old + 1], 42);
   assert.equal(system.objects[old + 2], 4);
@@ -138,7 +139,7 @@ test("sharks stay in deep water, ground animals reject water, and alligators ret
     const { system, actor } = world(mapId, terrain);
     actor.remainingX = 40;
     actor.remainingY = 0;
-    for (let i = 0; i < 12; i++) system.update(90, far);
+    for (let i = 0; i < 12; i++) system.update(90, far, false);
     assert.equal(
       Math.floor(actor.x / 16) > 100,
       canCross,
@@ -150,13 +151,13 @@ test("wildlife uses fixed source ticks, freezes outside the view, and leaves ori
   const source = JSON.stringify(original.layers);
   const system = new WildlifeSystem(original, manifest),
     before = system.snapshot();
-  system.update(89, far);
+  system.update(89, far, false);
   assert.deepEqual(system.snapshot(), before);
-  system.update(0, far);
+  system.update(0, far, false);
   assert.deepEqual(system.snapshot(), before);
-  system.update(1, far, { x: 4000, y: 4000, width: 100, height: 100 });
+  system.update(1, far, false, { x: 4000, y: 4000, width: 100, height: 100 });
   assert.deepEqual(system.snapshot(), before);
-  for (let i = 0; i < 1500; i++) system.update(90, { x: 136, y: 2376 });
+  for (let i = 0; i < 1500; i++) system.update(90, { x: 136, y: 2376 }, false);
   assert.equal(JSON.stringify(original.layers), source);
   const cells = new Set<number>();
   for (const a of system.actors) {
@@ -170,14 +171,14 @@ test("wildlife uses fixed source ticks, freezes outside the view, and leaves ori
 });
 test("wildlife saves restore position, animation, behavior and deterministic continuation", () => {
   const system = new WildlifeSystem(original, manifest);
-  for (let i = 0; i < 100; i++) system.update(90, { x: 136, y: 2376 });
+  for (let i = 0; i < 100; i++) system.update(90, { x: 136, y: 2376 }, false);
   const snapshot = system.snapshot();
   assert.ok(validWildlife(snapshot));
   const restored = new WildlifeSystem(original, manifest, new Set(), snapshot);
   assert.deepEqual(restored.snapshot(), snapshot);
   for (let i = 0; i < 100; i++) {
-    system.update(90, far);
-    restored.update(90, far);
+    system.update(90, far, false);
+    restored.update(90, far, false);
   }
   assert.deepEqual(restored.snapshot(), system.snapshot());
 });

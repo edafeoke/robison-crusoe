@@ -458,6 +458,7 @@ export class IslandScene extends Phaser.Scene {
       this.wildlife.update(
         delta,
         this.player,
+        s.raft.phase === "aboard",
         this.cameras.main.worldView,
         (actor) => {
           if (!survival.enabled) {
@@ -469,6 +470,7 @@ export class IslandScene extends Phaser.Scene {
             actor,
             this.player,
             this.wildlife.manifest.tickMs,
+            s.raft.phase === "aboard",
           );
           if (!contact) return;
           flushSurvival();

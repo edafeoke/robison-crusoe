@@ -91,7 +91,8 @@ export function RaftDialogue() {
         <>
           <p className="journal-prose">
             Paddle with WASD, arrow keys, or click a clear channel. Hunger,
-            thirst and wildlife remain active.
+            thirst and wildlife remain active. Predators stop attacking while
+            you’re aboard; sharks remain dangerous.
           </p>
           <p className="muted">
             {land

@@ -23,6 +23,14 @@ def recover():
     assert 'Math.abs(this.c - this.a.Z) <= 1 && Math.abs(this.d - this.a.aa) <= 1' in source
     assert 'this.a.q * 30 / 10000' in contact
     shark = (ROOT / 'evidence/decompiled/data/i.java').read_text()
+    # ad.u/v prove this flag means aboard the swamp raft, not ship departure.
+    actions = (ROOT / 'evidence/decompiled/data/ad.java').read_text()
+    assert 'this.a.T = true;' in actions[actions.index('public final void u()'):actions.index('public final void v()')]
+    assert 'this.a.T = false;' in actions[actions.index('public final void v()'):]
+    assert source.count('if (!this.a.T) {') == 2
+    assert 'if (!this.a.T) {\n            if (Math.abs(this.c - this.a.Z) <= 2' in source
+    assert 'if (!this.a.T) {\n            if (Math.abs(this.c - this.a.Z) <= 1' in source
+    assert 'this.a.T' not in shark
     assert re.search(r'Math.abs\(this.a - this.a.Z\) <= 1 && Math.abs\(this.b - this.a.aa\) <= 1\) \{\s*this.a.c = 0.0f;\s*this.a.aO = true;', shark)
     constructors = (ROOT / 'evidence/decompiled/data/g.java').read_text()
     for rule in rules + [{'mapId': 56}]:

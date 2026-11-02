@@ -11,7 +11,7 @@ Audited 2026-11-01 against retained CFR and JVM disassembly from the supplied JA
 - While `T` is true, `ab.c()` substitutes `g.b(int,int)` for the terrain predicate, while continuing the Rock/Decor/Objects checks. Raft terrain permits **FULL12,13,14 only**. Ground walking continues to reject5,6,12,13,14. Collision does not become generic water walking.
 - `a.a()` while aboard offers only landing interaction. `a.b()` tests adjacent shore in priority **left, right, up, down**. It calls `g.a:(II)Z` twice, then `g.d` (Objects) and `g.c` (Decor); JVM confirms the duplicated terrain call and omitted `g.e` rock test. `ad.v()` clears `T`, chooses the static raft orientation, leaves map95 at the previous player cell and initiates one tile toward the first eligible shore.
 - `t` persists repaired status, raft location and aboard flag; when afloat, location derives from the player cell. It contains a special14925→14926 correction. The browser uses its own validated IndexedDB schema, not RMS serialization, and does not apply that source-specific correction to arbitrary web saves.
-- World needs and wildlife keep updating while paddling. The raft does not grant hazard immunity. Inventory menus, food use and short rest remain separate actions; raft rendering retains the seated composition while resting.
+- World needs and wildlife keep updating while paddling. Timed predator contacts and new pursuit targets are suspended aboard under the original p.T flag; sharks retain immediate contact exhaustion. See PROGRESSION_AUDIT.md for the integration correction. Inventory menus, food use and short rest remain separate actions; raft rendering retains the seated composition while resting.
 
 ## Original graphics and animation
 

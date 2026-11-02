@@ -18,7 +18,7 @@ export function advanceWorldContact(
   actor: ContactActor,
   player: { x: number; y: number },
   tickMs: number,
-  sailing = false,
+  sailing: boolean,
 ): WorldContact | null {
   const rule = worldHazardRule(actor.mapId);
   if (!rule) return null;

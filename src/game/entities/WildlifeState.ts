@@ -36,6 +36,8 @@ export interface WildlifeSnapshot {
   seed: number;
   /** Optional in older browser saves; elapsed nearby time in data.d, at most 1000 ms. */
   contactMs?: number;
+  /** Browser continuation of the last source reaction/speed; absent in legacy saves. */
+  reaction?: "flee" | "chase" | null;
 }
 export interface WildlifeActor extends WildlifeSnapshot {
   profile: WildlifeProfile;
@@ -72,6 +74,10 @@ export function validWildlife(value: unknown): value is WildlifeSnapshot[] {
       Number.isInteger(s.seed) &&
       s.seed > 0 &&
       s.seed <= 0xffffffff &&
+      (s.reaction === undefined ||
+        s.reaction === null ||
+        s.reaction === "flee" ||
+        s.reaction === "chase") &&
       (s.contactMs === undefined ||
         (Number.isSafeInteger(s.contactMs) &&
           s.contactMs >= 0 &&

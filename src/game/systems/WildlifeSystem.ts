@@ -89,7 +89,11 @@ export class WildlifeSystem {
         }
         return true;
       });
-      if (valid) for (const a of this.actors) Object.assign(a, byId.get(a.id));
+      if (valid)
+        for (const a of this.actors) {
+          const snapshot = byId.get(a.id)!;
+          Object.assign(a, snapshot, { reaction: snapshot.reaction ?? null });
+        }
     }
     for (const a of this.actors) this.occupy(a);
   }
@@ -196,7 +200,11 @@ export class WildlifeSystem {
     if (phase !== "rest") this.wander(a);
     this.occupy(a);
   }
-  private react(a: WildlifeActor, player: Point): boolean {
+  private react(a: WildlifeActor, player: Point, sailing: boolean): boolean {
+    // data.d skips retargeting aboard, retaining its previous movement/speed.
+    // This does not stop wandering or apply to the shark/prey/bird families.
+    if (sailing && a.profile.family === "predator")
+      return a.reaction === "chase";
     const tx = Math.floor(a.x / 16),
       ty = Math.floor(a.y / 16),
       dx = tx - Math.floor(player.x / 16),
@@ -254,8 +262,8 @@ export class WildlifeSystem {
       this.occupy(a);
     }
   }
-  private tick(a: WildlifeActor, player: Point) {
-    const reactive = this.react(a, player);
+  private tick(a: WildlifeActor, player: Point, sailing: boolean) {
+    const reactive = this.react(a, player, sailing);
     const family = a.profile.family;
     a.timer += this.manifest.tickMs;
     if (a.phase === "rest") {
@@ -299,6 +307,7 @@ export class WildlifeSystem {
   update(
     delta: number,
     player: Point,
+    sailing: boolean,
     view?: View,
     afterTick?: (actor: WildlifeActor) => void,
   ) {
@@ -317,7 +326,7 @@ export class WildlifeSystem {
             a.y > view.y + view.height + 32)
         )
           continue;
-        this.tick(a, player);
+        this.tick(a, player, sailing);
         afterTick?.(a);
       }
     }
@@ -339,9 +348,7 @@ export class WildlifeSystem {
     if (this.owners[index] === -1) this.objects[index] = 0;
   }
   snapshot(): WildlifeSnapshot[] {
-    return this.actors.map(
-      ({ profile: _profile, reaction: _reaction, ...state }) => ({ ...state }),
-    );
+    return this.actors.map(({ profile: _profile, ...state }) => ({ ...state }));
   }
   sprite(a: WildlifeActor) {
     const frames = a.profile.frames;

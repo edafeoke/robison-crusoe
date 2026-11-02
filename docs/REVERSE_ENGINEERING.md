@@ -2,6 +2,10 @@
 
 Investigation date: 2026-10-30. Scope of this iteration: recover the original archive and deliver the first playable exploration milestone. This is not yet a complete port.
 
+## Acquisition/raft integration audit (2026-11-02)
+
+Confirmed both data.d p.T guards against ad.u/v boarding/landing and JVM offsets4/2290. Corrected scene mode propagation for timed contacts and predator retargeting; preserved existing movement/exposure and afloat save reaction continuation. Sharks have no exemption. A new fixed-low-tide acquisition closure keeps actual Objects blockers, acquires loose tools and exact Tent/raft prerequisites from empty inventory, then links wreck/Sextant via validated landing edges. This is spatial/tool feasibility, not a full survival playthrough. See PROGRESSION_AUDIT.md for evidence and limits.
+
 ## Evidence and reproducibility
 
 The initial workspace contained **only** `robinsoncr_ok5vhpp3.jar` (365,449 bytes). No JAD, extracted assets, JSON maps, source code, or existing React/Phaser project was supplied. The JAR contains 59 files: 35 classes, 16 PNGs (15 BS banks plus the application icon), five 32,400-byte maps, `data/D0`, `objects.csv`, and the manifest. `evidence/archive-inventory.json` records every entry, size and SHA-256. Original files remain unmodified in the JAR and `evidence/original/`.

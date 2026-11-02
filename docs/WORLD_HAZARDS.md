@@ -30,6 +30,10 @@ The unprotected `d` branch clamps depleted energy to zero and sets `aO` **before
 
 The browser preserves subtraction, the unprotected pre-credit clamp and interrupted-rest integer arithmetic, then consistently clamps the final result to 0–100 and collapses at zero for either branch. For example, at energy 5 with 1080 ms of rest, a bare Boa attack clamps to 0 then credits 3 (survives at 3); a protected attack computes 5−10+3 and collapses at 0. It does not preserve negative-reserve survival or a stale `aO` flag after recovery. This normalization is an explicit safety adaptation, covered by tests, pending emulator comparison.
 
+## Raft integration correction (2026-11-02)
+
+The raft milestone initially left the source sailing exemption disconnected: the scene omitted the hazard helper’s sailing argument, and predators still retargeted passengers. Both now receive the actual aboard state. Timed exposure is retained without accumulation/reset aboard; existing movement/speed continues, and landing resumes targeting and attacks. Sharks remain immediate hazards. New optional snapshot reaction state preserves that last speed through afloat saves. Full source checks, route audit and verification: PROGRESSION_AUDIT.md.
+
 ## Scheduling, UI and persistence
 
 - Contacts run once after **each actually updated wildlife actor**, under the existing view bounds, with no separate wall-clock timer. At the browser's fixed 90 ms wildlife cadence, the first uninterrupted predator hit is on tick 12 (**1080 ms**). Java used measured loop intervals with a 90 ms minimum, so exact real-time parity is not claimed.
@@ -43,4 +47,4 @@ The browser preserves subtraction, the unprotected pre-credit clamp and interrup
 
 Automated tests cover independent source rules, correct/wrong clothing slots, diagonal/two-tile bounds, strict timing, repeated attacks, view freezing, actual actor removal, save continuation/migration, invalid timers, interrupted rest, source clamp quirks, protected fatal damage, immediate sharks and exploration safety. Browser QA uses a visibly labelled development fixture to move Robinson beside an actual source Boa or onto an original shore near an actual source Shark; it supplies a Hat only when labelled. No animal is relocated and no map layer is altered. See VALIDATION.md for observed results.
 
-Boat/raft travel, complete quest progression, special entity behavior, weather/tides, non-sleep offline depletion and emulator fidelity comparison remain outstanding. No exhaustive manual tour of every predator placement or Java ME execution is claimed.
+Raft travel, tides and the timed escape are now ported separately; a complete survival expedition, remaining special entity behavior, weather, non-sleep offline depletion and emulator fidelity comparison remain outstanding. No exhaustive manual tour of every predator placement or Java ME execution is claimed.

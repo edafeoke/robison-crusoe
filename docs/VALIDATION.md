@@ -1,6 +1,37 @@
 # Validation record
 
-## Current milestone: supply renewal and construction feasibility
+## Current milestone: acquisition audit and raft/predator integration
+
+Date: 2026-11-02. **164 tests pass**, including five new raft-contact/continuation tests and two acquisition-audit tests. TypeScript and final production build pass. Classic entry **index-CWnaCNHf.js**, 1,655.65kB /465.48kB gzip. Existing1,600kB advisory remains. No dependency added. Full decoding succeeds; all typed rule files and object metadata regenerate byte-identically. Original map/PNG/atlas integrity checks pass. No fixtures in dist. Source evidence, exact model scope and adaptations: PROGRESSION_AUDIT.md.
+
+### Findings and automated coverage
+
+- Original `ad.u/v` establish p.T as raft boarding state; both `data.d` targeting/contact guards and absence of a shark guard verified against retained CFR/JVM. Corrected the scene’s omitted aboard argument and wildlife retargeting. World updates continue. Required mode arguments prevent silent default omission.
+- All four timed predator profiles retain exposure/rest aboard; existing pursuit direction/speed continues. Landing resumes retargeting and timed attacks. Sharks remain immediately dangerous, prey/birds still react. Afloat snapshots retain partial exposure and last reaction; legacy/default and malformed reaction validation covered.
+- New fixed-low-tide acquisition closure starts empty, retains raw Decor/Rocks/mobile blockers and removes only tool-permitted static pickups. It acquires eleven loose tools and crafts Axe, then Tent and exact nested raft ingredients. Source Knife removal in a test map prevents Knife-dependent gathering, Tent and repair; no tool is granted.
+- Actual tool path witnesses, ingredients, kept tools, camp tier, interaction distance, boarding, landing priority and unchanged source map independently checked.17,546 foot cells before rafting;2,250 connected swamp cells/467 landing edges expand to18,798 foot cells and reach original wreck/Sextant. Report: `evidence/acquisition-access-audit.json`. This is **spatial/tool feasibility**, not survival or an ordered complete boat itinerary.
+- Two initial assertions were corrected after failures exposed test assumptions:20 animation ticks wrap a four-frame counter, so the wildlife test uses19; Giant log requires Saw, not Axe/Knife, so the negative Knife test checks only actual Knife/Axe-dependent supplies. Production gates/damage were not relaxed.
+
+### Browser observations
+
+Isolated origin **4201**, original user expedition4173 untouched. `tests/browser/raft-hazards.html` explicitly supplies a repaired raft and positions Robinson aboard; it does not grant tools/materials or claim their acquisition. Animals stay at original source placements and use the real AI. The observer only samples HUD/actor state and pauses after2.5 active seconds or an Energy change.
+
+- An initial candidate at(144,65) only stayed near the original Alligator for8/25 sampled updates, insufficient to prove a full attack delay. The fixture was changed to unchanged swamp(142,64), diagonal to original Alligator11843 at(143,65). No animal or terrain moved.
+- Actual scene observation: **2.5 seconds aboard, Energy100→100**, Alligator adjacent in24/24 sampled HUD updates, exposure0. The animal wandered to(141,65), so simulation was demonstrably running. `evidence/raft-contact-aboard-observed.jpg`.
+- Used actual E/raft discovery and **Land on shore**, reaching(142,65), leaving the raft at(142,64). Paused immediately;0.8 seconds had elapsed between the aboard checkpoint and paused landing. Resumed with observer; after a further0.2 active seconds, actual Alligator contact charged **100→50 Energy**, exposure reset0, no collapse. This is not a claim of a fresh0.2-second source timer: exposure had already accrued after landing. `evidence/raft-contact-landed-observed.jpg`.
+- Prepared elapsed59.8 with all reserves100, then crossed the actual minute tick aboard: **Hunger90/Thirst86/Energy96, elapsed60.0**, Alligator still adjacent, exposure0. Thus the predator exemption does not pause needs or grant full reserve immunity.
+- A decoder regeneration triggered the development server’s normal asset reload before saving. No checkpoint had been overwritten. Repeated the final minute-boundary case after decoding/build inputs stabilized; the same90/86/96 result was observed.
+
+
+- Final source-stable interval after the minute tick: **2.5 active seconds, Energy96→96, adjacent in23/23 HUD samples**, Alligator(141,65), exposure0, elapsed62.6. Normal IndexedDB Save succeeded at(142,64), afloat, with empty satchel and no clothes.
+- Production root4201 restored **08:01 / High tide,90/86/96,(142,64), aboard**. The actual DOM confirmed **index-CWnaCNHf.js**, exactly **one canvas**; assets reported cached, no fixture controls.
+- Stopped the owned preview server and opened a fresh cached4201 tab. Actual Continue restored that same afloat checkpoint and reserves. Actual Find a landing opened the normal raft discovery with the new predator/shark explanation and enabled Land on shore. `evidence/raft-contact-offline-world.jpg` and `evidence/raft-contact-offline-restored.jpg` record the cached world and paused interaction. Captured warnings/errors empty. Final retained tab is paused in that discovery; neither final production load overwrote the checkpoint. Owned dev/preview processes stopped.
+
+### Remaining limits
+
+A complete timed survival/renewal/crafting/raft/ship/escape expedition still needs verification. The new acquisition model fixes low tide, treats raw mobile actors as blockers, aggregates landing components, and does not charge travel/activity survival or consume food. It does not build the final ship or provide four renewed Sails for Large sail. No original emulator comparison, RMS import, weather or non-sleep offline loss parity is claimed. Source and browser state-continuation distinctions are explicit in PROGRESSION_AUDIT.md.
+
+## Previous milestone: supply renewal and construction feasibility
 
 Date: 2026-11-01. **157 tests passed**, including11 new resource-history checks. TypeScript and production build pass. Final classic entry **index-Djbz682B.js**, 1,655.35kB /465.40kB gzip; existing1,600kB advisory remains. No dependency added. Full decoding succeeds and all typed rule files/object metadata regenerate byte-for-byte. Original map/PNG/atlas integrity tests remain green. Fixtures are absent from dist. Source evidence, precise scope and adaptations: RESOURCE_RENEWAL.md.
 
